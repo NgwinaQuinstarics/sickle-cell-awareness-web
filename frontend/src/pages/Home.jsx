@@ -1,85 +1,64 @@
 import { Link } from 'react-router-dom';
-import { FiArrowRight, FiAlertTriangle, FiCheckCircle, FiUsers, FiHeart } from 'react-icons/fi';
-import { useState, useEffect } from 'react';
+import { FiArrowRight, FiAlertTriangle, FiCheckCircle } from 'react-icons/fi';
+import { SectionHead, StatCard, FeatureCard } from '../components/ui/index.jsx';
+import { useStats } from '../hooks/index.js';
 
-const COUNTER_TARGET = { people: 300000000, africa: 75, Cameroon: 25, deaths: 500000 };
-
-function CountUp({ target, suffix = '', prefix = '' }) {
-  const [val, setVal] = useState(0);
-  useEffect(() => {
-    let start = 0;
-    const step = target / 60;
-    const t = setInterval(() => {
-      start += step;
-      if (start >= target) { setVal(target); clearInterval(t); }
-      else setVal(Math.floor(start));
-    }, 20);
-    return () => clearInterval(t);
-  }, [target]);
-  const display = val >= 1000000 ? `${(val / 1000000).toFixed(0)}M` : val >= 1000 ? `${(val / 1000).toFixed(0)}K` : val;
-  return <>{prefix}{display}{suffix}</>;
-}
-
-const danger_facts = [
-  { icon: '💀', stat: '80%', text: 'of SS children in Africa die before age 5 without proper care' },
-  { icon: '🧬', stat: '1 in 4', text: 'Cameroonians unknowingly carries the sickle cell gene (AS genotype)' },
-  { icon: '👶', stat: '150,00+', text: 'babies are born with SCD in Cameroon every single year' },
-  { icon: '💔', stat: '70%', text: 'of SCD cases could be prevented through pre-marital genotype testing' },
+const FEATURES = [
+  { icon:'🧬', title:'Genotype Testing',    desc:'Find a certified testing centre in your region. Many offer free tests.',                  accent:'red' },
+  { icon:'📊', title:'Risk Assessment',     desc:'Our 7-question quiz gives you a personalised risk score in under 2 minutes.',             accent:'amber' },
+  { icon:'🏥', title:'Test Centre Finder',  desc:'Locate certified labs across all 10 Cameroon regions with directions.',                   accent:'blue' },
+  { icon:'📚', title:'Health Education',    desc:'Clear, medically accurate information about SCD, genetics, and prevention.',               accent:'green' },
+  { icon:'🤝', title:'Community Pledge',    desc:'Join thousands of Cameroonians committed to breaking the sickle cell cycle.',              accent:'purple' },
+  { icon:'📱', title:'Mobile App',          desc:'Track medications, hydration, and symptoms with the SickleCare mobile app.',              accent:'slate' },
 ];
 
+const TESTIMONIALS = [
+  { name:'Marie-Claire N.', region:'Centre',   role:"Mother of an SCD child",       text:"If I had known my genotype before marriage, my son would never have suffered. Please — get tested before starting a family." },
+  { name:'Dr. Emmanuel A.', region:'Littoral', role:'Haematologist, CHUY',           text:'Every week I see families devastated by SCD. 70% of these cases could have been prevented by a simple blood test.' },
+  { name:'Thierry B.',      region:'West',     role:'SCD Warrior, 28',               text:'I live with SCD every day. My mission is to make sure fewer children are born into this. Know your genotype.' },
+];
 
-const steps = [
-  { num: '01', icon: '🔍', title: 'Find a Center', desc: 'Use our directory to locate a certified genotype testing center near you.' },
-  { num: '02', icon: '🩸', title: 'Give a Blood Sample', desc: 'A simple, painless blood draw. Results in 24–48 hours at most centers.' },
-  { num: '03', icon: '📋', title: 'Get Your Result', desc: 'Receive your genotype: AA, AS, SS, or AC. A counselor explains what it means.' },
-  { num: '04', icon: '❤️', title: 'Make Informed Choices', desc: 'Share with your partner. Plan your family with full knowledge and love.' },
+const STEPS = [
+  { n:'01', icon:'🔍', t:'Find a Centre',     d:'Use our directory to locate a certified testing centre near you.' },
+  { n:'02', icon:'🩸', t:'Give a Blood Sample',d:'Quick, painless. Results in 24–48 hours at most centres.' },
+  { n:'03', icon:'📋', t:'Get Your Result',   d:'Receive your genotype (AA, AS, SS...) with a counsellor explanation.' },
+  { n:'04', icon:'❤️', t:'Protect Your Family',d:'Share with your partner. Make informed decisions for your children.' },
 ];
 
 export default function Home() {
+  const { data: stats } = useStats();
+
   return (
     <div>
       {/* HERO */}
-      <section style={{
-        minHeight: '92vh', display: 'flex', alignItems: 'center',
-        background: 'linear-gradient(135deg, #080F1A 0%, #0D1B2E 50%, #1A0A0A 100%)',
-        position: 'relative', overflow: 'hidden', padding: '80px 0 60px',
-      }}>
-        {/* BG Elements */}
-        <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(192,57,43,0.12) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(26,60,110,0.15) 0%, transparent 50%)', pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', top: '15%', right: '8%', width: 400, height: 400, border: '1px solid rgba(192,57,43,0.1)', borderRadius: '50%', pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', top: '10%', right: '6%', width: 500, height: 500, border: '1px solid rgba(192,57,43,0.06)', borderRadius: '50%', pointerEvents: 'none' }} />
+      <section className="bg-slate-950 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(circle, #fff 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-red-600/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3" />
 
-        <div className="wrap" style={{ position: 'relative', zIndex: 1 }}>
-          <div style={{ maxWidth: 820 }}>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(192,57,43,0.15)', border: '1px solid rgba(192,57,43,0.3)', color: '#F87171', padding: '7px 16px', borderRadius: 100, fontSize: 13, fontWeight: 700, marginBottom: 28, letterSpacing: '0.04em' }}>
-              <FiAlertTriangle size={13} /> SICKLE CELL AWARENESS & PREVENTION
-            </div>
-
-            <h1 style={{ fontFamily: 'var(--ff-display)', fontSize: 'clamp(2.8rem,6vw,5rem)', fontWeight: 900, lineHeight: 1.04, color: '#fff', marginBottom: 24, letterSpacing: '-0.02em' }}>
-              Not Knowing Your <br />
-              <span style={{ color: 'var(--red)', display: 'inline-block', position: 'relative' }}>Genotype</span> Is a<br />
-              <span style={{ color: '#94A3B8', fontStyle: 'italic' }}>Deadly Risk.</span>
+        <div className="relative page-container py-24 lg:py-36">
+          <div className="max-w-2xl">
+            <div className="tag-red mb-6 animate-in-up">🩸 Sickle Cell Awareness — Cameroon</div>
+            <h1 className="heading-xl text-white mb-6 animate-in-up delay-1 text-balance">
+              Not Knowing Your Genotype Is a{' '}
+              <span className="text-red-500">Deadly Risk.</span>
             </h1>
-
-            <p style={{ fontSize: '1.15rem', color: '#94A3B8', maxWidth: 580, lineHeight: 1.8, marginBottom: 20 }}>
-              Over <strong style={{ color: '#fff' }}>300 million people</strong> worldwide carry the sickle cell gene. In Cameroon, <strong style={{ color: '#F87171' }}>1 in 4 people</strong> is a carrier — and most don't know it. That ignorance is costing children their lives.
+            <p className="text-slate-300 text-lg leading-relaxed max-w-xl mb-8 animate-in-up delay-2">
+              Over <strong className="text-white">1 in 4 Cameroonians</strong> carries the sickle cell gene without knowing it.
+              A single blood test can protect your children — and it's free at most government hospitals.
             </p>
-            <p style={{ fontSize: '1.05rem', color: '#64748B', maxWidth: 540, lineHeight: 1.8, marginBottom: 40 }}>
-              A simple blood test can tell you your genotype. This knowledge can prevent sickle cell disease from being passed to your children.
-            </p>
-
-            <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', marginBottom: 56 }}>
-              <Link to="/centers" className="btn btn-red btn-lg">Get Tested Now <FiArrowRight /></Link>
-              <Link to="/dangers" className="btn btn-ghost btn-lg">Why It Matters</Link>
-              <Link to="/quiz" className="btn btn-outline btn-lg" style={{ color: '#94A3B8', borderColor: 'rgba(148,163,184,0.3)' }}>Take Risk Quiz</Link>
+            <div className="flex flex-wrap gap-3 mb-12 animate-in-up delay-3">
+              <Link to="/centres" className="btn-primary-lg">Get Tested Now <FiArrowRight /></Link>
+              <Link to="/dangers" className="btn-lg border border-slate-700 text-slate-300 hover:border-slate-500 hover:text-white rounded-lg transition-colors">Why It Matters</Link>
             </div>
-
-            {/* Mini Stats */}
-            <div style={{ display: 'flex', gap: 40, flexWrap: 'wrap' }}>
-              {[['300M+', 'Carriers Worldwide'], ['120K+', 'Born with SCD in Cameroon/yr'], ['70%', 'Cases Preventable']].map(([v, l]) => (
+            <div className="grid grid-cols-3 gap-8 max-w-sm animate-in-up delay-4">
+              {[
+                [stats?.pledges ? `${stats.pledges.toLocaleString()}+` : '47K+', 'Pledges taken'],
+                [stats?.centres ? `${stats.centres}` : '15+',                   'Test centres'],
+                ['70%', 'Cases preventable'],
+              ].map(([v, l]) => (
                 <div key={l}>
-                  <div style={{ fontFamily: 'var(--ff-display)', fontSize: '2rem', fontWeight: 800, color: 'var(--red)', lineHeight: 1 }}>{v}</div>
-                  <div style={{ fontSize: 12, color: '#475569', marginTop: 4, fontWeight: 500 }}>{l}</div>
+                  <div className="text-2xl font-bold text-red-500" style={{fontFamily:'Sora,sans-serif'}}>{v}</div>
+                  <div className="text-xs text-slate-500 mt-0.5">{l}</div>
                 </div>
               ))}
             </div>
@@ -87,103 +66,126 @@ export default function Home() {
         </div>
       </section>
 
-      {/* DANGER STATS STRIP */}
-      <section style={{ background: '#0D1117', borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '48px 0' }}>
-        <div className="wrap">
-          <div className="g4">
-            {danger_facts.map(({ icon, stat, text }) => (
-              <div key={stat} style={{ textAlign: 'center', padding: '12px 8px', borderRight: '1px solid rgba(255,255,255,0.06)' }}>
-                <div style={{ fontSize: 32, marginBottom: 10 }}>{icon}</div>
-                <div style={{ fontFamily: 'var(--ff-display)', fontSize: '1.8rem', fontWeight: 800, color: 'var(--red)', marginBottom: 8 }}>{stat}</div>
-                <div style={{ fontSize: 13, color: '#64748B', lineHeight: 1.6 }}>{text}</div>
-              </div>
-            ))}
-          </div>
+      {/* STATS */}
+      <section className="bg-white border-b border-slate-100 py-14">
+        <div className="page-container grid grid-cols-2 lg:grid-cols-4 gap-4">
+          {[
+            { value:'1 in 4',  label:'Cameroonians carry the gene', icon:'🧬' },
+            { value:'150K+',   label:'SCD births per year in Africa', icon:'👶' },
+            { value:'90%',     label:'SS children die before 5 without care', icon:'⚠️' },
+            { value:'70%',     label:'Cases preventable by testing', icon:'🛡️' },
+          ].map((s, i) => <StatCard key={i} {...s} />)}
         </div>
       </section>
 
-      {/* WHAT IS SCD  */}
-      <section className="section" style={{ background: '#fff' }}>
-        <div className="wrap">
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 72, alignItems: 'center' }}>
-            <div>
-              <div className="eyebrow">🔬 Understanding SCD</div>
-              <h2 className="h2" style={{ marginBottom: 20 }}>What Exactly is Sickle Cell Disease?</h2>
-              <p className="body" style={{ marginBottom: 16 }}>Sickle cell disease (SCD) is an inherited blood disorder where red blood cells — normally round and flexible — become crescent-shaped, rigid, and sticky.</p>
-              <p className="body" style={{ marginBottom: 16 }}>These abnormal cells block blood flow through vessels, starving organs and tissues of oxygen. The result is <strong>excruciating pain crises</strong>, organ damage, strokes, severe anemia, and a dramatically shortened life.</p>
-              <p className="body" style={{ marginBottom: 28 }}>SCD is not a curse. It is not contagious. It is a <strong>genetic disease</strong> that can only be passed from parents to children — which means it is <strong style={{ color: 'var(--red)' }}>largely preventable</strong> through knowledge.</p>
-              <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-                <Link to="/about" className="btn btn-blue">Learn the Full Science</Link>
-                <Link to="/dangers" className="btn btn-outline">See the Dangers</Link>
-              </div>
+      {/* WHAT IS SCD */}
+      <section className="section bg-slate-50">
+        <div className="page-container grid lg:grid-cols-2 gap-16 items-center">
+          <div>
+            <div className="tag-red mb-4">🔬 Understanding SCD</div>
+            <h2 className="heading-lg text-slate-900 mb-5">What Is Sickle Cell Disease?</h2>
+            <p className="body-md mb-4">Sickle cell disease (SCD) is a genetic blood disorder where red blood cells become crescent-shaped instead of round and flexible. These abnormal cells block blood vessels, starving organs of oxygen.</p>
+            <p className="body-md mb-6">The consequences: <strong className="text-slate-800">severe pain crises, organ damage, strokes, and significantly shortened life</strong>. An SS child in sub-Saharan Africa has a <strong className="text-red-600">90% chance of dying before age 5</strong> without proper care.</p>
+            <div className="flex gap-3 flex-wrap">
+              <Link to="/about"    className="btn-primary">Learn More</Link>
+              <Link to="/dangers"  className="btn-secondary">See the Dangers</Link>
             </div>
-
-            {/* Visual Comparison */}
-            <div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-                <div style={{ background: 'var(--green-light)', border: '2px solid rgba(22,163,74,0.2)', borderRadius: 20, padding: 28, textAlign: 'center' }}>
-                  <div style={{ fontSize: 56, marginBottom: 14 }}>⭕</div>
-                  <div style={{ fontWeight: 700, color: 'var(--green)', marginBottom: 8 }}>Healthy RBC</div>
-                  <div style={{ fontSize: 13, color: 'var(--ink-light)', lineHeight: 1.6 }}>Round & flexible. Carries oxygen freely. Lives 120 days.</div>
-                </div>
-                <div style={{ background: 'var(--red-light)', border: '2px solid rgba(192,57,43,0.2)', borderRadius: 20, padding: 28, textAlign: 'center' }}>
-                  <div style={{ fontSize: 56, marginBottom: 14 }}>🌙</div>
-                  <div style={{ fontWeight: 700, color: 'var(--red)', marginBottom: 8 }}>Sickle Cell</div>
-                  <div style={{ fontSize: 13, color: 'var(--ink-light)', lineHeight: 1.6 }}>Rigid & sticky. Blocks blood vessels. Lives only 10–20 days.</div>
-                </div>
-                <div style={{ background: '#F8FAFC', border: '1px solid var(--border)', borderRadius: 20, padding: 24, gridColumn: '1/-1' }}>
-                  <div style={{ fontWeight: 600, fontSize: 14, marginBottom: 12, color: 'var(--ink-mid)' }}>The Genetic Inheritance</div>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 10, textAlign: 'center' }}>
-                    {[['AA', 'Safe', 'var(--green)', '#F0FDF4'], ['AS', 'Carrier', 'var(--amber)', '#FFFBEB'], ['AS', 'Carrier', 'var(--amber)', '#FFFBEB'], ['SS', 'SICK', 'var(--red)', '#FEF2F2']].map(([g, l, c, bg], i) => (
-                      <div key={i} style={{ background: bg, borderRadius: 10, padding: '10px 6px', border: `1px solid ${c}30` }}>
-                        <div style={{ fontFamily: 'var(--ff-display)', fontWeight: 800, fontSize: '1.3rem', color: c }}>{g}</div>
-                        <div style={{ fontSize: 11, fontWeight: 700, color: c }}>{l}</div>
-                      </div>
-                    ))}
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="bg-green-50 border border-green-200 rounded-xl p-5 text-center">
+              <div className="text-5xl mb-3">⭕</div>
+              <div className="font-semibold text-green-700 mb-2 text-sm">Normal Blood Cell</div>
+              <ul className="text-xs text-slate-500 space-y-1.5">
+                {['Round & flexible','Flows freely','Lives 90–120 days','Carries oxygen well'].map(t => (
+                  <li key={t} className="flex items-center gap-1.5 justify-center"><FiCheckCircle size={10} className="text-green-500 shrink-0"/>{t}</li>
+                ))}
+              </ul>
+            </div>
+            <div className="bg-red-50 border border-red-200 rounded-xl p-5 text-center">
+              <div className="text-5xl mb-3">🌙</div>
+              <div className="font-semibold text-red-700 mb-2 text-sm">Sickle Cell</div>
+              <ul className="text-xs text-slate-500 space-y-1.5">
+                {['Crescent-shaped','Blocks vessels','Lives only 10–20 days','Causes pain crises'].map(t => (
+                  <li key={t} className="flex items-center gap-1.5 justify-center"><FiAlertTriangle size={10} className="text-red-500 shrink-0"/>{t}</li>
+                ))}
+              </ul>
+            </div>
+            <div className="col-span-2 bg-white border border-slate-200 rounded-xl p-5">
+              <div className="text-sm font-semibold text-slate-700 mb-3">AS + AS Parents — Each Pregnancy</div>
+              <div className="grid grid-cols-4 gap-2 text-center">
+                {[['AA','25%','green'],['AS','25%','amber'],['AS','25%','amber'],['SS','25%','red']].map(([g,p,c],i)=>(
+                  <div key={i} className={`rounded-lg p-2.5 border ${c==='green'?'bg-green-50 border-green-200':c==='amber'?'bg-amber-50 border-amber-200':'bg-red-50 border-red-200'}`}>
+                    <div className={`font-bold text-lg ${c==='green'?'text-green-700':c==='amber'?'text-amber-700':'text-red-700'}`} style={{fontFamily:'Sora,sans-serif'}}>{g}</div>
+                    <div className="text-xs text-slate-500">{p}</div>
                   </div>
-                  <div style={{ fontSize: 12, color: 'var(--ink-muted)', marginTop: 10, textAlign: 'center' }}>When both parents are AS: 25% chance of SS child every pregnancy</div>
-                </div>
+                ))}
               </div>
+              <p className="text-xs text-slate-400 text-center mt-2">25% chance of SCD child per pregnancy</p>
             </div>
           </div>
         </div>
       </section>
 
-      
-      {/* HOW TO GET TESTED */}
-      <section className="section" style={{ background: '#fff' }}>
-        <div className="wrap">
-          <div className="center" style={{ marginBottom: 52 }}>
-            <div className="eyebrow-green eyebrow" style={{ display: 'inline-flex' }}>✅ Take Action</div>
-            <h2 className="h2">Getting Tested is Simple. <em style={{ fontStyle: 'italic', color: 'var(--red)' }}>Not Getting Tested Is Not.</em></h2>
-          </div>
-          <div className="g4">
-            {steps.map(({ num, icon, title, desc }) => (
-              <div key={num} style={{ position: 'relative' }}>
-                <div style={{ fontFamily: 'var(--ff-display)', fontSize: '4rem', fontWeight: 900, color: '#F1F5F9', lineHeight: 1, marginBottom: 12 }}>{num}</div>
-                <div style={{ fontSize: 36, marginBottom: 12 }}>{icon}</div>
-                <h3 style={{ fontFamily: 'var(--ff-display)', fontWeight: 700, fontSize: '1.05rem', marginBottom: 8 }}>{title}</h3>
-                <p style={{ fontSize: 14, color: 'var(--ink-light)', lineHeight: 1.7 }}>{desc}</p>
-              </div>
-            ))}
-          </div>
-          <div style={{ textAlign: 'center', marginTop: 48 }}>
-            <Link to="/centers" className="btn btn-red btn-lg">Find a Testing Center Near Me <FiArrowRight /></Link>
+      {/* FEATURES */}
+      <section className="section bg-white">
+        <div className="page-container">
+          <SectionHead center tag="Platform" title="Everything you need in one place" body="SickleCare gives you the tools to understand, prevent, and manage sickle cell disease." />
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {FEATURES.map((f, i) => <FeatureCard key={i} {...f} />)}
           </div>
         </div>
       </section>
 
-      {/* CTA PLEDGE */}
-      <section style={{ background: 'linear-gradient(135deg, var(--red-dark), var(--red))', padding: '80px 0', textAlign: 'center' }}>
-        <div className="wrap" style={{ maxWidth: 680, margin: '0 auto' }}>
-          <div style={{ fontSize: 48, marginBottom: 20 }}>🤝</div>
-          <h2 style={{ fontFamily: 'var(--ff-display)', fontSize: 'clamp(2rem,4vw,3rem)', fontWeight: 800, color: '#fff', marginBottom: 16 }}>Take the SickleCare Pledge</h2>
-          <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: '1.1rem', marginBottom: 36, lineHeight: 1.7 }}>
-            Join thousands of Cameroonians who have pledged to know their genotype, share this awareness, and break the cycle of sickle cell disease. One pledge, one life saved.
+      {/* TESTIMONIALS */}
+      <section className="section bg-slate-50">
+        <div className="page-container">
+          <SectionHead center tag="Real stories" title="These stories could have been prevented" />
+          <div className="grid md:grid-cols-3 gap-5">
+            {TESTIMONIALS.map(({ name, region, role, text }) => (
+              <div key={name} className="card p-6">
+                <div className="text-3xl text-red-200 mb-3" style={{fontFamily:'Georgia,serif'}}>"</div>
+                <p className="text-sm text-slate-600 leading-relaxed italic mb-5">{text}</p>
+                <div className="border-t border-slate-100 pt-4">
+                  <div className="font-semibold text-slate-800 text-sm">{name}</div>
+                  <div className="text-xs text-slate-400 mt-0.5">{role} · {region}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* HOW TO GET TESTED */}
+      <section className="section bg-white">
+        <div className="page-container">
+          <SectionHead center tag="Take action" title="Getting tested is simple. Not getting tested isn't." />
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
+            {STEPS.map(({ n, icon, t, d }) => (
+              <div key={n} className="text-center">
+                <div className="text-5xl font-bold text-slate-100 mb-1" style={{fontFamily:'Sora,sans-serif'}}>{n}</div>
+                <div className="text-3xl mb-3">{icon}</div>
+                <h3 className="font-semibold text-slate-900 mb-2 text-sm">{t}</h3>
+                <p className="text-xs text-slate-500 leading-relaxed">{d}</p>
+              </div>
+            ))}
+          </div>
+          <div className="text-center">
+            <Link to="/centres" className="btn-primary-lg">Find a Test Centre Near Me <FiArrowRight /></Link>
+          </div>
+        </div>
+      </section>
+
+      {/* PLEDGE CTA */}
+      <section className="bg-red-600 py-20">
+        <div className="page-container text-center max-w-2xl mx-auto">
+          <div className="text-5xl mb-4">🤝</div>
+          <h2 className="text-3xl font-bold text-white mb-4" style={{fontFamily:'Sora,sans-serif'}}>Take the SickleCare Pledge</h2>
+          <p className="text-red-100 text-lg leading-relaxed mb-8">
+            Join thousands of Cameroonians committed to getting tested, sharing awareness, and protecting future generations.
           </p>
-          <div style={{ display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap' }}>
-            <Link to="/pledge" className="btn btn-white btn-lg">I Pledge to Get Tested</Link>
-            <Link to="/centers" className="btn btn-ghost btn-lg">Find Test Centers</Link>
+          <div className="flex flex-wrap gap-3 justify-center">
+            <Link to="/pledge"  className="btn-secondary">Take the Pledge</Link>
+            <Link to="/centres" className="btn-lg border border-white/30 text-white hover:bg-white/10 rounded-lg transition-colors">Find a Test Centre</Link>
           </div>
         </div>
       </section>

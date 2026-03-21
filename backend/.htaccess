@@ -1,74 +1,87 @@
-# SickleCare Backend — Apache Security Configuration
-Options -Indexes -ExecCGI
+# SickleCare Cameroon — Apache Security Configuration
+
+Options -Indexes -ExecCGI -MultiViews
 ServerSignature Off
 
-# Deny access to sensitive files
-<FilesMatch "\.(sql|log|json|md|sh|env|bak|backup|config|ini|conf)$">
+# Block access to sensitive file types
+<FilesMatch "\.(sql|log|json|md|sh|env|bak|ini|conf|lock|txt|yaml|yml)$">
     Require all denied
 </FilesMatch>
 
-# Block access to hidden files and directories
+# Block hidden files and directories (.env, .git, etc.)
 <FilesMatch "^\.">
     Require all denied
 </FilesMatch>
 
-# Only allow PHP files to be executed
-<FilesMatch "\.php$">
-    Options -ExecCGI
-</FilesMatch>
-
-# Prevent direct access to non-API directories
-<DirectoryMatch "(config|middleware|utils|logs|uploads)">
+# Deny direct access to all non-API directories
+<DirectoryMatch "^.*(config|middleware|utils|logs|uploads|tests|vendor).*$">
     Require all denied
 </DirectoryMatch>
 
-# Block common exploit attempts
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
-    # Block suspicious user agents
-    RewriteCond %{HTTP_USER_AGENT} (curl|wget|python|perl|ruby|java|go-http-client|libwww|nikto|nessus|masscan) [NC]
+    # Only allow GET, POST, OPTIONS
+    RewriteCond %{REQUEST_METHOD} !^(GET|POST|OPTIONS)$
     RewriteRule .* - [F,L]
 
-    # Block requests with no user agent
+    # Block empty User-Agents (most bots)
     RewriteCond %{HTTP_USER_AGENT} ^$
     RewriteRule .* - [F,L]
 
-    # Enforce HTTPS in production
+    # Block known scanners and attack tools
+    RewriteCond %{HTTP_USER_AGENT} (nikto|sqlmap|nmap|dirbuster|gobuster|masscan|hydra|wfuzz) [NC]
+    RewriteRule .* - [F,L]
+
+    # Block path traversal
+    RewriteCond %{QUERY_STRING} (\.\./|\.\.\\) [NC]
+    RewriteRule .* - [F,L]
+
+    # Block SQL injection patterns in query string
+    RewriteCond %{QUERY_STRING} (union\+select|drop\+table|insert\+into|<script|%27|%3C%3E) [NC]
+    RewriteRule .* - [F,L]
+
+    # Force HTTPS — uncomment when SSL certificate is active
     # RewriteCond %{HTTPS} off
     # RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-
-    # Only allow GET and POST
-    RewriteCond %{REQUEST_METHOD} !^(GET|POST|OPTIONS)$
-    RewriteRule .* - [F,L]
 </IfModule>
 
-# Rate limiting via mod_evasive (if available)
-# <IfModule mod_evasive24.c>
-#     DOSHashTableSize 3097
-#     DOSPageCount 10
-#     DOSSiteCount 100
-#     DOSPageInterval 1
-#     DOSSiteInterval 1
-#     DOSBlockingPeriod 600
-# </IfModule>
-
-# Security headers (supplement PHP headers)
+# Security response headers
 <IfModule mod_headers.c>
-    Header always set X-Content-Type-Options "nosniff"
-    Header always set X-Frame-Options "DENY"
-    Header always set Referrer-Policy "strict-origin-when-cross-origin"
-    Header unset Server
-    Header unset X-Powered-By
+    Header always set X-Content-Type-Options  "nosniff"
+    Header always set X-Frame-Options         "DENY"
+    Header always set X-XSS-Protection        "1; mode=block"
+    Header always set Referrer-Policy         "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy      "geolocation=(), microphone=(), camera=()"
+    Header always unset Server
+    Header always unset X-Powered-By
 </IfModule>
 
-# Compress responses
+# Gzip compression for API responses
 <IfModule mod_deflate.c>
     AddOutputFilterByType DEFLATE application/json text/plain
 </IfModule>
 
-# Cache control
-<IfModule mod_expires.c>
-    ExpiresActive On
-    ExpiresByType application/json "access plus 0 seconds"
+# No caching for API responses
+<IfModule mod_headers.c>
+    <FilesMatch "\.php$">
+        Header set Cache-Control "no-store, no-cache, must-revalidate"
+        Header set Pragma "no-cache"
+    </FilesMatch>
+</IfModule>
+
+# PHP hardening (if using mod_php)
+<IfModule mod_php.c>
+    php_flag  display_errors          Off
+    php_flag  log_errors              On
+    php_value error_log               ../logs/php-error.log
+    php_flag  allow_url_include       Off
+    php_flag  allow_url_fopen         Off
+    php_flag  session.cookie_httponly On
+    php_flag  session.cookie_secure   On
+    php_value session.cookie_samesite Strict
+    php_value upload_max_filesize     2M
+    php_value post_max_size           2M
+    php_value max_execution_time      30
+    php_value memory_limit            64M
 </IfModule>

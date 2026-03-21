@@ -3,121 +3,169 @@ require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/Logger.php';
 
 /**
- * Simple SMTP mailer (no external dependencies).
- * In production, replace with PHPMailer or SendGrid SDK.
+ * Mailer — branded HTML email templates.
+ *
+ * Uses PHP mail() by default.
+ * For production: install PHPMailer with `composer require phpmailer/phpmailer`
+ * then uncomment the PHPMailer block in send() below.
  */
-class Mailer {
+class Mailer
+{
+    // ── Public helpers ────────────────────────────────────────
 
-    public static function send(string $to, string $toName, string $subject, string $htmlBody): bool {
-        // In production, use PHPMailer with SMTP credentials
-        // For now, uses PHP mail() as fallback
+    public static function welcome(string $to, string $name): void
+    {
+        self::send($to, APP_NAME . ' — Welcome to SickleCare Cameroon',
+            self::tpl('Welcome to SickleCare', $name,
+                '<p>Thank you for joining SickleCare Cameroon. You have taken an important step toward protecting your health and your family\'s future.</p>
+                <div style="background:#fef2f2;border-left:4px solid #e22410;padding:16px 20px;border-radius:8px;margin:20px 0;">
+                    <strong style="color:#e22410;">Your next step:</strong><br>
+                    Find a certified genotype testing centre near you. The test is quick, often free, and could change everything for your family.
+                </div>
+                <div style="text-align:center;margin:24px 0;">
+                    <a href="' . APP_URL . '/centres" style="background:#e22410;color:#fff;padding:14px 28px;border-radius:8px;text-decoration:none;font-weight:700;font-size:14px;">Find a Test Centre</a>
+                </div>'
+            )
+        );
+    }
+
+    public static function contactConfirm(string $to, string $name, string $subject, string $ref): void
+    {
+        self::send($to, 'Message received — Ref: ' . $ref . ' | ' . APP_NAME,
+            self::tpl('We received your message', $name,
+                '<p>Thank you for reaching out. We have received your message about: <strong>"' . $subject . '"</strong></p>
+                <p>Your reference number: <strong style="color:#e22410;">' . $ref . '</strong> — keep this for follow-ups.</p>
+                <p>Our team will respond within <strong>24 business hours</strong>. For medical emergencies, call <strong>15</strong> (SAMU Cameroon) or visit your nearest hospital.</p>'
+            )
+        );
+    }
+
+    public static function pledgeCert(string $to, string $name, string $region): void
+    {
+        self::send($to, APP_NAME . ' — Your Pledge is Recorded 🎉',
+            self::tpl('Pledge Confirmed!', $name,
+                '<div style="text-align:center;background:linear-gradient(135deg,#96281B,#e22410);color:#fff;padding:28px;border-radius:12px;margin-bottom:24px;">
+                    <div style="font-size:40px;margin-bottom:8px;">🤝</div>
+                    <h2 style="margin:0 0 6px;">Pledge Confirmed!</h2>
+                    <p style="margin:0;opacity:0.9;">You are part of the movement to end sickle cell disease in Cameroon.</p>
+                </div>
+                <p><strong>' . $name . '</strong> from <strong>' . $region . '</strong> — you have pledged to get tested, educate your community, and support those living with SCD.</p>
+                <div style="text-align:center;margin:24px 0;">
+                    <a href="' . APP_URL . '/centres" style="background:#e22410;color:#fff;padding:14px 28px;border-radius:8px;text-decoration:none;font-weight:700;font-size:14px;">Book My Genotype Test</a>
+                </div>'
+            )
+        );
+    }
+
+    public static function appointmentConfirm(string $to, string $name, string $centre, string $date, string $ref): void
+    {
+        self::send($to, 'Appointment confirmed — ' . $ref . ' | ' . APP_NAME,
+            self::tpl('Appointment Request Submitted', $name,
+                '<p>Your appointment request has been received:</p>
+                <table style="width:100%;border-collapse:collapse;margin:16px 0;font-size:14px;">
+                    <tr><td style="padding:10px 12px;background:#f8fafc;border:1px solid #e2e8f0;font-weight:600;">Reference</td><td style="padding:10px 12px;border:1px solid #e2e8f0;color:#e22410;font-weight:700;">' . $ref . '</td></tr>
+                    <tr><td style="padding:10px 12px;background:#f8fafc;border:1px solid #e2e8f0;font-weight:600;">Test Centre</td><td style="padding:10px 12px;border:1px solid #e2e8f0;">' . $centre . '</td></tr>
+                    <tr><td style="padding:10px 12px;background:#f8fafc;border:1px solid #e2e8f0;font-weight:600;">Preferred Date</td><td style="padding:10px 12px;border:1px solid #e2e8f0;">' . $date . '</td></tr>
+                </table>
+                <div style="background:#f0fdf4;border-left:4px solid #16a34a;padding:14px 18px;border-radius:8px;">
+                    The centre will contact you to confirm. Please arrive 15 minutes early with a valid ID.
+                </div>'
+            )
+        );
+    }
+
+    public static function notifyAdmin(string $subject, string $body): void
+    {
+        self::send(MAIL_ADMIN, '[' . APP_NAME . '] ' . $subject, self::tpl('Admin Alert', 'Team', $body));
+    }
+
+    // ── Core send ─────────────────────────────────────────────
+
+    private static function send(string $to, string $subject, string $html): bool
+    {
+        /*
+         * ── PHPMailer (recommended for production) ───────────
+         * After running: composer require phpmailer/phpmailer
+         * Uncomment the block below and remove the mail() fallback.
+         *
+         * require_once BASE_PATH . '/vendor/autoload.php';
+         * use PHPMailer\PHPMailer\PHPMailer;
+         * $mail = new PHPMailer(true);
+         * try {
+         *     $mail->isSMTP();
+         *     $mail->Host       = MAIL_HOST;
+         *     $mail->SMTPAuth   = true;
+         *     $mail->Username   = MAIL_USER;
+         *     $mail->Password   = MAIL_PASS;
+         *     $mail->SMTPSecure = 'tls';
+         *     $mail->Port       = MAIL_PORT;
+         *     $mail->setFrom(MAIL_USER, MAIL_FROM_NAME);
+         *     $mail->addAddress($to);
+         *     $mail->isHTML(true);
+         *     $mail->Subject = $subject;
+         *     $mail->Body    = $html;
+         *     $mail->AltBody = strip_tags($html);
+         *     $mail->send();
+         *     Logger::info('Email sent', ['to' => $to]);
+         *     return true;
+         * } catch (\Exception $e) {
+         *     Logger::error('Email failed', ['to' => $to, 'err' => $e->getMessage()]);
+         *     return false;
+         * }
+         */
+
+        // ── Fallback: PHP mail() ──────────────────────────────
         $headers  = "MIME-Version: 1.0\r\n";
         $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
-        $headers .= "From: " . MAIL_FROM_NAME . " <" . MAIL_USER . ">\r\n";
-        $headers .= "Reply-To: " . MAIL_USER . "\r\n";
-        $headers .= "X-Mailer: SickleCare/1.0\r\n";
+        $headers .= 'From: ' . MAIL_FROM_NAME . ' <' . MAIL_USER . ">\r\n";
+        $headers .= 'Reply-To: ' . MAIL_USER . "\r\n";
+        $headers .= "X-Mailer: SickleCare-CM/3.0\r\n";
 
-        $result = mail($to, $subject, $htmlBody, $headers);
-        if (!$result) {
-            Logger::error("Mail failed to: $to | Subject: $subject");
+        $result = @mail($to, $subject, $html, $headers);
+
+        if ($result) {
+            Logger::info('Email sent', ['to' => $to, 'subject' => $subject]);
         } else {
-            Logger::info("Mail sent to: $to | Subject: $subject");
+            Logger::error('Email failed', ['to' => $to, 'subject' => $subject]);
         }
-        return $result;
+
+        return (bool)$result;
     }
 
-    public static function sendWelcome(string $email, string $name): void {
-        $subject = 'Welcome to SickleCare — Your Genotype Journey Starts Now';
-        $body = self::template('Welcome', $name, "
-            <p>Thank you for joining SickleCare! You've taken an important step toward protecting your health and your family's future.</p>
-            <div style='background:#FEF2F2;border-left:4px solid #C0392B;padding:16px 20px;border-radius:8px;margin:20px 0;'>
-                <strong style='color:#C0392B;'>Your Next Step:</strong><br>
-                Find a certified genotype testing center near you. The test is quick, often free, and could change everything.
-            </div>
-            <p>If you haven't been tested yet, use our <a href='https://sicklecare.org/centers' style='color:#C0392B;'>Testing Center Finder</a> to locate the nearest certified lab.</p>
-        ");
-        self::send($email, $name, $subject, $body);
-    }
+    // ── HTML template ─────────────────────────────────────────
 
-    public static function sendPledgeCertificate(string $email, string $name, string $state): void {
-        $subject = 'Your SickleCare Pledge Certificate 🎉';
-        $body = self::template('Pledge Confirmed', $name, "
-            <div style='text-align:center;background:linear-gradient(135deg,#96281B,#C0392B);color:#fff;padding:32px;border-radius:12px;margin-bottom:24px;'>
-                <div style='font-size:48px;margin-bottom:12px;'>🤝</div>
-                <h2 style='font-size:22px;margin:0 0 8px;'>Pledge Confirmed!</h2>
-                <p style='margin:0;opacity:0.9;'>You are now part of the movement to end sickle cell disease in Nigeria.</p>
-            </div>
-            <p><strong>$name</strong> from <strong>$state</strong> — you have made a solemn pledge to get genotype tested, educate your community, and support those living with sickle cell disease.</p>
-            <p>Now take the most important next step:</p>
-            <div style='text-align:center;margin:24px 0;'>
-                <a href='https://sicklecare.org/centers' style='background:#C0392B;color:#fff;padding:14px 28px;border-radius:100px;text-decoration:none;font-weight:700;font-size:15px;display:inline-block;'>Book My Genotype Test</a>
-            </div>
-        ");
-        self::send($email, $name, $subject, $body);
-    }
+    private static function tpl(string $heading, string $name, string $body): string
+    {
+        $year    = date('Y');
+        $appUrl  = APP_URL;
+        $admin   = MAIL_ADMIN;
+        $appName = APP_NAME;
 
-    public static function sendQuizResult(string $email, string $name, string $risk, array $answers): void {
-        $riskColors = ['VERY HIGH' => '#C0392B', 'HIGH' => '#C2410C', 'MODERATE' => '#D97706', 'LOWER' => '#16A34A'];
-        $color = $riskColors[$risk] ?? '#C0392B';
-        $subject = "Your SickleCare Risk Assessment Results — $risk RISK";
-        $body = self::template('Your Risk Assessment', $name, "
-            <div style='text-align:center;background:$color;color:#fff;padding:28px;border-radius:12px;margin-bottom:24px;'>
-                <div style='font-size:13px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;opacity:0.85;margin-bottom:6px;'>Your Sickle Cell Risk Level</div>
-                <div style='font-size:2.5rem;font-weight:900;'>$risk</div>
-            </div>
-            <p>Based on your answers, you have a <strong>$risk risk level</strong>. " .
-            ($risk === 'VERY HIGH' || $risk === 'HIGH' ?
-                'We strongly recommend getting a genotype test as soon as possible.' :
-                'We still recommend getting tested to confirm your genotype and protect your family.') . "</p>
-            <div style='text-align:center;margin:28px 0;'>
-                <a href='https://sicklecare.org/centers' style='background:$color;color:#fff;padding:14px 28px;border-radius:100px;text-decoration:none;font-weight:700;font-size:15px;display:inline-block;'>Find a Test Center Near Me</a>
-            </div>
-            <p style='font-size:12px;color:#94A3B8;'>This assessment is for educational purposes only and does not replace medical advice. Please consult a healthcare professional.</p>
-        ");
-        self::send($email, $name, $subject, $body);
-    }
-
-    public static function sendContactConfirmation(string $email, string $name, string $subject): void {
-        $body = self::template('Message Received', $name, "
-            <p>Thank you for reaching out to SickleCare. We have received your message regarding: <strong>\"$subject\"</strong></p>
-            <p>Our team will respond within <strong>24 business hours</strong>. For urgent medical matters, please call your local emergency services or visit the nearest hospital.</p>
-            <div style='background:#F0FDF4;border-left:4px solid #16A34A;padding:16px 20px;border-radius:8px;margin:20px 0;'>
-                <strong>While you wait:</strong><br>
-                Explore our <a href='https://sicklecare.org/resources' style='color:#16A34A;'>Resources Library</a> for immediate answers, or take our <a href='https://sicklecare.org/quiz' style='color:#16A34A;'>Risk Assessment Quiz</a>.
-            </div>
-        ");
-        self::send($email, $name, 'Message Received — SickleCare Will Respond Within 24 Hours', $body);
-    }
-
-    public static function notifyAdmin(string $subject, string $content): void {
-        $body = self::template('Admin Alert', 'Team', "<pre style='font-family:monospace;font-size:13px;background:#F8FAFC;padding:20px;border-radius:8px;overflow:auto;'>$content</pre>");
-        self::send(MAIL_ADMIN, 'Admin', "[SICKLECARE] $subject", $body);
-    }
-
-    private static function template(string $heading, string $name, string $content): string {
         return "<!DOCTYPE html>
-<html>
-<head><meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1'></head>
-<body style='margin:0;padding:0;background:#F1F5F9;font-family:\"Plus Jakarta Sans\",system-ui,sans-serif;'>
-<div style='max-width:600px;margin:32px auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.08);'>
-  <div style='background:linear-gradient(135deg,#96281B,#C0392B);padding:28px 36px;'>
-    <div style='color:#fff;font-size:22px;font-weight:800;'>🩸 SickleCare</div>
-    <div style='color:rgba(255,255,255,0.8);font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;margin-top:2px;'>Know Your Genotype. Protect Your Children.</div>
+<html lang='en'>
+<head><meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1'>
+<title>{$heading}</title></head>
+<body style='margin:0;padding:0;background:#f1f5f9;font-family:Inter,Helvetica,Arial,sans-serif;'>
+<div style='max-width:600px;margin:32px auto;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);'>
+  <div style='background:linear-gradient(135deg,#96281B,#e22410);padding:28px 32px;'>
+    <div style='color:#fff;font-size:20px;font-weight:800;letter-spacing:-0.3px;'>🩸 {$appName}</div>
+    <div style='color:rgba(255,255,255,0.7);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;margin-top:2px;'>Know Your Genotype. Protect Your Family.</div>
   </div>
-  <div style='padding:36px;'>
-    <h1 style='font-size:20px;color:#0D1117;margin:0 0 8px;'>$heading</h1>
-    <p style='color:#64748B;margin:0 0 24px;'>Hi $name,</p>
-    $content
+  <div style='padding:32px;'>
+    <h1 style='font-size:18px;color:#0f172a;margin:0 0 6px;'>{$heading}</h1>
+    <p style='color:#64748b;font-size:14px;margin:0 0 20px;'>Hi {$name},</p>
+    <div style='font-size:14px;color:#475569;line-height:1.7;'>
+      {$body}
+    </div>
   </div>
-  <div style='background:#F8FAFC;padding:24px 36px;border-top:1px solid #E2E8F0;'>
-    <p style='margin:0;font-size:12px;color:#94A3B8;line-height:1.6;'>
-      This email was sent by SickleCare Nigeria. If you did not sign up, please ignore this email.<br>
-      SickleCare provides educational information only. Always consult a qualified healthcare professional for medical advice.<br>
-      <a href='https://sicklecare.org' style='color:#C0392B;'>sicklecare.org</a> &nbsp;|&nbsp; <a href='mailto:hello@sicklecare.org' style='color:#C0392B;'>hello@sicklecare.org</a>
+  <div style='background:#f8fafc;padding:20px 32px;border-top:1px solid #e2e8f0;'>
+    <p style='margin:0;font-size:11px;color:#94a3b8;line-height:1.6;'>
+      &copy; {$year} {$appName}. All rights reserved.<br>
+      This platform provides educational information only. Always consult a qualified healthcare professional for medical advice.<br>
+      <a href='{$appUrl}' style='color:#e22410;'>{$appUrl}</a> &nbsp;|&nbsp; <a href='mailto:{$admin}' style='color:#e22410;'>{$admin}</a>
     </p>
   </div>
 </div>
-</body>
-</html>";
+</body></html>";
     }
 }

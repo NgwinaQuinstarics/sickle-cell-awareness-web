@@ -1,87 +1,61 @@
-<?php
-/**
- * POST /api/contact/submit.php
- * Contact form submission
- */
+<?php // contact/submit.php
 require_once __DIR__ . '/../../config/config.php';
 require_once __DIR__ . '/../../config/database.php';
 require_once __DIR__ . '/../../middleware/Security.php';
 require_once __DIR__ . '/../../utils/Logger.php';
+require_once __DIR__ . '/../../utils/Validator.php';
 require_once __DIR__ . '/../../utils/Mailer.php';
 
-Security::initHeaders();
-Security::requirePost();
-Security::rateLimit('contact', 3); // 3 messages per minute per IP
+Security::boot('POST', 'contact');
+$d = Security::body();
+Security::honeypot($d);
 
-$data = Security::getJsonInput();
-Security::checkHoneypot($data);
+$nameR = Validator::required($d['name']    ?? '', 'Name',    2, MAX_NAME);
+$emlR  = Validator::email(   $d['email']   ?? '');
+$subR  = Validator::required($d['subject'] ?? '', 'Subject', 2, 120);
+$msgR  = Validator::required($d['message'] ?? '', 'Message', 20, MAX_MSG);
 
-// Extract and validate fields
-$name    = Security::sanitize($data['name'] ?? '', MAX_NAME_LENGTH);
-$email   = trim($data['email'] ?? '');
-$phone   = Security::sanitize($data['phone'] ?? '', 20);
-$subject = Security::sanitize($data['subject'] ?? '', 100);
-$message = Security::sanitize($data['message'] ?? '', MAX_MESSAGE_LENGTH);
+$err = Validator::first($nameR, $emlR, $subR, $msgR);
+if ($err) Security::abort(422, $err);
 
-// Validate required fields
-if (strlen($name) < 2) {
-    Security::abort(400, 'Please provide your full name.');
-}
-if (!Security::validateEmail($email)) {
-    Security::abort(400, 'Please provide a valid email address.');
-}
-if (empty($subject)) {
-    Security::abort(400, 'Please select a subject.');
-}
-if (strlen($message) < 20) {
-    Security::abort(400, 'Message must be at least 20 characters.');
+$name    = Validator::clean($nameR['val'], MAX_NAME);
+$email   = $emlR['val'];
+$subject = Validator::clean($subR['val'],  120);
+$message = Validator::clean($msgR['val'],  MAX_MSG);
+$phone   = null;
+
+if (!empty(trim($d['phone'] ?? ''))) {
+    $pr = Validator::phone($d['phone']);
+    if ($pr['ok']) $phone = $pr['val'];
 }
 
-// Optional phone validation
-if (!empty($phone) && !Security::validatePhone($phone)) {
-    Security::abort(400, 'Please provide a valid Nigerian phone number.');
+if (Validator::isSpam($name, $subject, $message)) {
+    Logger::warning('Spam contact', ['ip' => Security::clientIp()]);
+    Security::ok(['message' => 'Your message has been sent.', 'reference' => 'SC-FILTERED']);
 }
 
-// Spam detection - simple keyword filter
-$spamKeywords = ['casino', 'forex', 'bitcoin', 'crypto invest', 'click here to win', 'enlarge', 'viagra'];
-foreach ($spamKeywords as $kw) {
-    if (stripos($message, $kw) !== false || stripos($subject, $kw) !== false) {
-        Logger::warning("Spam detected from: " . Security::getClientIp());
-        // Silent success to confuse spammers
-        Security::respond(['message' => 'Thank you for your message. We will get back to you shortly.']);
-    }
-}
-
-$email = strtolower(filter_var($email, FILTER_SANITIZE_EMAIL));
+$ip  = Security::clientIp();
+$ref = 'SC-' . strtoupper(substr(md5(uniqid(mt_rand(), true)), 0, 8));
 
 try {
-    $db  = Database::getInstance();
-    $ip  = Security::getClientIp();
-    $ref = strtoupper(substr(md5(uniqid()), 0, 8)); // Ticket reference
+    $db = Database::get();
+    $db->prepare(
+        'INSERT INTO contact_messages (name,email,phone,subject,message,ip_address,reference,created_at) VALUES (?,?,?,?,?,?,?,NOW())'
+    )->execute([$name, $email, $phone, $subject, $message, $ip, $ref]);
 
-    $stmt = $db->prepare('
-        INSERT INTO contact_messages (name, email, phone, subject, message, ip_address, reference, created_at)
-        VALUES (?, ?, ?, ?, ?, ?, ?, NOW())
-    ');
-    $stmt->execute([$name, $email, $phone ?: null, $subject, $message, $ip, $ref]);
-
-    // Send confirmation to user
-    Mailer::sendContactConfirmation($email, $name, $subject);
-
-    // Notify admin
+    Mailer::contactConfirm($email, $name, $subject, $ref);
     Mailer::notifyAdmin(
-        "New Contact: $subject",
-        "Reference: $ref\nName: $name\nEmail: $email\nPhone: $phone\nSubject: $subject\n\nMessage:\n$message\n\nIP: $ip"
+        "New Contact: $subject [$ref]",
+        "<p><strong>$name</strong> ($email)</p><p>Subject: $subject</p><p>$message</p><p>Ref: $ref | IP: $ip</p>"
     );
 
-    Logger::audit("Contact form: $email | Subject: $subject | Ref: $ref");
-
-    Security::respond([
-        'message'   => 'Your message has been received. We will respond within 24 hours.',
+    Logger::audit('Contact submitted', ['ref' => $ref, 'email' => $email]);
+    Security::ok([
+        'message'   => 'Your message has been sent. We will respond within 24 hours.',
         'reference' => $ref,
     ]);
 
 } catch (PDOException $e) {
-    Logger::error('Contact submit error: ' . $e->getMessage());
-    Security::abort(500, 'Unable to send your message. Please email us directly at hello@sicklecare.org');
+    Logger::error('Contact error: ' . $e->getMessage());
+    Security::abort(500, 'Could not send your message. Please email us directly at ' . MAIL_ADMIN);
 }

@@ -1,39 +1,54 @@
-// Base URL — change to your PHP backend URL in production
+import axios from 'axios';
+
 const BASE = import.meta.env.VITE_API_URL || '/api';
 
-async function request(endpoint, options = {}) {
-  const config = {
-    headers: { 'Content-Type': 'application/json', ...options.headers },
-    ...options,
-  };
-  if (config.body && typeof config.body === 'object') {
-    config.body = JSON.stringify(config.body);
+const http = axios.create({
+  baseURL: BASE,
+  timeout: 15000,
+  headers: { 'Content-Type': 'application/json' },
+});
+
+http.interceptors.request.use(cfg => {
+  const token = localStorage.getItem('sc_token');
+  if (token) cfg.headers.Authorization = `Bearer ${token}`;
+  return cfg;
+});
+
+http.interceptors.response.use(
+  r => r.data,
+  err => {
+    if (err.response?.status === 401) {
+      localStorage.removeItem('sc_token');
+      localStorage.removeItem('sc_user');
+      window.location.href = '/login';
+    }
+    return Promise.reject(err.response?.data || { message: 'Network error. Please check your connection.' });
   }
-  const res = await fetch(`${BASE}${endpoint}`, config);
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.message || `HTTP ${res.status}`);
-  return data;
-}
+);
+
+export default http;
+
+export const auth = {
+  register:   d => http.post('/auth/register.php', d),
+  login:      d => http.post('/auth/login.php', d),
+  adminLogin: d => http.post('/admin/login.php', d),
+  me:         () => http.get('/auth/me.php'),
+};
 
 export const api = {
-  // Newsletter
-  subscribe: (email, name) => request('/newsletter/subscribe.php', { method: 'POST', body: { email, name } }),
+  getStats:      ()  => http.get('/stats/public.php'),
+  getCentres:    r   => http.get(`/centers/list.php?region=${encodeURIComponent(r)}`),
+  contact:       d   => http.post('/contact/submit.php', d),
+  subscribe:     d   => http.post('/newsletter/subscribe.php', d),
+  pledge:        d   => http.post('/pledge/submit.php', d),
+  quiz:          d   => http.post('/quiz/submit.php', d),
+  bookAppointment: d => http.post('/appointment/submit.php', d),
+};
 
-  // Contact
-  contact: (payload) => request('/contact/submit.php', { method: 'POST', body: payload }),
-
-  // Pledge
-  pledge: (payload) => request('/pledge/submit.php', { method: 'POST', body: payload }),
-
-  // Quiz
-  submitQuiz: (payload) => request('/quiz/submit.php', { method: 'POST', body: payload }),
-
-  // Appointment request
-  appointment: (payload) => request('/appointment/submit.php', { method: 'POST', body: payload }),
-
-  // Get stats (public counters)
-  getStats: () => request('/stats/public.php'),
-
-  // Get testing centers
-  getCenters: (state) => request(`/centers/list.php?state=${encodeURIComponent(state)}`),
+export const adminApi = {
+  dashboard:      ()    => http.get('/admin/dashboard.php'),
+  getMessages:    page  => http.get(`/admin/messages.php?page=${page || 1}`),
+  updateMessage:  d     => http.post('/admin/messages.php?action=update_status', d),
+  getAppointments:page  => http.get(`/admin/appointments.php?page=${page || 1}`),
+  getPledges:     page  => http.get(`/admin/pledges.php?page=${page || 1}`),
 };

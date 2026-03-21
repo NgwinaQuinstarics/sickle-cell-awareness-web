@@ -1,70 +1,56 @@
-<?php
-/**
- * POST /api/appointment/submit.php
- */
+<?php // appointment/submit.php
 require_once __DIR__ . '/../../config/config.php';
 require_once __DIR__ . '/../../config/database.php';
 require_once __DIR__ . '/../../middleware/Security.php';
 require_once __DIR__ . '/../../utils/Logger.php';
+require_once __DIR__ . '/../../utils/Validator.php';
 require_once __DIR__ . '/../../utils/Mailer.php';
 
-Security::initHeaders();
-Security::requirePost();
-Security::rateLimit('appointment', 5);
+Security::boot('POST', 'appointment');
+$d = Security::body();
+Security::honeypot($d);
 
-$data   = Security::getJsonInput();
-Security::checkHoneypot($data);
+$nameR   = Validator::required($d['name']   ?? '', 'Name',        2, MAX_NAME);
+$phoneR  = Validator::phone(   $d['phone']  ?? '');
+$centreR = Validator::required($d['center'] ?? $d['centre'] ?? '', 'Test centre', 2, 200);
+$dateR   = Validator::futureDate($d['date'] ?? '');
 
-$name   = Security::sanitize($data['name']   ?? '', MAX_NAME_LENGTH);
-$phone  = Security::sanitize($data['phone']  ?? '', 20);
-$email  = trim($data['email']  ?? '');
-$date   = trim($data['date']   ?? '');
-$center = Security::sanitize($data['center'] ?? '', 200);
+$err = Validator::first($nameR, $phoneR, $centreR, $dateR);
+if ($err) Security::abort(422, $err);
 
-if (strlen($name) < 2)  Security::abort(400, 'Please provide your full name.');
-if (!Security::validatePhone($phone)) Security::abort(400, 'Please provide a valid Nigerian phone number.');
-if (empty($center))     Security::abort(400, 'Test center is required.');
+$name   = Validator::clean($nameR['val'],   MAX_NAME);
+$phone  = $phoneR['val'];
+$centre = Validator::clean($centreR['val'], 200);
+$date   = $dateR['val'];
+$email  = null;
 
-// Validate date
-$d = DateTime::createFromFormat('Y-m-d', $date);
-if (!$d || $d < new DateTime('today')) {
-    Security::abort(400, 'Please select a valid future date.');
+if (!empty(trim($d['email'] ?? ''))) {
+    $er = Validator::email($d['email']);
+    if ($er['ok']) $email = $er['val'];
 }
 
-$email = !empty($email) && Security::validateEmail($email)
-    ? strtolower(filter_var($email, FILTER_SANITIZE_EMAIL))
-    : null;
-
-$ip  = Security::getClientIp();
-$ref = 'APT-' . strtoupper(substr(md5(uniqid()), 0, 6));
+$ip  = Security::clientIp();
+$ref = 'APT-' . strtoupper(substr(md5(uniqid(mt_rand(), true)), 0, 6));
 
 try {
-    $db = Database::getInstance();
-    $stmt = $db->prepare('INSERT INTO appointments (name, phone, email, preferred_date, center_name, reference, ip_address, created_at) VALUES (?,?,?,?,?,?,?,NOW())');
-    $stmt->execute([$name, $phone, $email, $date, $center, $ref, $ip]);
+    Database::get()->prepare(
+        'INSERT INTO appointments (name,phone,email,preferred_date,centre_name,reference,status,ip_address,created_at) VALUES (?,?,?,?,?,?,"pending",?,NOW())'
+    )->execute([$name, $phone, $email, $date, $centre, $ref, $ip]);
 
-    // Notify admin
+    if ($email) Mailer::appointmentConfirm($email, $name, $centre, $date, $ref);
+
     Mailer::notifyAdmin(
-        "New Appointment Request: $ref",
-        "Reference: $ref\nName: $name\nPhone: $phone\nEmail: $email\nDate: $date\nCenter: $center"
+        "New Appointment: $ref",
+        "<p><strong>$name</strong> | $phone | $centre | <strong>$date</strong><br>Ref: $ref</p>"
     );
 
-    // Confirm to user via email if provided
-    if ($email) {
-        $body = "Hi $name,<br><br>Your appointment request at <strong>$center</strong> for <strong>$date</strong> has been received.<br><br>
-        Reference: <strong>$ref</strong><br><br>The center will contact you at $phone to confirm. Please arrive 15 minutes early with a valid ID.<br><br>
-        <strong>What to expect:</strong> A small blood sample will be taken. Results are typically ready in 24–48 hours.";
-        Mailer::send($email, $name, "Appointment Request Confirmed — $ref", Mailer::notifyAdmin("dummy","dummy") ?: $body);
-    }
-
-    Logger::audit("Appointment $ref: $name at $center on $date");
-
-    Security::respond([
-        'message'   => 'Appointment request submitted! The center will contact you to confirm.',
+    Logger::audit('Appointment booked', ['ref' => $ref, 'centre' => $centre, 'date' => $date]);
+    Security::ok([
+        'message'   => 'Appointment request sent! The centre will contact you to confirm.',
         'reference' => $ref,
     ]);
 
 } catch (PDOException $e) {
     Logger::error('Appointment error: ' . $e->getMessage());
-    Security::abort(500, 'Unable to process appointment. Please call the center directly.');
+    Security::abort(500, 'Could not process your request. Please call the centre directly.');
 }

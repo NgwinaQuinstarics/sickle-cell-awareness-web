@@ -1,65 +1,71 @@
-<?php
-/**
- * POST /api/pledge/submit.php
- */
+<?php // pledge/submit.php
 require_once __DIR__ . '/../../config/config.php';
 require_once __DIR__ . '/../../config/database.php';
 require_once __DIR__ . '/../../middleware/Security.php';
 require_once __DIR__ . '/../../utils/Logger.php';
+require_once __DIR__ . '/../../utils/Validator.php';
 require_once __DIR__ . '/../../utils/Mailer.php';
 
-Security::initHeaders();
-Security::requirePost();
-Security::rateLimit('pledge', 2);
+Security::boot('POST', 'pledge');
+$d = Security::body();
+Security::honeypot($d);
 
-$data = Security::getJsonInput();
-Security::checkHoneypot($data);
+if (empty($d['agree'])) Security::abort(422, 'Please confirm the pledge to continue.');
 
-$name  = Security::sanitize($data['name'] ?? '', MAX_NAME_LENGTH);
-$email = trim($data['email'] ?? '');
-$phone = Security::sanitize($data['phone'] ?? '', 20);
-$state = Security::sanitize($data['state'] ?? '', 50);
-$agree = !empty($data['agree']);
+$nameR   = Validator::required($d['name']   ?? '', 'Name',   2, MAX_NAME);
+$emlR    = Validator::email(   $d['email']  ?? '');
+$regionR = Validator::required($d['region'] ?? '', 'Region', 2, 60);
 
-if (strlen($name) < 2) Security::abort(400, 'Please provide your full name.');
-if (!Security::validateEmail($email)) Security::abort(400, 'Please provide a valid email address.');
-if (empty($state)) Security::abort(400, 'Please select your state.');
-if (!$agree) Security::abort(400, 'Please confirm the pledge to continue.');
+$err = Validator::first($nameR, $emlR, $regionR);
+if ($err) Security::abort(422, $err);
 
-$email = strtolower(filter_var($email, FILTER_SANITIZE_EMAIL));
+if (!in_array($regionR['val'], CM_REGIONS, true)) Security::abort(422, 'Invalid region selected.');
+
+$name   = Validator::clean($nameR['val'],   MAX_NAME);
+$email  = $emlR['val'];
+$region = $regionR['val'];
+$phone  = null;
+
+if (!empty(trim($d['phone'] ?? ''))) {
+    $pr = Validator::phone($d['phone']);
+    if ($pr['ok']) $phone = $pr['val'];
+}
+
+$ip = Security::clientIp();
 
 try {
-    $db = Database::getInstance();
-    $ip = Security::getClientIp();
+    $db = Database::get();
 
-    // Prevent duplicate pledges from same email
+    // Prevent duplicate pledges
     $stmt = $db->prepare('SELECT id FROM pledges WHERE email = ? LIMIT 1');
     $stmt->execute([$email]);
     if ($stmt->fetch()) {
-        Security::respond([
-            'message'       => 'You have already made the pledge! Thank you for your commitment.',
-            'pledgeNumber'  => null,
+        Security::ok([
+            'message'       => 'You have already taken the pledge. Thank you for your commitment!',
+            'alreadyPledged'=> true,
         ]);
     }
 
-    $stmt = $db->prepare('INSERT INTO pledges (name, email, phone, state, ip_address, pledged_at) VALUES (?,?,?,?,?,NOW())');
-    $stmt->execute([$name, $email, $phone ?: null, $state, $ip]);
-    $pledgeId = $db->lastInsertId();
+    $db->prepare(
+        'INSERT INTO pledges (name, email, phone, region, ip_address, pledged_at) VALUES (?,?,?,?,?,NOW())'
+    )->execute([$name, $email, $phone, $region, $ip]);
 
-    // Get total count
-    $totalStmt = $db->query('SELECT COUNT(*) as total FROM pledges');
-    $total     = $totalStmt->fetch()['total'];
+    $pledgeId = (int) $db->lastInsertId();
+    $total    = (int) $db->query('SELECT COUNT(*) FROM pledges')->fetchColumn();
 
-    Mailer::sendPledgeCertificate($email, $name, $state);
-    Mailer::notifyAdmin("New Pledge #$pledgeId", "Name: $name\nEmail: $email\nState: $state\nTotal pledges: $total");
-    Logger::audit("Pledge #$pledgeId: $name ($email) from $state");
+    Mailer::pledgeCert($email, $name, $region);
+    Mailer::notifyAdmin(
+        "New Pledge #$pledgeId — $region",
+        "<p><strong>$name</strong> ($email) from <strong>$region</strong> just took the pledge. Total pledges: <strong>$total</strong></p>"
+    );
 
-    Security::respond([
+    Logger::audit('Pledge submitted', ['id' => $pledgeId, 'email' => $email, 'region' => $region]);
+    Security::ok([
         'message'      => 'Your pledge has been recorded. Welcome to the movement!',
         'pledgeNumber' => $total,
     ]);
 
 } catch (PDOException $e) {
-    Logger::error('Pledge submit error: ' . $e->getMessage());
-    Security::abort(500, 'Unable to record your pledge. Please try again.');
+    Logger::error('Pledge error: ' . $e->getMessage());
+    Security::abort(500, 'Could not record your pledge. Please try again.');
 }
