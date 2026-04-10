@@ -1,15 +1,24 @@
 import { Link } from 'react-router-dom';
-import { FiArrowRight, FiAlertTriangle, FiCheckCircle } from 'react-icons/fi';
+import {
+  FiArrowRight, FiAlertTriangle, FiCheckCircle,
+  FiDroplet, FiBarChart2, FiMapPin, FiBook,
+  FiUsers, FiSmartphone, FiSearch, FiActivity,
+  FiClipboard, FiHeart, FiShield,
+} from 'react-icons/fi';
+import {
+  FaDna, FaBaby, FaHandshake,
+} from 'react-icons/fa';
+import { GiSyringe } from 'react-icons/gi';
 import { SectionHead, StatCard, FeatureCard } from '../components/ui/index.jsx';
 import { useStats } from '../hooks/index.js';
 
 const FEATURES = [
-  { icon:'🧬', title:'Genotype Testing',    desc:'Find a certified testing centre in your region. Many offer free tests.',                  accent:'red' },
-  { icon:'📊', title:'Risk Assessment',     desc:'Our 7-question quiz gives you a personalised risk score in under 2 minutes.',             accent:'amber' },
-  { icon:'🏥', title:'Test Centre Finder',  desc:'Locate certified labs across all 10 Cameroon regions with directions.',                   accent:'blue' },
-  { icon:'📚', title:'Health Education',    desc:'Clear, medically accurate information about SCD, genetics, and prevention.',               accent:'green' },
-  { icon:'🤝', title:'Community Pledge',    desc:'Join thousands of Cameroonians committed to breaking the sickle cell cycle.',              accent:'purple' },
-  { icon:'📱', title:'Mobile App',          desc:'Track medications, hydration, and symptoms with the SickleCare mobile app.',              accent:'slate' },
+  { icon: <FaDna />,        title:'Genotype Testing',    desc:'Find a certified testing centre in your region. Many offer free tests.',                  accent:'red' },
+  { icon: <FiBarChart2 />,  title:'Risk Assessment',     desc:'Our 7-question quiz gives you a personalised risk score in under 2 minutes.',             accent:'amber' },
+  { icon: <FiMapPin />,     title:'Test Centre Finder',  desc:'Locate certified labs across all 10 Cameroon regions with directions.',                   accent:'blue' },
+  { icon: <FiBook />,       title:'Health Education',    desc:'Clear, medically accurate information about SCD, genetics, and prevention.',               accent:'green' },
+  { icon: <FiUsers />,      title:'Community Pledge',    desc:'Join thousands of Cameroonians committed to breaking the sickle cell cycle.',              accent:'purple' },
+  { icon: <FiSmartphone />, title:'Mobile App',          desc:'Track medications, hydration, and symptoms with the SickleCare mobile app.',              accent:'slate' },
 ];
 
 const TESTIMONIALS = [
@@ -19,10 +28,10 @@ const TESTIMONIALS = [
 ];
 
 const STEPS = [
-  { n:'01', icon:'🔍', t:'Find a Centre',     d:'Use our directory to locate a certified testing centre near you.' },
-  { n:'02', icon:'🩸', t:'Give a Blood Sample',d:'Quick, painless. Results in 24–48 hours at most centres.' },
-  { n:'03', icon:'📋', t:'Get Your Result',   d:'Receive your genotype (AA, AS, SS...) with a counsellor explanation.' },
-  { n:'04', icon:'❤️', t:'Protect Your Family',d:'Share with your partner. Make informed decisions for your children.' },
+  { n:'01', icon: <FiSearch />,    t:'Find a Centre',      d:'Use our directory to locate a certified testing centre near you.' },
+  { n:'02', icon: <GiSyringe />,   t:'Give a Blood Sample', d:'Quick, painless. Results in 24–48 hours at most centres.' },
+  { n:'03', icon: <FiClipboard />, t:'Get Your Result',    d:'Receive your genotype (AA, AS, SS...) with a counsellor explanation.' },
+  { n:'04', icon: <FiHeart />,     t:'Protect Your Family', d:'Share with your partner. Make informed decisions for your children.' },
 ];
 
 export default function Home() {
@@ -37,7 +46,7 @@ export default function Home() {
 
         <div className="relative page-container py-24 lg:py-36">
           <div className="max-w-2xl">
-            <div className="tag-red mb-6 animate-in-up">🩸 Sickle Cell Awareness — Cameroon</div>
+            <div className="tag-red mb-6 animate-in-up flex items-center gap-1.5"><FiDroplet className="text-red-400" /> Sickle Cell Awareness — Cameroon</div>
             <h1 className="heading-xl text-white mb-6 animate-in-up delay-1 text-balance">
               Not Knowing Your Genotype Is a{' '}
               <span className="text-red-500">Deadly Risk.</span>
@@ -70,10 +79,10 @@ export default function Home() {
       <section className="bg-white border-b border-slate-100 py-14">
         <div className="page-container grid grid-cols-2 lg:grid-cols-4 gap-4">
           {[
-            { value:'1 in 4',  label:'Cameroonians carry the gene', icon:'🧬' },
-            { value:'150K+',   label:'SCD births per year in Africa', icon:'👶' },
-            { value:'90%',     label:'SS children die before 5 without care', icon:'⚠️' },
-            { value:'70%',     label:'Cases preventable by testing', icon:'🛡️' },
+            { value:'1 in 4',  label:'Cameroonians carry the gene', icon: <FaDna /> },
+            { value:'150K+',   label:'SCD births per year in Africa', icon: <FaBaby /> },
+            { value:'90%',     label:'SS children die before 5 without care', icon: <FiAlertTriangle /> },
+            { value:'70%',     label:'Cases preventable by testing', icon: <FiShield /> },
           ].map((s, i) => <StatCard key={i} {...s} />)}
         </div>
       </section>
@@ -82,7 +91,7 @@ export default function Home() {
       <section className="section bg-slate-50">
         <div className="page-container grid lg:grid-cols-2 gap-16 items-center">
           <div>
-            <div className="tag-red mb-4">🔬 Understanding SCD</div>
+            <div className="tag-red mb-4 flex items-center gap-1.5"><FiActivity className="text-red-400" /> Understanding SCD</div>
             <h2 className="heading-lg text-slate-900 mb-5">What Is Sickle Cell Disease?</h2>
             <p className="body-md mb-4">Sickle cell disease (SCD) is a genetic blood disorder where red blood cells become crescent-shaped instead of round and flexible. These abnormal cells block blood vessels, starving organs of oxygen.</p>
             <p className="body-md mb-6">The consequences: <strong className="text-slate-800">severe pain crises, organ damage, strokes, and significantly shortened life</strong>. An SS child in sub-Saharan Africa has a <strong className="text-red-600">90% chance of dying before age 5</strong> without proper care.</p>
@@ -93,7 +102,7 @@ export default function Home() {
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="bg-green-50 border border-green-200 rounded-xl p-5 text-center">
-              <div className="text-5xl mb-3">⭕</div>
+              <div className="text-5xl mb-3 flex justify-center"><FiCheckCircle className="text-green-400" size={48} /></div>
               <div className="font-semibold text-green-700 mb-2 text-sm">Normal Blood Cell</div>
               <ul className="text-xs text-slate-500 space-y-1.5">
                 {['Round & flexible','Flows freely','Lives 90–120 days','Carries oxygen well'].map(t => (
@@ -102,7 +111,7 @@ export default function Home() {
               </ul>
             </div>
             <div className="bg-red-50 border border-red-200 rounded-xl p-5 text-center">
-              <div className="text-5xl mb-3">🌙</div>
+              <div className="text-5xl mb-3 flex justify-center"><FiAlertTriangle className="text-red-400" size={48} /></div>
               <div className="font-semibold text-red-700 mb-2 text-sm">Sickle Cell</div>
               <ul className="text-xs text-slate-500 space-y-1.5">
                 {['Crescent-shaped','Blocks vessels','Lives only 10–20 days','Causes pain crises'].map(t => (
@@ -163,7 +172,7 @@ export default function Home() {
             {STEPS.map(({ n, icon, t, d }) => (
               <div key={n} className="text-center">
                 <div className="text-5xl font-bold text-slate-100 mb-1" style={{fontFamily:'Sora,sans-serif'}}>{n}</div>
-                <div className="text-3xl mb-3">{icon}</div>
+                <div className="text-3xl mb-3 flex justify-center text-slate-400">{icon}</div>
                 <h3 className="font-semibold text-slate-900 mb-2 text-sm">{t}</h3>
                 <p className="text-xs text-slate-500 leading-relaxed">{d}</p>
               </div>
@@ -178,7 +187,7 @@ export default function Home() {
       {/* PLEDGE CTA */}
       <section className="bg-red-600 py-20">
         <div className="page-container text-center max-w-2xl mx-auto">
-          <div className="text-5xl mb-4">🤝</div>
+          <div className="text-5xl mb-4 flex justify-center"><FaHandshake className="text-white/80" size={52} /></div>
           <h2 className="text-3xl font-bold text-white mb-4" style={{fontFamily:'Sora,sans-serif'}}>Take the SickleCare Pledge</h2>
           <p className="text-red-100 text-lg leading-relaxed mb-8">
             Join thousands of Cameroonians committed to getting tested, sharing awareness, and protecting future generations.
