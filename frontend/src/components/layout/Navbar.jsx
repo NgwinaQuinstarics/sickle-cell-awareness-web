@@ -12,7 +12,7 @@ const LINKS = [
   { to: '/centres',    label: 'Test Centres' },
   { to: '/living',     label: 'Living with SCD' },
   { to: '/resources',  label: 'Resources' },
-  { to: '/app',        label: '📱 App' },
+  { to: '/app',        label: 'Get App' },
 ];
 
 function UserMenu({ user, isAdmin, logout }) {
@@ -101,14 +101,6 @@ export default function Navbar() {
 
           {/* Right */}
           <div className="hidden lg:flex items-center gap-2 ml-auto">
-            {isLoggedIn ? (
-              <UserMenu user={user} isAdmin={isAdmin} logout={logout} />
-            ) : (
-              <>
-                <Link to="/login"    className="btn-ghost btn-sm">Sign In</Link>
-                <Link to="/register" className="btn-primary btn-sm">Create Account</Link>
-              </>
-            )}
             <Link to="/quiz" className="btn-outline btn-sm ml-1">Risk Quiz</Link>
           </div>
 
@@ -133,18 +125,7 @@ export default function Navbar() {
               ))}
             </div>
             <div className="flex flex-col gap-2 pt-3 border-t border-slate-100">
-              {isLoggedIn ? (
-                <>
-                  {isAdmin && <Link to="/admin" onClick={close} className="btn-ghost btn-md justify-center">Admin Panel</Link>}
-                  <Link to="/dashboard" onClick={close} className="btn-secondary btn-md justify-center">Dashboard</Link>
-                  <button onClick={() => { logout(); close(); }} className="btn-md bg-red-50 text-red-600 hover:bg-red-100 rounded-lg font-semibold justify-center flex items-center">Sign Out</button>
-                </>
-              ) : (
-                <>
-                  <Link to="/login"    onClick={close} className="btn-secondary btn-md justify-center">Sign In</Link>
-                  <Link to="/register" onClick={close} className="btn-primary  btn-md justify-center">Create Account</Link>
-                </>
-              )}
+             
               <Link to="/quiz" onClick={close} className="btn-outline btn-md justify-center">Risk Quiz</Link>
             </div>
           </div>

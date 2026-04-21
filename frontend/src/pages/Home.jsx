@@ -46,7 +46,7 @@ export default function Home() {
 
         <div className="relative page-container py-24 lg:py-36">
           <div className="max-w-2xl">
-            <div className="tag-red mb-6 animate-in-up flex items-center gap-1.5"><FiDroplet className="text-red-400" /> Sickle Cell Awareness — Cameroon</div>
+           
             <h1 className="heading-xl text-white mb-6 animate-in-up delay-1 text-balance">
               Not Knowing Your Genotype Is a{' '}
               <span className="text-red-500">Deadly Risk.</span>
@@ -59,18 +59,7 @@ export default function Home() {
               <Link to="/centres" className="btn-primary-lg">Get Tested Now <FiArrowRight /></Link>
               <Link to="/dangers" className="btn-lg border border-slate-700 text-slate-300 hover:border-slate-500 hover:text-white rounded-lg transition-colors">Why It Matters</Link>
             </div>
-            <div className="grid grid-cols-3 gap-8 max-w-sm animate-in-up delay-4">
-              {[
-                [stats?.pledges ? `${stats.pledges.toLocaleString()}+` : '47K+', 'Pledges taken'],
-                [stats?.centres ? `${stats.centres}` : '15+',                   'Test centres'],
-                ['70%', 'Cases preventable'],
-              ].map(([v, l]) => (
-                <div key={l}>
-                  <div className="text-2xl font-bold text-red-500" style={{fontFamily:'Sora,sans-serif'}}>{v}</div>
-                  <div className="text-xs text-slate-500 mt-0.5">{l}</div>
-                </div>
-              ))}
-            </div>
+           
           </div>
         </div>
       </section>
