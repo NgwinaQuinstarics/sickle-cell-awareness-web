@@ -1,0 +1,69 @@
+.section-center-text { text-align:center; margin-bottom:48px; }
+.about-what { display:grid; grid-template-columns:1fr 1fr; gap:72px; align-items:start; opacity:0; transform:translateY(24px); transition:opacity .6s,transform .6s; }
+.about-what.av { opacity:1; transform:translateY(0); }
+.about-p { font-size:.97rem; color:var(--gray-600); line-height:1.8; margin-top:16px; }
+.cell-diagram { background:var(--gray-50); border:1px solid var(--gray-200); border-radius:20px; padding:32px; margin-bottom:16px; text-align:center; }
+.cell-compare { display:flex; justify-content:center; gap:48px; margin-bottom:16px; }
+.cell-item { display:flex; flex-direction:column; align-items:center; gap:10px; font-size:.85rem; font-weight:600; color:var(--gray-600); }
+.cell-shape { width:64px; height:64px; background:var(--blue-500); }
+.cell-normal { border-radius:50%; }
+.cell-sickle { border-radius:50% 50% 50% 0/50% 50% 0 50%; transform:rotate(-45deg); background:var(--red-600); }
+.cell-caption { font-size:.8rem; color:var(--gray-400); }
+.about-fact-cards { display:flex; flex-direction:column; gap:10px; }
+.about-fact { display:flex; align-items:center; gap:12px; padding:16px; border-radius:12px; }
+
+.genetics-section { background:var(--gray-50); }
+.genetics-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin-bottom:28px; }
+.genetics-scenario { border-radius:20px; padding:28px; border:2px solid; text-align:center; }
+.gs-green { background:#f0fdf4; border-color:#bbf7d0; }
+.gs-amber { background:#fffbeb; border-color:#fed7aa; }
+.gs-red   { background:#fef2f2; border-color:#fecaca; }
+.gs-badge { display:inline-block; font-weight:800; font-size:1.1rem; font-family:var(--font-display); margin-bottom:8px; }
+.gs-green .gs-badge { color:#15803d; }
+.gs-amber .gs-badge { color:#d97706; }
+.gs-red   .gs-badge { color:#dc2626; }
+.gs-label { font-size:.82rem; color:var(--gray-500); margin-bottom:20px; }
+.gs-children { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:16px; }
+.gs-child { border-radius:8px; padding:10px 6px; font-weight:800; font-size:.9rem; }
+.gs-aa { background:#dcfce7; color:#15803d; }
+.gs-as { background:#fef3c7; color:#d97706; }
+.gs-ss { background:#fee2e2; color:#dc2626; }
+.gs-result { font-size:.85rem; font-weight:600; color:var(--gray-700); }
+.genetics-note { display:flex; gap:14px; background:var(--amber-50); border:1px solid var(--amber-100); border-radius:14px; padding:20px 24px; }
+.genetics-note p { font-size:.9rem; color:var(--gray-700); line-height:1.7; }
+
+.symptoms-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+.symp-card { background:#fff; border:1px solid var(--gray-200); border-radius:16px; padding:24px; opacity:0; transform:translateY(22px); transition:opacity .5s,transform .5s,box-shadow .25s; }
+.symp-card.sv { opacity:1; transform:translateY(0); }
+.symp-card:hover { box-shadow:var(--shadow-md); transform:translateY(-3px); }
+.symp-card.sv:hover { transform:translateY(-3px); }
+.symp-icon { width:44px; height:44px; background:var(--blue-50); color:var(--blue-700); border-radius:12px; display:flex; align-items:center; justify-content:center; margin-bottom:14px; }
+.symp-card h3 { font-size:.97rem; font-weight:700; color:var(--gray-900); margin-bottom:8px; }
+.symp-card p  { font-size:.87rem; color:var(--gray-600); line-height:1.65; }
+
+.awareness-section { background:var(--blue-900); }
+.awareness-inner { display:grid; grid-template-columns:1.2fr 1fr; gap:80px; align-items:center; opacity:0; transform:translateY(24px); transition:opacity .6s,transform .6s; }
+.awareness-inner.awv { opacity:1; transform:translateY(0); }
+.awareness-text .section-label { color:rgba(255,255,255,.6); }
+.awareness-text .section-title { color:#fff; }
+.awareness-list { display:flex; flex-direction:column; gap:18px; margin-top:28px; }
+.awareness-list li { display:flex; align-items:flex-start; gap:14px; opacity:0; transform:translateX(-16px); transition:opacity .5s,transform .5s; }
+.awv .awareness-list li { opacity:1; transform:translateX(0); }
+.aw-num { font-family:var(--font-display); font-size:1.4rem; font-weight:700; color:rgba(255,255,255,.25); flex-shrink:0; line-height:1.2; min-width:32px; }
+.awareness-list p { font-size:.93rem; color:rgba(255,255,255,.75); line-height:1.7; }
+.awareness-cta-box { background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.15); border-radius:24px; padding:36px; }
+.acb-header { display:flex; align-items:center; gap:12px; color:#fff; margin-bottom:14px; }
+.acb-header svg { color:#7dd3fc; }
+.acb-header h3 { font-family:var(--font-display); font-size:1.4rem; font-weight:700; color:#fff; }
+.awareness-cta-box p { font-size:.92rem; color:rgba(255,255,255,.7); line-height:1.7; margin-bottom:24px; }
+.acb-actions { display:flex; flex-direction:column; gap:12px; }
+
+@media(max-width:900px) {
+  .about-what,.awareness-inner { grid-template-columns:1fr; gap:40px; }
+  .about-what { transform:none; }
+  .genetics-grid { grid-template-columns:1fr; }
+  .symptoms-grid { grid-template-columns:1fr 1fr; }
+}
+@media(max-width:600px) {
+  .symptoms-grid { grid-template-columns:1fr; }
+}

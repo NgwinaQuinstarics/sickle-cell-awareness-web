@@ -1,0 +1,55 @@
+.section-center-text { text-align:center; margin-bottom:48px; }
+.res-header { display:flex; justify-content:space-between; align-items:flex-end; gap:24px; margin-bottom:40px; flex-wrap:wrap; }
+.res-filters { display:flex; gap:8px; flex-wrap:wrap; }
+.res-filter { background:var(--gray-100); color:var(--gray-600); border:1px solid var(--gray-200); padding:7px 16px; border-radius:999px; font-size:.82rem; font-weight:600; cursor:pointer; transition:background .18s,color .18s,border-color .18s; }
+.res-filter.active,.res-filter:hover { background:var(--blue-700); color:#fff; border-color:var(--blue-700); }
+.articles-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+.article-card { background:#fff; border:1px solid var(--gray-200); border-radius:20px; padding:28px; display:flex; flex-direction:column; gap:14px; opacity:0; transform:translateY(22px); transition:opacity .5s,transform .5s,box-shadow .25s; }
+.article-card.av { opacity:1; transform:translateY(0); }
+.article-card:hover { box-shadow:var(--shadow-md); transform:translateY(-3px); }
+.article-card.av:hover { transform:translateY(-3px); }
+.art-cat { align-self:flex-start; }
+.art-title { font-size:1rem; font-weight:700; color:var(--gray-900); line-height:1.45; }
+.art-excerpt { font-size:.87rem; color:var(--gray-600); line-height:1.7; flex:1; }
+.art-footer { display:flex; justify-content:space-between; align-items:center; margin-top:auto; }
+.art-time { font-size:.78rem; color:var(--gray-400); font-weight:500; }
+.art-read { display:inline-flex; align-items:center; gap:5px; font-size:.82rem; font-weight:700; color:var(--blue-700); background:none; border:none; cursor:pointer; padding:0; transition:gap .2s; }
+.art-read:hover { gap:9px; }
+
+.tips-section { background:var(--gray-50); }
+.tips-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; }
+.tip-card { display:flex; gap:16px; border-radius:16px; padding:24px; border:1.5px solid; opacity:0; transform:translateY(18px); transition:opacity .5s,transform .5s; }
+.tip-card.tv { opacity:1; transform:translateY(0); }
+.tip-blue  { background:var(--blue-50);  border-color:var(--blue-100);  }
+.tip-teal  { background:var(--teal-50);  border-color:var(--teal-100);  }
+.tip-amber { background:var(--amber-50); border-color:var(--amber-100); }
+.tip-icon { width:44px; height:44px; border-radius:12px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.tip-blue  .tip-icon { background:#fff; color:var(--blue-700);  }
+.tip-teal  .tip-icon { background:#fff; color:var(--teal-700);  }
+.tip-amber .tip-icon { background:#fff; color:var(--amber-600); }
+.tip-card h3 { font-size:.93rem; font-weight:700; color:var(--gray-900); margin-bottom:6px; }
+.tip-card p  { font-size:.85rem; color:var(--gray-600); line-height:1.65; }
+
+.faq-section { background:#fff; }
+.faq-inner { display:grid; grid-template-columns:1fr 1.6fr; gap:80px; align-items:start; opacity:0; transform:translateY(20px); transition:opacity .6s,transform .6s; }
+.faq-inner.fv { opacity:1; transform:translateY(0); }
+.faq-header { position:sticky; top:100px; }
+.faq-list { display:flex; flex-direction:column; gap:8px; }
+.faq-item { border:1px solid var(--gray-200); border-radius:14px; overflow:hidden; transition:border-color .2s; }
+.faq-item.open { border-color:var(--blue-300,#93c5fd); }
+.faq-q { width:100%; display:flex; align-items:center; justify-content:space-between; gap:16px; padding:18px 20px; background:none; border:none; cursor:pointer; font-size:.93rem; font-weight:600; color:var(--gray-900); text-align:left; transition:background .18s; }
+.faq-q:hover { background:var(--gray-50); }
+.faq-item.open .faq-q { background:var(--blue-50); color:var(--blue-800); }
+.faq-q svg { flex-shrink:0; color:var(--blue-600); }
+.faq-a { padding:0 20px 18px; font-size:.9rem; color:var(--gray-600); line-height:1.75; }
+
+@media(max-width:1024px) {
+  .articles-grid { grid-template-columns:1fr 1fr; }
+  .faq-inner { grid-template-columns:1fr; gap:40px; }
+  .faq-header { position:static; }
+}
+@media(max-width:768px) {
+  .articles-grid { grid-template-columns:1fr; }
+  .tips-grid { grid-template-columns:1fr; }
+  .res-header { flex-direction:column; align-items:flex-start; }
+}
