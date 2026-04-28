@@ -51,9 +51,9 @@ const GENOTYPES = [
 
 /* ── Testimonials ── */
 const TESTIMONIALS = [
-  { name: 'Aminata T.', city: 'Yaoundé', text: 'SickleCare helped me understand my condition and manage my daily routine. I feel so much more in control of my health.', initials: 'AT' },
-  { name: 'Jean-Paul M.', city: 'Douala', text: 'As a parent of a child with SS genotype, this platform gave me the education I needed. The hydration tracker is a game changer.', initials: 'JP' },
-  { name: 'Fatima B.', city: 'Bafoussam', text: 'I discovered I was AS through genotype testing prompted by SickleCare. Now my partner and I can make informed decisions.', initials: 'FB' },
+  { name: 'PraisesT.', city: 'Yaoundé', text: 'SickleCare helped me understand my condition and manage my daily routine. I feel so much more in control of my health.', initials: 'AT' },
+  { name: 'Paul M.', city: 'Douala', text: 'As a parent of a child with SS genotype, this platform gave me the education I needed. The hydration tracker is a game changer.', initials: 'JP' },
+  { name: 'Sandra B.', city: 'Bamenda', text: 'I discovered I was SS through genotype testing prompted by SickleCare. Now my partner and I can make informed decisions.', initials: 'FB' },
 ];
 
 export default function Home() {
