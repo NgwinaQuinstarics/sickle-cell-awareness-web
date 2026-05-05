@@ -4,6 +4,8 @@ import { MdBloodtype } from 'react-icons/md';
 import PageHero from '../components/PageHero';
 import useInView from '../hooks/useInView';
 import './Contact.css';
+import { db } from '../firebase';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 const TOPICS = ['General Enquiry', 'About Sickle Cell Disease', 'Genotype Testing', 'Mobile App', 'Partnership / Media', 'Crisis Support', 'Other'];
 
@@ -22,13 +24,40 @@ export default function Contact() {
     return e;
   };
 
-  const handleSubmit = (ev) => {
-    ev.preventDefault();
-    const e = validate();
-    if (Object.keys(e).length) { setErrors(e); return; }
+const handleSubmit = async (ev) => {
+  ev.preventDefault();
+
+  const e = validate();
+  if (Object.keys(e).length) {
+    setErrors(e);
+    return;
+  }
+
+  setErrors({});
+
+  try {
+    await addDoc(collection(db, "contacts"), {
+      name: form.name.trim(),
+      email: form.email.trim(),
+      topic: form.topic,
+      message: form.message.trim(),
+      createdAt: serverTimestamp(),
+    });
+
     setSent(true);
-    setErrors({});
-  };
+
+    setForm({
+      name: '',
+      email: '',
+      topic: 'General Enquiry',
+      message: ''
+    });
+
+  } catch (error) {
+    console.error("Firebase Error:", error);
+    alert("Failed to send message. Try again.");
+  }
+};
 
   return (
     <div>
