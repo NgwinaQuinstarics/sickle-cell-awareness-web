@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
+
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+
 import Home from './pages/Home';
 import About from './pages/About';
 import Prevention from './pages/Prevention';
@@ -9,6 +11,11 @@ import Living from './pages/Living';
 import AppPage from './pages/AppPage';
 import Resources from './pages/Resources';
 import Contact from './pages/Contact';
+
+// 🔐 ADMIN IMPORTS
+import AdminDashboard from './admin/AdminDashboard';
+import ProtectedAdminRoute from './admin/ProtectedAdminRoute';
+
 import './App.css';
 
 function ScrollToTop() {
@@ -22,8 +29,11 @@ export default function App() {
     <>
       <ScrollToTop />
       <Navbar />
+
       <main>
         <Routes>
+
+          {/* PUBLIC ROUTES */}
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/prevention" element={<Prevention />} />
@@ -31,8 +41,20 @@ export default function App() {
           <Route path="/app" element={<AppPage />} />
           <Route path="/resources" element={<Resources />} />
           <Route path="/contact" element={<Contact />} />
+
+          {/* ADMIN ROUTE (PROTECTED) */}
+          <Route
+            path="/admin"
+            element={
+              <ProtectedAdminRoute>
+                <AdminDashboard />
+              </ProtectedAdminRoute>
+            }
+          />
+
         </Routes>
       </main>
+
       <Footer />
     </>
   );
