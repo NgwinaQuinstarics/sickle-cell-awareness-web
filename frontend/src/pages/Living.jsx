@@ -66,7 +66,7 @@ export default function Living() {
           <div className={`crisis-intro${crisisV ? ' cv' : ''}`}>
             <div className="crisis-text">
               <span className="section-label">
-                <FiAlertTriangle size={14}/> Crisis Management
+                Crisis Management
               </span>
               <h2 className="section-title">
                 Managing Sickle<br/><em>Cell Crises</em>
@@ -96,7 +96,7 @@ export default function Living() {
           </div>
 
           <div className="crisis-steps-label">
-            <FiCheckCircle size={15}/> What to Do During a Crisis
+             What to Do During a Crisis
           </div>
           <div className="crisis-steps">
             {CRISIS_STEPS.map((s, i) => (
@@ -127,7 +127,7 @@ export default function Living() {
       <section className="section lifestyle-section" ref={lifRef}>
         <div className="container">
           <div className="section-center-text">
-            <span className="section-label"><FiSun size={14}/> Daily Wellness</span>
+            <span className="section-label"> Daily Wellness</span>
             <h2 className="section-title">
               Healthy Habits for<br/><em>Everyday Life</em>
             </h2>
@@ -203,7 +203,7 @@ export default function Living() {
       <section className="section emotional-section" ref={emoRef}>
         <div className="container">
           <div className="section-center-text">
-            <span className="section-label"><FiSmile size={14}/> Mental Wellness</span>
+            <span className="section-label"> Mental Wellness</span>
             <h2 className="section-title">
               Emotional Support<br/><em>& Encouragement</em>
             </h2>
