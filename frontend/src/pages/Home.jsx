@@ -90,41 +90,22 @@ export default function Home() {
 
             <div className="hero-actions">
               <Link to="/about" className="btn btn-white btn-lg">
-                <FiBookOpen size={17} /> Learn About SCD
+                Learn About SCD
               </Link>
               <Link to="/app" className="btn btn-ghost btn-lg">
-                <FiSmartphone size={17} /> Explore the App
+                Explore the App
               </Link>
             </div>
 
             <div className="hero-trust">
               {['Free Platform', 'No Sign-up Required', 'Cameroon-focused'].map(item => (
                 <span key={item} className="trust-chip">
-                  <FiCheckCircle size={14} /> {item}
+                  <FiCheckCircle size={0} /> {item}
                 </span>
               ))}
             </div>
           </div>
 
-          <div className="hero-visual">
-            <div className="hero-card-main">
-             
-              <div className="hcm-content">
-                <div className="hcm-title">Your Genotype Matters</div>
-                <div className="hcm-sub">Test today. Choose wisely. Live fully.</div>
-              </div>
-            </div>
-
-           <div className="hero-stat-float hsf-top-right">
-              <div className="hsf-val">25%</div>
-              <div className="hsf-lbl">Carriers in Cameroon</div>
-            </div>
-
-            <div className="hero-stat-float hsf-bottom-left">
-              <div className="hsf-val">300M+</div>
-              <div className="hsf-lbl">Global SCD cases</div>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -246,7 +227,7 @@ export default function Home() {
                 </div>
                 <div className="app-mockup-body">
                   <div className="am-screen-title">
-                    <MdBloodtype size={17} /> SickleCare
+                     SickleCare
                   </div>
                   <div className="am-row">
                     <FiBell size={15} />
@@ -269,7 +250,7 @@ export default function Home() {
                     <span className="am-tag am-green">Low Risk</span>
                   </div>
                   <div className="am-tip">
-                    💡 Drink water every 2 hours to reduce your crisis risk.
+                   Drink water every 2 hours to reduce your crisis risk.
                   </div>
                 </div>
               </div>
@@ -277,7 +258,7 @@ export default function Home() {
 
             <div className="app-preview-text">
               <span className="section-label">
-                <FiSmartphone size={13} /> Mobile App
+                Mobile App
               </span>
               <h2 className="section-title">
                 Health Management<br /><em>In Your Pocket</em>
@@ -299,7 +280,7 @@ export default function Home() {
                 ))}
               </ul>
               <Link to="/app" className="btn btn-primary btn-lg">
-                <FiSmartphone size={17} /> Discover the App
+                 Discover the App
               </Link>
             </div>
           </div>

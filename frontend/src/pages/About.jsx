@@ -85,7 +85,7 @@ export default function About() {
                   { label: 'Inherited — Not Contagious',   sub: 'passed through genes',  color: 'var(--teal-50)', tc: 'var(--teal-700)' },
                 ].map(f => (
                   <div key={f.label} className="about-fact" style={{ background: f.color }}>
-                    <MdBloodtype size={20} style={{ color: f.tc, flexShrink: 0 }}/>
+                   
                     <div>
                       <div style={{ fontWeight: 700, color: f.tc, fontSize: '.88rem' }}>{f.label}</div>
                       <div style={{ fontSize: '.8rem', color: 'var(--gray-500)', marginTop: 2 }}>{f.sub}</div>
@@ -166,7 +166,6 @@ export default function About() {
       <section className="section" ref={sympRef}>
         <div className="container">
           <div className="section-center-text">
-            <span className="section-label"><FiActivity size={14}/> Symptoms</span>
             <h2 className="section-title">
               Signs & Symptoms<br/><em>of SCD</em>
             </h2>
@@ -192,7 +191,7 @@ export default function About() {
         <div className="container">
           <div className={`awareness-inner${awV ? ' awv' : ''}`}>
             <div className="awareness-text">
-              <span className="section-label"><FiHeart size={14}/> Why It Matters</span>
+              <span className="section-label"> Why It Matters</span>
               <h2 className="section-title">
                 Why Awareness<br/><em>Saves Lives</em>
               </h2>
@@ -208,7 +207,6 @@ export default function About() {
 
             <div className="awareness-cta-box">
               <div className="acb-header">
-                <MdBloodtype size={30}/>
                 <h3>Take Action Today</h3>
               </div>
               <p>
