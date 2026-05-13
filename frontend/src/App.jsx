@@ -12,7 +12,7 @@ import AppPage from './pages/AppPage';
 import Resources from './pages/Resources';
 import Contact from './pages/Contact';
 
-// 🔐 ADMIN IMPORTS
+//  ADMIN IMPORTS
 import AdminDashboard from './admin/AdminDashboard';
 import ProtectedAdminRoute from './admin/ProtectedAdminRoute';
 

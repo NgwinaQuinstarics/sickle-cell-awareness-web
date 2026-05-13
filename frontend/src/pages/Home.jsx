@@ -12,26 +12,26 @@ import useInView from '../hooks/useInView';
 import './Home.css';
 
 const STATS = [
-  { num: '300M+',  label: 'People affected worldwide',       icon: <FiGlobe size={22}/>,    color: 'blue'  },
-  { num: '50M+',   label: 'Affected in sub-Saharan Africa',  icon: <FiUsers size={22}/>,    color: 'teal'  },
-  { num: '1 in 4', label: 'Cameroonians carry the trait',    icon: <MdBloodtype size={22}/>, color: 'amber' },
-  { num: '80%',    label: 'Of cases occur in Africa',        icon: <FiActivity size={22}/>, color: 'red'   },
+  { num: '300M+',  label: 'People affected worldwide',      icon: <FiGlobe size={22}/>,     color: 'blue'  },
+  { num: '50M+',   label: 'Affected in sub-Saharan Africa', icon: <FiUsers size={22}/>,     color: 'teal'  },
+  { num: '1 in 4', label: 'Cameroonians carry the trait',   icon: <MdBloodtype size={22}/>, color: 'amber' },
+  { num: '80%',    label: 'Of cases occur in Africa',       icon: <FiActivity size={22}/>,  color: 'red'   },
 ];
 
 const FEATURES = [
-  { icon: <FiBell size={24}/>,      title: 'Medication Reminders', desc: 'Never miss a dose. Smart daily reminders keep your treatment schedule on track.',               color: 'blue'  },
-  { icon: <FiDroplet size={24}/>,   title: 'Hydration Tracking',   desc: 'Log your water intake and get timely nudges — hydration is your first defence against crises.', color: 'teal'  },
-  { icon: <FiBarChart2 size={24}/>, title: 'Symptom Tracking',     desc: 'Record pain levels and symptoms over time, building a health picture to share with your doctor.', color: 'amber' },
-  { icon: <FiShield size={24}/>,    title: 'Crisis Prevention',    desc: 'Personalised early-warning tips to help you recognise and avoid painful sickle cell crises.',   color: 'blue'  },
-  { icon: <FiBookOpen size={24}/>,  title: 'Education Library',    desc: 'Curated articles, guides and videos about living well with SCD — written for a Cameroonian context.', color: 'teal' },
-  { icon: <FiHeart size={24}/>,     title: 'Emotional Support',    desc: 'Find encouragement, connect with others, and access mental-health resources built around you.', color: 'amber' },
+  { icon: <FiBell size={22}/>,      title: 'Medication Reminders', desc: 'Never miss a dose. Smart daily reminders keep your treatment schedule on track.',                    color: 'blue'  },
+  { icon: <FiDroplet size={22}/>,   title: 'Hydration Tracking',   desc: 'Log your water intake and get timely nudges — hydration is your first defence against crises.',      color: 'teal'  },
+  { icon: <FiBarChart2 size={22}/>, title: 'Symptom Tracking',     desc: 'Record pain levels and symptoms over time to build a clear health picture for your doctor.',         color: 'amber' },
+  { icon: <FiShield size={22}/>,    title: 'Crisis Prevention',    desc: 'Personalised early-warning tips to help you spot and avoid painful sickle cell crises early.',       color: 'blue'  },
+  { icon: <FiBookOpen size={22}/>,  title: 'Education Library',    desc: 'Curated articles and guides about living well with SCD — written for a Cameroonian context.',        color: 'teal'  },
+  { icon: <FiHeart size={22}/>,     title: 'Emotional Support',    desc: 'Find encouragement, connect with others, and access mental-health resources built around you.',      color: 'amber' },
 ];
 
 const GENOTYPES = [
-  { type: 'AA', label: 'Normal',            desc: 'Does not have sickle cell and cannot pass SCD to children.',              color: '#15803d', bg: '#f0fdf4' },
-  { type: 'AS', label: 'Carrier (Trait)',   desc: 'Healthy but carries one sickle gene. Can pass it on to children.',        color: '#d97706', bg: '#fffbeb' },
-  { type: 'SS', label: 'Sickle Cell Disease', desc: 'Has sickle cell disease and will experience symptoms without treatment.', color: '#dc2626', bg: '#fef2f2' },
-  { type: 'AC', label: 'Carrier (HbC)',     desc: 'Carries the haemoglobin C variant. Lower risk but can still pass it on.', color: '#7c3aed', bg: '#faf5ff' },
+  { type: 'AA', label: 'Normal',              desc: 'Does not have sickle cell and cannot pass SCD to children.',               color: '#15803d', bg: '#f0fdf4' },
+  { type: 'AS', label: 'Carrier (Trait)',     desc: 'Healthy but carries one sickle gene. Can pass it on to children.',         color: '#d97706', bg: '#fffbeb' },
+  { type: 'SS', label: 'Sickle Cell Disease', desc: 'Has sickle cell disease and will experience symptoms without treatment.',   color: '#dc2626', bg: '#fef2f2' },
+  { type: 'AC', label: 'Carrier (HbC)',       desc: 'Carries the haemoglobin C variant. Lower risk but can still pass it on.',  color: '#7c3aed', bg: '#faf5ff' },
 ];
 
 function StatCard({ stat, delay }) {
@@ -55,49 +55,52 @@ export default function Home() {
   const [gRef, gV]         = useInView(0.1);
 
   useEffect(() => {
-    const t = setTimeout(() => setHeroVisible(true), 80);
+    const t = setTimeout(() => setHeroVisible(true), 100);
     return () => clearTimeout(t);
   }, []);
 
   return (
     <div className="home">
 
-      {/* HERO */}
+      {/* ── HERO ── */}
       <section className="hero-section">
         <div className="hero-bg">
-          <div className="hero-blob hb1" />
-          <div className="hero-blob hb2" />
-          <div className="hero-blob hb3" />
-          <div className="hero-grid-overlay" />
+          <div className="hero-shape hs-1" />
+          <div className="hero-shape hs-2" />
+          <div className="hero-shape hs-3" />
         </div>
+
         <div className={`container hero-inner${heroVisible ? ' hv' : ''}`}>
           <div className="hero-text">
             <div className="hero-pill">
-              <span className="pill-dot" />
-              Sickle Cell Awareness Platform — Cameroon
+              Sickle Cell Awareness — Cameroon
             </div>
+
             <h1 className="hero-title">
               Knowledge is the<br />
               <em>First Step to</em><br />
               Better Health
             </h1>
+
             <p className="hero-sub">
-              SickleCare gives Cameroonians the education, tools, and support they need to
-              prevent, understand, and manage sickle cell disease — because every life
-              deserves to be fully lived.
+              SickleCare gives Cameroonians the education, tools, and support
+              they need to prevent, understand, and manage sickle cell disease.
+              Because every life deserves to be fully lived.
             </p>
+
             <div className="hero-actions">
               <Link to="/about" className="btn btn-white btn-lg">
-                <FiBookOpen size={18} /> Learn About SCD
+                <FiBookOpen size={17} /> Learn About SCD
               </Link>
               <Link to="/app" className="btn btn-ghost btn-lg">
-                <FiSmartphone size={18} /> Explore the App
+                <FiSmartphone size={17} /> Explore the App
               </Link>
             </div>
+
             <div className="hero-trust">
               {['Free Platform', 'No Sign-up Required', 'Cameroon-focused'].map(item => (
                 <span key={item} className="trust-chip">
-                  <FiCheckCircle size={13} /> {item}
+                  <FiCheckCircle size={14} /> {item}
                 </span>
               ))}
             </div>
@@ -105,29 +108,27 @@ export default function Home() {
 
           <div className="hero-visual">
             <div className="hero-card-main">
-              <div className="hcm-icon"><MdBloodtype size={40} /></div>
+             
               <div className="hcm-content">
                 <div className="hcm-title">Your Genotype Matters</div>
                 <div className="hcm-sub">Test today. Choose wisely. Live fully.</div>
               </div>
             </div>
-            <div className="hero-dna-ring">
-              <GiDna2 size={120} className="dna-icon" />
+
+           <div className="hero-stat-float hsf-top-right">
+              <div className="hsf-val">25%</div>
+              <div className="hsf-lbl">Carriers in Cameroon</div>
             </div>
-            {[
-              { label: 'Carriers in Cameroon', val: '25%',   pos: 'top-right'   },
-              { label: 'Global SCD cases',     val: '300M+', pos: 'bottom-left' },
-            ].map(c => (
-              <div key={c.label} className={`hero-stat-float hsf-${c.pos}`}>
-                <div className="hsf-val">{c.val}</div>
-                <div className="hsf-lbl">{c.label}</div>
-              </div>
-            ))}
+
+            <div className="hero-stat-float hsf-bottom-left">
+              <div className="hsf-val">300M+</div>
+              <div className="hsf-lbl">Global SCD cases</div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* STATS */}
+      {/* ── STATS ── */}
       <section className="stats-section section-sm">
         <div className="container">
           <div className="stats-grid">
@@ -138,12 +139,12 @@ export default function Home() {
         </div>
       </section>
 
-      {/* QUOTE */}
+      {/* ── QUOTE ── */}
       <div className="quote-band" ref={quoteRef}>
         <div className={`container quote-inner${quoteV ? ' qv' : ''}`}>
-          <div className="quote-mark">"</div>
+          <div className="quote-mark"></div>
           <blockquote>
-            With awareness, education, and proper health management, individuals living
+            With awareness, education, and proper health management, people living
             with sickle cell disease can lead
             <strong> healthier and more empowered lives.</strong>
           </blockquote>
@@ -151,21 +152,22 @@ export default function Home() {
         </div>
       </div>
 
-      {/* FEATURES */}
+      {/* ── FEATURES ── */}
       <section className="section features-section">
         <div className="container">
           <div className="section-center">
             <span className="section-label">
-              <FiSmartphone size={14} /> SickleCare Platform
+               SickleCare Platform
             </span>
             <h2 className="section-title">
               Everything You Need,<br /><em>In One Place</em>
             </h2>
             <p className="section-sub">
-              From education to daily management tools, SickleCare is built around the
-              real needs of people living with sickle cell disease in Cameroon.
+              From education to daily management tools, SickleCare is built
+              around the real needs of people living with SCD in Cameroon.
             </p>
           </div>
+
           <div className="features-grid">
             {FEATURES.map((f, i) => (
               <FeatureCard
@@ -178,34 +180,36 @@ export default function Home() {
               />
             ))}
           </div>
+
           <div className="features-cta">
             <Link to="/app" className="btn btn-primary btn-lg">
-              Explore All Features <FiArrowRight size={18} />
+              Explore All Features <FiArrowRight size={17} />
             </Link>
           </div>
         </div>
       </section>
 
-      {/* GENOTYPE EXPLAINER */}
+      {/* ── GENOTYPE EXPLAINER ── */}
       <section className="section genotype-section" ref={gRef}>
         <div className="container">
           <div className="genotype-inner">
             <div className={`genotype-text${gV ? ' gv' : ''}`}>
               <span className="section-label">
-                <MdScience size={14} /> Genotype Basics
+                 Genotype Basics
               </span>
               <h2 className="section-title">
                 Know Your<br /><em>Genotype</em>
               </h2>
               <p className="section-sub">
-                Your blood genotype is one of the most important things to know about
-                your health — especially before marriage or having children. A simple
-                blood test is all it takes.
+                Your blood genotype is one of the most important things to know
+                about your health — especially before marriage or having children.
+                A simple blood test is all it takes.
               </p>
               <Link to="/prevention" className="btn btn-primary mt-24">
-                Learn About Prevention <FiArrowRight size={16} />
+                Learn About Prevention <FiArrowRight size={15} />
               </Link>
             </div>
+
             <div className={`genotype-cards${gV ? ' gv' : ''}`}>
               {GENOTYPES.map((g, i) => (
                 <div
@@ -229,54 +233,57 @@ export default function Home() {
         </div>
       </section>
 
-      {/* APP PREVIEW */}
+      {/* ── APP PREVIEW ── */}
       <section className="section app-preview-section">
         <div className="container">
           <div className="app-preview-inner">
             <div className="app-preview-visual">
               <div className="app-mockup">
                 <div className="app-mockup-header">
-                  <div className="am-dot" /><div className="am-dot" /><div className="am-dot" />
+                  <div className="am-dot" />
+                  <div className="am-dot" />
+                  <div className="am-dot" />
                 </div>
                 <div className="app-mockup-body">
                   <div className="am-screen-title">
-                    <MdBloodtype size={18} /> SickleCare
+                    <MdBloodtype size={17} /> SickleCare
                   </div>
                   <div className="am-row">
-                    <FiBell size={16} />
+                    <FiBell size={15} />
                     <span>Medication: Hydroxyurea</span>
                     <span className="am-tag am-green">✓ Taken</span>
                   </div>
                   <div className="am-row">
-                    <FiDroplet size={16} />
+                    <FiDroplet size={15} />
                     <span>Hydration Today</span>
                     <span className="am-tag am-blue">6 / 8 glasses</span>
                   </div>
                   <div className="am-row">
-                    <FiActivity size={16} />
+                    <FiActivity size={15} />
                     <span>Pain Level</span>
-                    <span className="am-tag am-amber">Low ★★☆☆☆</span>
+                    <span className="am-tag am-amber">Low</span>
                   </div>
                   <div className="am-row">
-                    <FiShield size={16} />
+                    <FiShield size={15} />
                     <span>Crisis Risk</span>
                     <span className="am-tag am-green">Low Risk</span>
                   </div>
                   <div className="am-tip">
-                    💡 Tip: Drink water every 2 hours to reduce your crisis risk.
+                    💡 Drink water every 2 hours to reduce your crisis risk.
                   </div>
                 </div>
               </div>
             </div>
+
             <div className="app-preview-text">
               <span className="section-label">
-                <FiSmartphone size={14} /> Mobile App
+                <FiSmartphone size={13} /> Mobile App
               </span>
               <h2 className="section-title">
                 Health Management<br /><em>In Your Pocket</em>
               </h2>
               <p className="section-sub">
-                The SickleCare mobile app puts daily health tools, reminders, and
+                The SickleCare app puts daily health tools, reminders, and
                 educational content right in your hands — built for life in Cameroon.
               </p>
               <ul className="app-feature-list">
@@ -287,32 +294,33 @@ export default function Home() {
                   'Emergency guidance and contacts',
                 ].map(f => (
                   <li key={f}>
-                    <FiCheckCircle size={16} className="check-icon" /> {f}
+                    <FiCheckCircle size={15} className="check-icon" /> {f}
                   </li>
                 ))}
               </ul>
               <Link to="/app" className="btn btn-primary btn-lg">
-                <FiSmartphone size={18} /> Discover the App
+                <FiSmartphone size={17} /> Discover the App
               </Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* FINAL CTA */}
+      {/* ── FINAL CTA ── */}
       <section className="cta-section">
         <div className="container">
           <div className="cta-card">
             <div className="cta-bg">
-              <div className="cta-blob cb1" /><div className="cta-blob cb2" />
+              <div className="cta-blob cb1" />
+              <div className="cta-blob cb2" />
             </div>
             <div className="cta-content">
               <h2 className="cta-title">
                 Start Your Journey<br />to Better Health Today
               </h2>
               <p className="cta-sub">
-                Thousands of Cameroonians are already using SickleCare to live more
-                informed, empowered lives. Join them.
+                Thousands of Cameroonians are already using SickleCare to live
+                more informed, empowered lives. Join them.
               </p>
               <div className="cta-actions">
                 <Link to="/about" className="btn btn-white btn-lg">

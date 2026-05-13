@@ -6,12 +6,12 @@ import useInView from '../hooks/useInView';
 import './Resources.css';
 
 const ARTICLES = [
-  { cat:'Education', color:'blue', icon:<FiBookOpen size={16}/>, title:'What Every Cameroonian Should Know About Sickle Cell Disease', excerpt:'A comprehensive, easy-to-read guide explaining SCD in simple language for patients, families, and community members.', time:'8 min read' },
-  { cat:'Prevention', color:'teal', icon:<FiHeart size={16}/>, title:'Why Genotype Testing Matters Before Marriage', excerpt:'Understanding genotype compatibility could prevent tens of thousands of new SCD cases in Cameroon each decade.', time:'5 min read' },
-  { cat:'Health Tips', color:'amber', icon:<MdLocalPharmacy size={16}/>, title:'Living Well With Hydroxyurea: A Patient Guide', excerpt:'Hydroxyurea is the most effective medication for SCD. Here is everything you need to know about taking it safely.', time:'6 min read' },
-  { cat:'Crisis Care', color:'red', icon:<FiAlertTriangle size={16}/>, title:'Recognising and Responding to a Sickle Cell Crisis', excerpt:'A practical emergency guide for patients and caregivers — know the warning signs and exactly what to do.', time:'4 min read' },
-  { cat:'Education', color:'blue', icon:<FiBookOpen size={16}/>, title:'SCD and Malaria: A Double Threat in Cameroon', excerpt:'Why people with SCD are particularly vulnerable to malaria and how to protect yourself effectively.', time:'5 min read' },
-  { cat:'Wellness', color:'teal', icon:<FiHeart size={16}/>, title:'Nutrition Guide for People Living With SCD', excerpt:'The right foods can reduce inflammation, support blood production, and help prevent crises. Practical dietary advice for Cameroon.', time:'7 min read' },
+  { cat:'Education', color:'blue', icon:<FiBookOpen size={16}/>, title:'What Every Cameroonian Should Know About Sickle Cell Disease', excerpt:'A comprehensive, easy-to-read guide explaining SCD in simple language for patients, families, and community members.',  },
+  { cat:'Prevention', color:'teal', icon:<FiHeart size={16}/>, title:'Why Genotype Testing Matters Before Marriage', excerpt:'Understanding genotype compatibility could prevent tens of thousands of new SCD cases in Cameroon each decade.',  },
+  { cat:'Health Tips', color:'amber', icon:<MdLocalPharmacy size={16}/>, title:'Living Well With Hydroxyurea: A Patient Guide', excerpt:'Hydroxyurea is the most effective medication for SCD. Here is everything you need to know about taking it safely.', },
+  { cat:'Crisis Care', color:'red', icon:<FiAlertTriangle size={16}/>, title:'Recognising and Responding to a Sickle Cell Crisis', excerpt:'A practical emergency guide for patients and caregivers — know the warning signs and exactly what to do.',  },
+  { cat:'Education', color:'blue', icon:<FiBookOpen size={16}/>, title:'SCD and Malaria: A Double Threat in Cameroon', excerpt:'Why people with SCD are particularly vulnerable to malaria and how to protect yourself effectively.', },
+  { cat:'Wellness', color:'teal', icon:<FiHeart size={16}/>, title:'Nutrition Guide for People Living With SCD', excerpt:'The right foods can reduce inflammation, support blood production, and help prevent crises. Practical dietary advice for Cameroon.', },
 ];
 
 const FAQS = [
