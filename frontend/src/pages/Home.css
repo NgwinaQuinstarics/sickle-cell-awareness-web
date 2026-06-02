@@ -102,7 +102,6 @@
   max-width: 540px; margin: 0;
 }
 .section-header { text-align: center; margin-bottom: 64px; }
-.section-header .section-eyebrow { justify-content: center; }
 .section-header .section-sub { margin: 0 auto; }
 .section-cta { text-align: center; margin-top: 52px; }
 
@@ -121,14 +120,6 @@
     radial-gradient(ellipse 80% 60% at 70% 40%, rgba(29,78,216,.18) 0%, transparent 60%),
     radial-gradient(ellipse 50% 50% at 10% 80%, rgba(220,38,38,.12) 0%, transparent 55%),
     linear-gradient(160deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
-}
-
-.hero-grid {
-  position: absolute; inset: 0; opacity: .04;
-  background-image:
-    linear-gradient(rgba(255,255,255,.6) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,.6) 1px, transparent 1px);
-  background-size: 64px 64px;
 }
 
 .hero-inner {
@@ -183,12 +174,12 @@
 }
 
 .hero-img {
-  width: 85%;
-  height: 100%;
-  aspect-ratio: 4/5;
+  width: 90%;
+  height: 200%;
+  aspect-ratio: 5/5;
   object-fit: cover;
   object-position: center;
-  border-radius: var(--radius-xl);
+  border-radius: 3%;;
   box-shadow: var(--shadow-xl);
   display: block;
   transform: scale(1.02);
@@ -358,23 +349,23 @@
 }
 
 .app-screenshot {
-  width: 100%;
-  height: 400px;
+  width: 400PX;
+  height: 500px;
   object-fit: cover;
-  border-radius: 24px;
+  border-radius: 20px;
   display: block;
   transform: scale(1.01);
 }
 
 /* make phone feel real device */
 .app-phone {
-  width: 500px;
+  width: 350px;
   background: #0f172a;
-  border-radius: 40px;
-  padding: 14px;
+  border-radius: 30px;
+  padding: 20Px;
   box-shadow: var(--shadow-xl), 0 0 0 1px rgba(255,255,255,0.05);
 }
-/* ── CTA ───────────────────────────────────────────────────────────────────── */
+/* ── CTA ─────────────────────────────────────────────────────── */
 .cta-section { padding: 80px 0; }
 
 .cta-card {
@@ -384,12 +375,6 @@
   text-align: center;
 }
 
-
-.cta-eyebrow {
-  font-size: 11px; font-weight: 700; letter-spacing: .14em;
-  text-transform: uppercase; color: rgba(255,255,255,.45);
-  margin-bottom: 20px;
-}
 .cta-title {
   font-family: var(--font-display); font-size: clamp(1.8rem, 4vw, 2.6rem);
   font-weight: 800; color: var(--white); line-height: 1.15;
