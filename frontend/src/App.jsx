@@ -12,15 +12,17 @@ import AppPage from './pages/AppPage';
 import Resources from './pages/Resources';
 import Contact from './pages/Contact';
 
-//  ADMIN IMPORTS
-import AdminDashboard from './admin/AdminDashboard';
-import ProtectedAdminRoute from './admin/ProtectedAdminRoute';
-
-import './App.css';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsConditions from './pages/TermsConditions';
+import Disclaimer from './pages/Disclaimer'; // ✅ ADD THIS
 
 function ScrollToTop() {
   const { pathname } = useLocation();
-  useEffect(() => { window.scrollTo(0, 0); }, [pathname]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
   return null;
 }
 
@@ -28,11 +30,11 @@ export default function App() {
   return (
     <>
       <ScrollToTop />
+
       <Navbar />
 
-      <main>
+      <main style={{ minHeight: '80vh' }}>
         <Routes>
-
           {/* PUBLIC ROUTES */}
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
@@ -42,16 +44,10 @@ export default function App() {
           <Route path="/resources" element={<Resources />} />
           <Route path="/contact" element={<Contact />} />
 
-          {/* ADMIN ROUTE (PROTECTED) */}
-          <Route
-            path="/admin"
-            element={
-              <ProtectedAdminRoute>
-                <AdminDashboard />
-              </ProtectedAdminRoute>
-            }
-          />
-
+          {/* LEGAL ROUTES */}
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/terms-and-conditions" element={<TermsConditions />} />
+          <Route path="/disclaimer" element={<Disclaimer />} />
         </Routes>
       </main>
 

@@ -1,78 +1,147 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { MdBloodtype } from 'react-icons/md';
-import { FiFacebook, FiTwitter, FiInstagram, FiYoutube, FiMail, FiPhone, FiMapPin } from 'react-icons/fi';
-import './Footer.css';
+
+import {
+  FiFacebook,
+  FiTwitter,
+  FiInstagram,
+  FiYoutube,
+  FiMail,
+  FiPhone,
+  FiMapPin,
+} from 'react-icons/fi';
+
+import logo from '../assets/logo.png';
 
 const LINKS = [
-  { label: 'About SCD',   to: '/about'      },
-  { label: 'Prevention',  to: '/prevention' },
+  { label: 'About SCD', to: '/about' },
+  { label: 'Prevention', to: '/prevention' },
   { label: 'Living With SCD', to: '/living' },
-  { label: 'Mobile App',  to: '/app'        },
-  { label: 'Resources',   to: '/resources'  },
-  { label: 'Contact',     to: '/contact'    },
+  { label: 'Resources', to: '/resources' },
+  { label: 'Contact', to: '/contact' },
 ];
 
 export default function Footer() {
   return (
-    <footer className="footer">
-      <div className="footer-wave">
-        <svg viewBox="0 0 1440 80" preserveAspectRatio="none">
-          <path d="M0,40 C360,80 1080,0 1440,40 L1440,80 L0,80 Z" fill="#0d2d6e"/>
-        </svg>
-      </div>
-      <div className="footer-body">
-        <div className="container">
-          <div className="footer-grid">
-            <div className="footer-brand">
-              <Link to="/" className="footer-logo">
-                <span className="footer-logo-icon"><MdBloodtype size={22}/></span>
-                <span>Sickle<em>Care</em></span>
-              </Link>
-              <p className="footer-tagline">
-                Empowering Cameroonians with knowledge, tools and support to fight sickle cell disease.
-              </p>
-              <div className="footer-social">
-                {[
-                  { icon: <FiFacebook size={18}/>, href: '#', label: 'Facebook'  },
-                  { icon: <FiTwitter  size={18}/>, href: '#', label: 'Twitter'   },
-                  { icon: <FiInstagram size={18}/>, href:'#', label: 'Instagram' },
-                  { icon: <FiYoutube  size={18}/>, href: '#', label: 'YouTube'   },
-                ].map(s => (
-                  <a key={s.label} href={s.href} className="social-btn" aria-label={s.label}>{s.icon}</a>
-                ))}
-              </div>
-            </div>
+    <footer style={styles.footer}>
 
-            <div className="footer-col">
-              <h4 className="footer-heading">Quick Links</h4>
-              <ul className="footer-links">
-                {LINKS.map(l => <li key={l.to}><Link to={l.to}>{l.label}</Link></li>)}
-              </ul>
-            </div>
+      <div style={styles.container}>
 
-            <div className="footer-col">
-              <h4 className="footer-heading">Contact Us</h4>
-              <ul className="footer-contact">
-                <li><FiMail size={15}/><a href="mailto:info@sicklecare.cm">info@sicklecare.cm</a></li>
-                <li><FiPhone size={15}/><a href="tel:+237000000000">+237 000 000 000</a></li>
-                <li><FiMapPin size={15}/><span>Yaoundé, Cameroon</span></li>
-              </ul>
-              <div className="footer-emergency">
-                <span className="emergency-dot"/>
-                <p>Emergency hotline: <strong>15</strong> (SAMU Cameroon)</p>
-              </div>
-            </div>
+        {/* BRAND */}
+        <div style={styles.brand}>
+
+          <Link to="/" style={styles.logoWrap}>
+            <img src={logo} alt="SickleCare Logo" style={styles.logo} />
+          </Link>
+
+          <p style={styles.text}>
+            Empowering individuals, families, and communities with sickle cell awareness and care.
+          </p>
+
+          <div style={styles.socials}>
+            <a href="#"><FiFacebook /></a>
+            <a href="#"><FiTwitter /></a>
+            <a href="#"><FiInstagram /></a>
+            <a href="#"><FiYoutube /></a>
           </div>
 
-          <div className="footer-bottom">
-            <p>© {new Date().getFullYear()} SickleCare. Built for Cameroon with ❤️</p>
-            <p className="footer-disclaimer">
-              This platform provides educational information only — not medical advice. Always consult a qualified healthcare professional.
-            </p>
-          </div>
         </div>
+
+        {/* LINKS */}
+        <div>
+          <h4>Quick Links</h4>
+          {LINKS.map((l) => (
+            <div key={l.to}>
+              <Link to={l.to} style={styles.link}>{l.label}</Link>
+            </div>
+          ))}
+        </div>
+
+        {/* LEGAL */}
+        <div>
+          <h4>Legal</h4>
+
+          <div><Link to="/privacy-policy" style={styles.link}>Privacy Policy</Link></div>
+          <div><Link to="/terms-and-conditions" style={styles.link}>Terms & Conditions</Link></div>
+          <div><Link to="/disclaimer" style={styles.link}>Medical Disclaimer</Link></div>
+
+        </div>
+
+        {/* CONTACT */}
+        <div>
+          <h4>Contact</h4>
+
+          <p><FiMail /> support@sicklecare.app</p>
+          <p><FiPhone /> +237 622114407</p>
+          <p><FiMapPin /> Yaoundé, Cameroon</p>
+        </div>
+
       </div>
+
+      <div style={styles.bottom}>
+        © {new Date().getFullYear()} SickleCare. All rights reserved.
+      </div>
+
     </footer>
   );
 }
+
+/* ================= STYLES ================= */
+const styles = {
+  footer: {
+    background: '#0f172a',
+    color: '#fff',
+    padding: '40px 20px',
+    marginTop: '50px',
+  },
+
+  container: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+    gap: '30px',
+    maxWidth: '1100px',
+    margin: '0 auto',
+  },
+
+  brand: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '10px',
+  },
+
+  logoWrap: {
+    display: 'block',
+  },
+
+  logo: {
+    width: '180px',   
+    height: 'auto',
+  },
+
+  text: {
+    fontSize: '14px',
+    color: '#cbd5e1',
+    lineHeight: '1.5',
+  },
+
+  socials: {
+    display: 'flex',
+    gap: '12px',
+    marginTop: '10px',
+    fontSize: '18px',
+  },
+
+  link: {
+    color: '#cbd5e1',
+    textDecoration: 'none',
+    display: 'block',
+    marginBottom: '6px',
+  },
+
+  bottom: {
+    textAlign: 'center',
+    marginTop: '30px',
+    fontSize: '13px',
+    color: '#94a3b8',
+  },
+};
