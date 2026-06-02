@@ -53,7 +53,7 @@ export default function Prevention() {
         <div className="container">
           <div className="why-test-grid">
             <div className="why-test-text">
-              <span className="section-label"><FiSearch size={14}/> Why Test?</span>
+              <span className="section-label">Why Test?</span>
               <h2 className="section-title">
                 The Importance of<br/><em>Genotype Testing</em>
               </h2>
@@ -79,7 +79,7 @@ export default function Prevention() {
                     key={p}
                     style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: '.92rem', color: 'var(--gray-700)' }}
                   >
-                    <FiCheckCircle size={15} style={{ color: 'var(--teal-600)', flexShrink: 0 }}/> {p}
+                    <FiCheckCircle size={16} style={{ color: 'var(--teal-600)', flexShrink: 0 }}/> {p}
                   </div>
                 ))}
               </div>
@@ -87,7 +87,7 @@ export default function Prevention() {
 
             <div className="why-test-visual">
               <div className="test-info-card">
-                <div className="tic-icon"><MdScience size={30}/></div>
+              
                 <h3>Haemoglobin Electrophoresis</h3>
                 <p>The gold-standard test for identifying your blood genotype with certainty.</p>
                 <div className="tic-tags">
@@ -113,7 +113,7 @@ export default function Prevention() {
       <section className="section prev-steps-section" ref={stepsRef}>
         <div className="container">
           <div className="section-center-text">
-            <span className="section-label"><FiCheckCircle size={14}/> Step by Step</span>
+            <span className="section-label"> Step by Step</span>
             <h2 className="section-title">How to Get<br/><em>Tested</em></h2>
           </div>
           <div className="prev-steps">
@@ -142,7 +142,7 @@ export default function Prevention() {
       <section className="section compat-section" ref={tableRef}>
         <div className="container">
           <div className="section-center-text">
-            <span className="section-label"><GiDna2 size={14}/> Compatibility Guide</span>
+            <span className="section-label">Compatibility Guide</span>
             <h2 className="section-title">
               Genotype Compatibility<br/><em>Before Marriage</em>
             </h2>
@@ -175,7 +175,7 @@ export default function Prevention() {
       <section className="section choices-section" ref={choiceRef}>
         <div className="container">
           <div className="section-center-text">
-            <span className="section-label"><FiHeart size={14}/> Responsible Choices</span>
+            <span className="section-label">Responsible Choices</span>
             <h2 className="section-title">
               Making Informed<br/><em>Decisions</em>
             </h2>
@@ -199,7 +199,6 @@ export default function Prevention() {
           </div>
 
           <div className="choice-note">
-            <FiHeart size={17} style={{ color: 'var(--blue-600)', flexShrink: 0 }}/>
             <p>
               SickleCare does not tell you who to love or marry. We give you accurate
               information so that you and your family can make{' '}

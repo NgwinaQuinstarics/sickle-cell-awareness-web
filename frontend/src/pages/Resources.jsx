@@ -6,12 +6,12 @@ import useInView from '../hooks/useInView';
 import './Resources.css';
 
 const ARTICLES = [
-  { cat:'Education', color:'blue', icon:<FiBookOpen size={16}/>, title:'What Every Cameroonian Should Know About Sickle Cell Disease', excerpt:'A comprehensive, easy-to-read guide explaining SCD in simple language for patients, families, and community members.',  },
-  { cat:'Prevention', color:'teal', icon:<FiHeart size={16}/>, title:'Why Genotype Testing Matters Before Marriage', excerpt:'Understanding genotype compatibility could prevent tens of thousands of new SCD cases in Cameroon each decade.',  },
-  { cat:'Health Tips', color:'amber', icon:<MdLocalPharmacy size={16}/>, title:'Living Well With Hydroxyurea: A Patient Guide', excerpt:'Hydroxyurea is the most effective medication for SCD. Here is everything you need to know about taking it safely.', },
-  { cat:'Crisis Care', color:'red', icon:<FiAlertTriangle size={16}/>, title:'Recognising and Responding to a Sickle Cell Crisis', excerpt:'A practical emergency guide for patients and caregivers — know the warning signs and exactly what to do.',  },
-  { cat:'Education', color:'blue', icon:<FiBookOpen size={16}/>, title:'SCD and Malaria: A Double Threat in Cameroon', excerpt:'Why people with SCD are particularly vulnerable to malaria and how to protect yourself effectively.', },
-  { cat:'Wellness', color:'teal', icon:<FiHeart size={16}/>, title:'Nutrition Guide for People Living With SCD', excerpt:'The right foods can reduce inflammation, support blood production, and help prevent crises. Practical dietary advice for Cameroon.', },
+  { cat:'Education', color:'blue',  title:'What Every Cameroonian Should Know About Sickle Cell Disease', excerpt:'A comprehensive, easy-to-read guide explaining SCD in simple language for patients, families, and community members.',  },
+  { cat:'Prevention', color:'teal',  title:'Why Genotype Testing Matters Before Marriage', excerpt:'Understanding genotype compatibility could prevent tens of thousands of new SCD cases in Cameroon each decade.',  },
+  { cat:'Health Tips', color:'amber',  title:'Living Well With Hydroxyurea: A Patient Guide', excerpt:'Hydroxyurea is the most effective medication for SCD. Here is everything you need to know about taking it safely.', },
+  { cat:'Crisis Care', color:'red', title:'Recognising and Responding to a Sickle Cell Crisis', excerpt:'A practical emergency guide for patients and caregivers — know the warning signs and exactly what to do.',  },
+  { cat:'Education', color:'blue', title:'SCD and Malaria: A Double Threat in Cameroon', excerpt:'Why people with SCD are particularly vulnerable to malaria and how to protect yourself effectively.', },
+  { cat:'Wellness', color:'teal', title:'Nutrition Guide for People Living With SCD', excerpt:'The right foods can reduce inflammation, support blood production, and help prevent crises. Practical dietary advice for Cameroon.', },
 ];
 
 const FAQS = [
@@ -67,7 +67,7 @@ export default function Resources() {
         <div className="container">
           <div className="res-header">
             <div>
-              <span className="section-label"><FiBookOpen size={14}/> Articles</span>
+              <span className="section-label"> Articles</span>
               <h2 className="section-title">Health Articles<br/><em>& Guides</em></h2>
             </div>
             <div className="res-filters">
@@ -96,7 +96,7 @@ export default function Resources() {
       <section className="section tips-section" ref={tipRef}>
         <div className="container">
           <div className="section-center-text">
-            <span className="section-label"><FiHeart size={14}/> Quick Tips</span>
+            <span className="section-label"> Quick Tips</span>
             <h2 className="section-title">Crisis Prevention<br/><em>Quick Tips</em></h2>
           </div>
           <div className="tips-grid">
@@ -118,7 +118,7 @@ export default function Resources() {
         <div className="container">
           <div className={`faq-inner${faqV ? ' fv' : ''}`}>
             <div className="faq-header">
-              <span className="section-label"><FiInfo size={14}/> FAQ</span>
+              <span className="section-label"> FAQ</span>
               <h2 className="section-title">Frequently Asked<br/><em>Questions</em></h2>
               <p className="section-sub">Honest answers to the questions we hear most often about sickle cell disease.</p>
             </div>

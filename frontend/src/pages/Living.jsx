@@ -233,7 +233,7 @@ export default function Living() {
               You are not defined by your diagnosis. You are defined by your courage,
               your kindness, and the life you choose to live — every single day.
             </blockquote>
-            <div className="mc-source">— SickleCare</div>
+            <div className="mc-source"> SickleCare</div>
           </div>
         </div>
       </section>

@@ -132,7 +132,6 @@ const handleSubmit = async (ev) => {
             {/* CONTACT INFO */}
             <div className="contact-info">
               <div className="ci-card">
-                <div className="ci-icon ci-blue"><MdBloodtype size={26}/></div>
                 <h3>SickleCare Platform</h3>
                 <p>Empowering Cameroonians with sickle cell knowledge, tools, and community.</p>
               </div>
@@ -157,7 +156,7 @@ const handleSubmit = async (ev) => {
               </div>
 
               <div className="ci-emergency">
-                <div className="cie-dot"/><strong>Medical Emergency:</strong> Call <strong>15</strong> (SAMU Cameroon)
+                <strong>Medical Emergency:</strong> Call <strong>15</strong> (SAMU Cameroon)
               </div>
 
               <div className="ci-social">
@@ -175,7 +174,6 @@ const handleSubmit = async (ev) => {
               </div>
 
               <div className="ci-disclaimer">
-                <FiCheckCircle size={14} style={{ flexShrink:0, marginTop:2 }}/>
                 <p>This platform provides educational information only — not medical advice. Always consult a qualified healthcare professional for personal medical decisions.</p>
               </div>
             </div>
