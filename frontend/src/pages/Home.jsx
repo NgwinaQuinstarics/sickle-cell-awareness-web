@@ -1,20 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  FiArrowRight, FiActivity, FiUsers, FiGlobe,
-  FiShield, FiBell, FiDroplet, FiBarChart2,
-  FiBookOpen, FiHeart, FiCheckCircle
-} from 'react-icons/fi';
+import { FiArrowRight, FiActivity, FiUsers, FiGlobe,FiShield, FiBell, FiDroplet, FiBarChart2,FiBookOpen, FiHeart, FiCheckCircle} from 'react-icons/fi';
 import { MdBloodtype } from 'react-icons/md';
 import FeatureCard from '../components/FeatureCard';
 import useInView from '../hooks/useInView';
 import './Home.css';
 import heroImage from '../assets/hero.png';
-import appScreenshot from '../assets/hero.png';
+import appScreenshot from '../assets/screenshot.jpeg';
 
-
-// ── Data ──────────────────────────────────────────────────────────────────────
-
+// ── Data 
 const STATS = [
   { num: '300M+',  label: 'People affected worldwide',        icon: <FiGlobe size={18}/>,     color: 'blue'  },
   { num: '50M+',   label: 'Affected in sub-Saharan Africa',   icon: <FiUsers size={18}/>,     color: 'teal'  },
@@ -38,7 +32,7 @@ const GENOTYPES = [
   { type: 'SC', label: 'HbSC Disease',        desc: 'A milder variant of sickle cell disease that still requires monitoring.',    color: '#6d28d9', bg: '#faf5ff' },
 ];
 
-// ── Components ─────────────────────────────────────────────────────────────────
+// ── Components
 
 function StatCard({ stat, delay }) {
   const [ref, v] = useInView(0.1);
@@ -55,7 +49,7 @@ function StatCard({ stat, delay }) {
   );
 }
 
-// ── Page ─────────────
+// ── Page
 
 export default function Home() {
   const [heroVisible, setHeroVisible] = useState(false);
@@ -71,7 +65,7 @@ export default function Home() {
   return (
     <div className="home">
 
-      {/* ── HERO ───────────────────────────────────────────────────────────── */}
+      {/* ── HERO  */}
       <section className="hero-section">
         <div className="hero-bg">
           <div className="hero-gradient" />
@@ -123,14 +117,13 @@ export default function Home() {
               src={heroImage}
               alt="SickleCare healthcare illustration"
               className="hero-img"
-            />
-              
+              />
            </div>
           </div>
         </div>
       </section>
 
-      {/* ── STATS ──────────────────────────────────────────────────────────── */}
+      {/* ── STATS */}
       <section className="stats-section">
         <div className="container">
           <div className="stats-grid">
@@ -141,7 +134,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── QUOTE ──────────────────────────────────────────────────────────── */}
+      {/* ── QUOTE  */}
       <div className="quote-band" ref={quoteRef}>
         <div className={`container quote-inner${quoteV ? ' qv' : ''}`}>
          
@@ -153,15 +146,10 @@ export default function Home() {
           <div className="quote-attribution">SickleCare Mission</div>
         </div>
       </div>
-
-      {/* ── FEATURES ───────────────────────────────────────────────────────── */}
+      {/* ── FEATURES */}
       <section className="section features-section">
         <div className="container">
           <div className="section-header">
-            <div className="section-eyebrow">
-              
-              SickleCare Platform
-            </div>
             <h2 className="section-title">
               Everything You Need,<br />
               <span className="title-accent">In One Place</span>
@@ -239,33 +227,28 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── APP PREVIEW ────────────────────────────────────────────────────── */}
+      {/* ── APP PREVIEW  */}
       <section className="section app-section" ref={appRef}>
         <div className="container">
           <div className={`app-layout${appV ? ' av' : ''}`}>
 
             <div className="app-mockup-wrap">
 
-  <div className="app-phone">
+            <div className="app-phone">
 
-    <div className="phone-notch" />
+              <div className="phone-notch" />
 
-    <div className="phone-screen screenshot-screen">
+              <div className="phone-screen screenshot-screen">
 
-      <img
-        src={appScreenshot}
-        alt="SickleCare Mobile App Screenshot"
-        className="app-screenshot"
-        loading="eager"
-      />
-
-    </div>
-
-  </div>
-
-  <div className="phone-glow" />
-
-</div>
+                <img
+                  src={appScreenshot}
+                  alt="SickleCare Mobile App Screenshot"
+                  className="app-screenshot"
+                  loading="eager"
+                />
+              </div>
+            </div>
+          </div>
             <div className="app-text">
               <div className="section-eyebrow">
                 Mobile Application
