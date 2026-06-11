@@ -4,38 +4,65 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
-import { auth, db } from "@/firebase";
+import { auth } from "@/firebase";
 
-/**
- * Same admin model as the SickleCare mobile app:
- * a user is admin when their `users/{uid}` Firestore document
- * has `role == 'admin'`.
- */
-const AuthContext = createContext({ user: null, isAdmin: false, loading: true });
+const AuthContext = createContext({
+  user: null,
+  isAdmin: false,
+  loading: true,
+});
 
 export function AuthProvider({ children }) {
-  const [state, setState] = useState({ user: null, isAdmin: false, loading: true });
+  const [state, setState] = useState({
+    user: null,
+    isAdmin: false,
+    loading: true,
+  });
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (user) => {
       if (!user) {
-        setState({ user: null, isAdmin: false, loading: false });
+        setState({
+          user: null,
+          isAdmin: false,
+          loading: false,
+        });
         return;
       }
-      let isAdmin = false;
+
       try {
-        const snap = await getDoc(doc(db, "users", user.uid));
-        isAdmin = (snap.data()?.role ?? "user") === "admin";
-      } catch {
-        // profile unreadable (offline / rules) — treat as non-admin
+        // Force refresh so latest custom claims are loaded
+        const tokenResult = await user.getIdTokenResult(true);
+
+        const isAdmin = tokenResult.claims.admin === true;
+
+        console.log("Claims:", tokenResult.claims);
+        console.log("Admin:", isAdmin);
+
+        setState({
+          user,
+          isAdmin,
+          loading: false,
+        });
+      } catch (error) {
+        console.error("Error reading custom claims:", error);
+
+        setState({
+          user,
+          isAdmin: false,
+          loading: false,
+        });
       }
-      setState({ user, isAdmin, loading: false });
     });
+
     return unsub;
   }, []);
 
-  return <AuthContext.Provider value={state}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={state}>
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
 export function useAuth() {
