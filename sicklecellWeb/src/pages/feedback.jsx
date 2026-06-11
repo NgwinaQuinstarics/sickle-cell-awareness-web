@@ -3,20 +3,50 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { Star, Send } from "lucide-react";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { db } from "@/firebase";
 
 function FeedbackPage() {
-  useEffect(() => { document.title = "Feedback \u2014 SickleCare"; let m = document.querySelector("meta[name=description]"); if(!m){m=document.createElement("meta");m.setAttribute("name","description");document.head.appendChild(m);} m.setAttribute("content", "Share your feedback, suggestions, or report a bug with the SickleCare team."); }, []);
+  useEffect(() => {
+    document.title = "Feedback — SickleCare";
+    let m = document.querySelector("meta[name=description]");
+    if (!m) { m = document.createElement("meta"); m.setAttribute("name", "description"); document.head.appendChild(m); }
+    m.setAttribute("content", "Share your feedback, suggestions, or report a bug with the SickleCare team.");
+  }, []);
 
-  const [rating, setRating] = useState(0);
-  const [sent, setSent] = useState(false);
+  const [rating,  setRating]  = useState(0);
+  const [sent,    setSent]    = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error,   setError]   = useState("");
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    // TODO: wire to Firestore `feedback` collection (same Firebase project as the mobile app)
-    setSent(true);
-    setTimeout(() => setSent(false), 4000);
-    e.currentTarget.reset();   // ← removed TypeScript cast
-    setRating(0);
+    setLoading(true);
+    setError("");
+    const form = e.currentTarget;
+    const data = new FormData(form);
+    try {
+      // FIX: was a TODO — now actually writes to Firestore.
+      // Uses "feedback" collection. Add this rule to Firestore:
+      //   match /feedback/{docId} { allow create: if true; }
+      await addDoc(collection(db, "feedback"), {
+        name:      data.get("name")     ?? "",
+        email:     data.get("email")    ?? "",
+        category:  data.get("category") ?? "suggestion",
+        message:   data.get("message")  ?? "",
+        rating,
+        createdAt: serverTimestamp(),
+      });
+      setSent(true);
+      form.reset();
+      setRating(0);
+      setTimeout(() => setSent(false), 4000);
+    } catch (err) {
+      setError("Failed to submit. Please try again.");
+      console.error("Feedback submit error:", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -54,8 +84,8 @@ function FeedbackPage() {
           </div>
 
           <div className="mt-8 grid gap-5 sm:grid-cols-2">
-            <Field label="Your name" name="name" />
-            <Field label="Email (optional)" name="email" type="email" />
+            <Field label="Your name"         name="name" />
+            <Field label="Email (optional)"  name="email" type="email" />
           </div>
           <div className="mt-5">
             <label className="mb-2 block text-xs font-medium uppercase tracking-wider text-muted-foreground">
@@ -63,8 +93,8 @@ function FeedbackPage() {
             </label>
             <select
               name="category"
-              className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none focus:border-accent focus:ring-2 focus:ring-accent/20"
               defaultValue="suggestion"
+              className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none focus:border-accent focus:ring-2 focus:ring-accent/20"
             >
               <option value="suggestion">Suggestion</option>
               <option value="bug">Bug report</option>
@@ -87,16 +117,23 @@ function FeedbackPage() {
             />
           </div>
 
+          {error && (
+            <p className="mt-4 text-sm text-red-500">{error}</p>
+          )}
+
           <button
             type="submit"
-            className="mt-8 inline-flex items-center gap-2 rounded-full bg-foreground px-6 py-3.5 text-sm font-medium text-background transition hover:opacity-90"
+            disabled={loading}
+            className="mt-8 inline-flex items-center gap-2 rounded-full bg-foreground px-6 py-3.5 text-sm font-medium text-background transition hover:opacity-90 disabled:opacity-60"
           >
             <Send className="h-4 w-4" />
-            {sent ? "Thank you — feedback received!" : "Send feedback"}
+            {loading ? "Sending…" : sent ? "Thank you — feedback received!" : "Send feedback"}
           </button>
 
           <p className="mt-6 text-xs text-muted-foreground">
-            By submitting, you agree to our <a href="/privacy" className="text-accent underline">Privacy Policy</a>. We never share your email.
+            By submitting, you agree to our{" "}
+            <a href="/privacy" className="text-accent underline">Privacy Policy</a>.
+            We never share your email.
           </p>
         </form>
       </section>

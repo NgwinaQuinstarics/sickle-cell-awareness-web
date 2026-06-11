@@ -1,4 +1,4 @@
-import { useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
@@ -6,29 +6,43 @@ import { Mail, Phone, MapPin, Send } from "lucide-react";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db } from "@/firebase";
 
-
-
 function ContactPage() {
-  useEffect(() => { document.title = "Contact \u2014 SickleCare"; let m = document.querySelector("meta[name=description]"); if(!m){m=document.createElement("meta");m.setAttribute("name","description");document.head.appendChild(m);} m.setAttribute("content", "Reach the SickleCare team. Send a message, find us on the map, or connect on social media."); }, []);
+  useEffect(() => {
+    document.title = "Contact — SickleCare";
+    let m = document.querySelector("meta[name=description]");
+    if (!m) { m = document.createElement("meta"); m.setAttribute("name", "description"); document.head.appendChild(m); }
+    m.setAttribute("content", "Reach the SickleCare team. Send a message, find us on the map, or connect on social media.");
+  }, []);
 
   const [sent, setSent] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError("");
     const form = e.currentTarget;
     const data = new FormData(form);
-    // Saved to the same `contact_messages` collection the mobile app's
-    // admin screen reads.
-    await addDoc(collection(db, "contact_messages"), {
-      name: data.get("name") ?? "",
-      email: data.get("email") ?? "",
-      subject: data.get("subject") ?? "",
-      message: data.get("message") ?? "",
-      createdAt: serverTimestamp(),
-    });
-    setSent(true);
-    setTimeout(() => setSent(false), 4000);
-    form.reset();
+    try {
+      // FIX: collection name changed from "contact_messages" → "contacts"
+      // to match Firestore rules: match /contacts/{docId} { allow create: if true; }
+      await addDoc(collection(db, "contacts"), {
+        name:      data.get("name")    ?? "",
+        email:     data.get("email")   ?? "",
+        subject:   data.get("subject") ?? "",
+        message:   data.get("message") ?? "",
+        createdAt: serverTimestamp(),
+      });
+      setSent(true);
+      form.reset();
+      setTimeout(() => setSent(false), 4000);
+    } catch (err) {
+      setError("Failed to send. Please try again.");
+      console.error("Contact submit error:", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -47,8 +61,8 @@ function ContactPage() {
             <p className="mt-1 text-sm text-muted-foreground">We typically respond within 1–2 business days.</p>
 
             <div className="mt-8 grid gap-5 sm:grid-cols-2">
-              <Field label="Full name" name="name" required />
-              <Field label="Email" name="email" type="email" required />
+              <Field label="Full name"  name="name"  required />
+              <Field label="Email"      name="email" type="email" required />
             </div>
             <div className="mt-5">
               <Field label="Subject" name="subject" />
@@ -67,18 +81,23 @@ function ContactPage() {
               />
             </div>
 
+            {error && (
+              <p className="mt-4 text-sm text-red-500">{error}</p>
+            )}
+
             <button
               type="submit"
-              className="mt-8 inline-flex items-center gap-2 rounded-full bg-foreground px-6 py-3.5 text-sm font-medium text-background transition hover:opacity-90"
+              disabled={loading}
+              className="mt-8 inline-flex items-center gap-2 rounded-full bg-foreground px-6 py-3.5 text-sm font-medium text-background transition hover:opacity-90 disabled:opacity-60"
             >
               <Send className="h-4 w-4" />
-              {sent ? "Message sent — thank you!" : "Send message"}
+              {loading ? "Sending…" : sent ? "Message sent — thank you!" : "Send message"}
             </button>
           </form>
 
           <aside className="space-y-5">
-            <InfoCard icon={Mail} label="Email" value="hello@sicklecare.org" />
-            <InfoCard icon={Phone} label="Phone" value="+237 6 00 00 00 00" />
+            <InfoCard icon={Mail}   label="Email"  value="hello@sicklecare.org" />
+            <InfoCard icon={Phone}  label="Phone"  value="+237 6 00 00 00 00" />
             <InfoCard icon={MapPin} label="Office" value="Awareness Hub, Yaoundé, Cameroon" />
 
             <div className="overflow-hidden rounded-3xl border border-border">
