@@ -74,18 +74,6 @@ function HomePage() {
               </Link>
             </div>
 
-            <dl className="mt-12 grid max-w-md grid-cols-3 gap-6 border-t border-border pt-8">
-              {[
-                { k: "20+", v: "Articles" },
-                { k: "8", v: "Care guides" },
-                { k: "24/7", v: "Resource hub" },
-              ].map((s) => (
-                <div key={s.v}>
-                  <dt className="font-display text-3xl font-semibold text-foreground">{s.k}</dt>
-                  <dd className="mt-1 text-xs uppercase tracking-wider text-muted-foreground">{s.v}</dd>
-                </div>
-              ))}
-            </dl>
           </div>
 
           <div className="reveal relative">
@@ -201,31 +189,31 @@ function HomePage() {
       </section>
 
       {/* CTA */}
-      <section className="container-page pb-24">
-        <div className="relative overflow-hidden rounded-3xl border border-border bg-card p-10 md:p-16">
-          <div
-            aria-hidden
-            className="absolute -right-20 -top-20 h-72 w-72 rounded-full opacity-60 blur-3xl"
-            style={{ background: "radial-gradient(closest-side, var(--coral-soft), transparent)" }}
-          />
-          <div className="relative grid gap-8 lg:grid-cols-[1.4fr_1fr] lg:items-end">
-            <div>
-              <Activity className="h-7 w-7 text-accent" />
-              <h2 className="mt-4 text-3xl font-semibold md:text-5xl">
-                Know your genotype. Share what you know.
-              </h2>
-              <p className="mt-4 max-w-xl text-muted-foreground">
-                Awareness saves lives. Take five minutes to read a guide, share it
-                with someone you love, or get tested today.
-              </p>
-            </div>
-            <div className="flex flex-wrap gap-3 lg:justify-end">
-              <Link to="/resources" className="rounded-full bg-foreground px-6 py-3 text-sm font-medium text-background hover:opacity-90">Resources</Link>
-              <Link to="/contact" className="rounded-full border border-border bg-background px-6 py-3 text-sm font-medium hover:border-accent hover:text-accent">Contact us</Link>
+            <section className="container-page pb-24">
+          <div className="relative overflow-hidden rounded-3xl border border-border bg-card p-10 md:p-16">
+            <div
+              aria-hidden
+              className="absolute -right-20 -top-20 h-72 w-72 rounded-full opacity-60 blur-3xl"
+              style={{ background: "radial-gradient(closest-side, var(--coral-soft), transparent)" }}
+            />
+            <div className="relative flex flex-col items-center text-center gap-8">
+              <div>
+                <p className="font-display text-sm uppercase tracking-[0.25em] text-accent">Get involved</p>
+                <h2 className="mt-4 text-3xl font-semibold md:text-5xl">
+                  Know your genotype. Share what you know.
+                </h2>
+                <p className="mt-4 max-w-xl text-muted-foreground">
+                  Awareness saves lives. Take five minutes to read a guide, share it
+                  with someone you love, or get tested today.
+                </p>
+              </div>
+              <div className="flex flex-wrap justify-center gap-3">
+                <Link to="/resources" className="rounded-full bg-foreground px-6 py-3 text-sm font-medium text-background hover:opacity-90">Resources</Link>
+                <Link to="/contact" className="rounded-full border border-border bg-background px-6 py-3 text-sm font-medium hover:border-accent hover:text-accent">Contact us</Link>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
       <Footer />
     </div>

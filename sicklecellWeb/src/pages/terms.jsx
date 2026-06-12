@@ -3,8 +3,6 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 
-
-
 function TermsPage() {
   useEffect(() => { document.title = "Terms & Conditions \u2014 SickleCare"; let m = document.querySelector("meta[name=description]"); if(!m){m=document.createElement("meta");m.setAttribute("name","description");document.head.appendChild(m);} m.setAttribute("content", "Terms governing use of the SickleCare website and mobile application."); }, []);
 
@@ -18,6 +16,16 @@ function TermsPage() {
       />
       <section className="container-page py-16">
         <article className="mx-auto max-w-3xl space-y-8 text-[15px] leading-relaxed text-foreground/90">
+
+          {/* ── Privacy Policy link ── */}
+          <p className="text-sm text-muted-foreground">
+            These Terms should be read alongside our{" "}
+            <a href="/privacy-policy" className="text-accent underline font-medium">
+              Privacy Policy
+            </a>
+            , which explains how we collect and use your data.
+          </p>
+
           <Block title="1. Acceptance of terms">
             By accessing or using the SickleCare website or installing the SickleCare mobile application
             ("the Service"), you agree to be bound by these Terms & Conditions and our Privacy Policy.

@@ -1,10 +1,8 @@
-import { useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { Plus, Minus } from "lucide-react";
-
-
 
 const FAQS = [
   { q: "What causes sickle cell disease?", a: "It is caused by inheriting two copies of an abnormal haemoglobin gene (HbS) — one from each parent. The mutation changes how red blood cells are shaped and how long they survive." },
@@ -17,15 +15,35 @@ const FAQS = [
 ];
 
 function FaqPage() {
-  useEffect(() => { document.title = "Frequently Asked Questions \u2014 SickleCare"; let m = document.querySelector("meta[name=description]"); if(!m){m=document.createElement("meta");m.setAttribute("name","description");document.head.appendChild(m);} m.setAttribute("content", "Plain-language answers to the most common questions about sickle cell disease, inheritance, treatment and daily life."); }, []);
+  useEffect(() => {
+    document.title = "Frequently Asked Questions — SickleCare";
 
-  const [open, setOpen] = useState<number | null>(0);
+    let m = document.querySelector("meta[name=description]");
+    if (!m) {
+      m = document.createElement("meta");
+      m.setAttribute("name", "description");
+      document.head.appendChild(m);
+    }
+
+    m.setAttribute(
+      "content",
+      "Plain-language answers to the most common questions about sickle cell disease, inheritance, treatment and daily life."
+    );
+  }, []);
+
+  const [open, setOpen] = useState(0); // ✅ FIXED
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
+
       <PageHero
         eyebrow="FAQ"
-        title={<>Honest answers to <span className="text-accent">honest questions.</span></>}
+        title={
+          <>
+            Honest answers to <span className="text-accent">honest questions.</span>
+          </>
+        }
         description="The questions families ask us most — answered plainly, without jargon or judgment."
       />
 
@@ -33,6 +51,7 @@ function FaqPage() {
         <div className="mx-auto max-w-3xl space-y-3">
           {FAQS.map((f, i) => {
             const isOpen = open === i;
+
             return (
               <div
                 key={f.q}
@@ -43,13 +62,20 @@ function FaqPage() {
                 <button
                   onClick={() => setOpen(isOpen ? null : i)}
                   className="flex w-full items-start justify-between gap-4 p-6 text-left"
-                  aria-expanded={isOpen}
                 >
-                  <span className="font-display text-lg font-semibold leading-snug">{f.q}</span>
+                  <span className="font-display text-lg font-semibold leading-snug">
+                    {f.q}
+                  </span>
+
                   <span className="mt-1 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent/10 text-accent">
-                    {isOpen ? <Minus className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
+                    {isOpen ? (
+                      <Minus className="h-4 w-4" />
+                    ) : (
+                      <Plus className="h-4 w-4" />
+                    )}
                   </span>
                 </button>
+
                 <div
                   className="grid overflow-hidden px-6 transition-all"
                   style={{
@@ -58,7 +84,9 @@ function FaqPage() {
                   }}
                 >
                   <div className="min-h-0">
-                    <p className="leading-relaxed text-muted-foreground">{f.a}</p>
+                    <p className="leading-relaxed text-muted-foreground">
+                      {f.a}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -66,6 +94,7 @@ function FaqPage() {
           })}
         </div>
       </section>
+
       <Footer />
     </div>
   );

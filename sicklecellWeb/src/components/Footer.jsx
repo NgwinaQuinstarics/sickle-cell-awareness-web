@@ -29,12 +29,11 @@ const SECTIONS = [
   {
     title: "Legal",
     links: [
-      { to: "/privacy", label: "Privacy Policy" },
+      { to: "/privacy-policy", label: "Privacy Policy" },
       { to: "/terms", label: "Terms & Conditions" },
     ],
   },
 ];
-
 
 export function Footer() {
   return (

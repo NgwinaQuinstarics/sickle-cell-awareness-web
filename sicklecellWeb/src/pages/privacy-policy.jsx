@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { Link } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
@@ -78,7 +79,7 @@ function PrivacyPage() {
           <Block title="9. Your rights">
             You have the right to access, correct, export or delete your personal data at any time. To exercise
             these rights, contact us at <a className="text-accent underline" href="mailto:privacy@sicklecare.org">privacy@sicklecare.org</a>.
-            In the mobile app, you can delete your account from Settings → Account → Delete account.
+            In the mobile app, you can delete your account from Settings \u2192 Account \u2192 Delete account.
           </Block>
 
           <Block title="10. Data retention">
@@ -94,12 +95,15 @@ function PrivacyPage() {
 
           <Block title="12. Changes to this policy">
             We may update this policy from time to time. Material changes will be announced on this page and,
-            for the mobile app, via an in-app notice. The "Effective date" above always reflects the latest version.
+            for the mobile app, via an in-app notice. The "Effective date" above always reflects the latest version.{" "}
+            Please also review our{" "}
+            <Link to="/terms" className="text-accent underline">Terms and Conditions</Link>,
+            which govern your use of the Service alongside this policy.
           </Block>
 
           <Block title="13. Contact">
             Questions about this Privacy Policy? Email <a className="text-accent underline" href="mailto:privacy@sicklecare.org">privacy@sicklecare.org</a> or write to
-            SickleCare, Yaoundé, Cameroon.
+            SickleCare, Yaound\u00e9, Cameroon.
           </Block>
         </article>
       </section>
