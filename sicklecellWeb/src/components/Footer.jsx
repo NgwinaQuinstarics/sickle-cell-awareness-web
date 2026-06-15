@@ -15,10 +15,12 @@ const SECTIONS = [
     title: "Support",
     links: [
       { to: "/resources", label: "Resources" },
+      { to: "/announcements", label: "Announcements" },
       { to: "/faq", label: "FAQ" },
       { to: "/contact", label: "Contact" },
     ],
   },
+
   {
     title: "Project",
     links: [

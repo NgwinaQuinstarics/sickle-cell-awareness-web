@@ -22,7 +22,10 @@ isSupported().then((yes) => {
   if (yes) analytics = getAnalytics(app);
 });
 
+import { getStorage } from "firebase/storage";
+
 // Services
 export const db = getFirestore(app);
 export const auth = getAuth(app);
+export const storage = getStorage(app);
 export { analytics };

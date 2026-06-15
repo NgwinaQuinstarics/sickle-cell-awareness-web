@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Routes, Route, Link, useLocation } from "react-router-dom";
 
 import Home from "./pages/index.jsx";
@@ -14,6 +14,8 @@ import ResourceDetail from "./pages/resource-detail.jsx";
 import Admin from "./pages/admin.jsx";
 import Symptoms from "./pages/symptoms.jsx";
 import Terms from "./pages/terms.jsx";
+import Announcements from "./pages/announcements.jsx";
+import { PageLoader } from "./components/AnimationHelpers.jsx";
 
 function NotFound() {
   return (
@@ -46,29 +48,36 @@ function ScrollToTop() {
 }
 
 export default function App() {
+  const [initLoad, setInitLoad] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setInitLoad(false), 800);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (initLoad) {
+    return <PageLoader />;
+  }
+
   return (
     <>
       <ScrollToTop />
 
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/app" element={<AppPage />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/faq" element={<Faq />} />
-        <Route path="/feedback" element={<Feedback />} />
-        <Route path="/prevention" element={<Prevention />} />
-
-        <Route path="/privacy-policy" element={<Privacy />} />
-
-        <Route path="/resources" element={<Resources />} />
-        <Route path="/resources/:id" element={<ResourceDetail />} />
-        <Route path="/admin" element={<Admin />} />
-        <Route path="/symptoms" element={<Symptoms />} />
-
-        <Route path="/terms" element={<Terms />} />
-
-        <Route path="*" element={<NotFound />} />
+      <Route path="/" element={<Home />} />
+      <Route path="/about" element={<About />} />
+      <Route path="/app" element={<AppPage />} />
+      <Route path="/contact" element={<Contact />} />
+      <Route path="/faq" element={<Faq />} />
+      <Route path="/feedback" element={<Feedback />} />
+      <Route path="/prevention" element={<Prevention />} />
+      <Route path="/privacy" element={<Privacy />} />
+      <Route path="/resources" element={<Resources />} />
+      <Route path="/resources/:id" element={<ResourceDetail />} />
+      <Route path="/admin" element={<Admin />} />
+      <Route path="/symptoms" element={<Symptoms />} />
+      <Route path="/terms" element={<Terms />} />
+      <Route path="*" element={<NotFound />} />
       </Routes>
     </>
   );

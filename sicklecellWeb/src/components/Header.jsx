@@ -10,10 +10,12 @@ const NAV = [
   { to: "/symptoms", label: "Symptoms" },
   { to: "/prevention", label: "Prevention" },
   { to: "/resources", label: "Resources" },
+  { to: "/announcements", label: "Announcements" },
   { to: "/app", label: "Our App" },
   { to: "/faq", label: "FAQ" },
   { to: "/contact", label: "Contact" },
 ];
+
 
 export function Header() {
   const [open, setOpen] = useState(false);

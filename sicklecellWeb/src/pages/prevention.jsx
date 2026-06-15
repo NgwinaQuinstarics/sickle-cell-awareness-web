@@ -2,20 +2,31 @@ import { useEffect } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
-import { Dna, Droplet, Apple, Calendar, Snowflake, Heart, CheckCircle2, AlertTriangle, XCircle } from "lucide-react";
+import {
+  Dna,
+  Droplet,
+  Apple,
+  Calendar,
+  Snowflake,
+  Heart,
+  CheckCircle2,
+  AlertTriangle,
+  XCircle,
+} from "lucide-react";
+import { usePageContent } from "@/lib/content";
+import { ScrollReveal, AnimatedCard } from "@/components/AnimationHelpers";
 
+const ICONS = { Dna, Droplet, Apple, Calendar, Snowflake, Heart };
 
-
-const CARE = [
-  { icon: Dna, title: "Genotype testing", body: "Know your genotype before pregnancy. Two AS partners have a 25% chance of having a child with SS — a fact that quietly shapes a family's entire future." },
-  { icon: Droplet, title: "Hydration", body: "Sickled cells are triggered by dehydration. Aim for 2–3 litres of water daily; more in hot weather, during exercise, or when unwell." },
-  { icon: Apple, title: "Nutrition", body: "A diet rich in leafy greens, beans, fish, eggs and citrus supports red blood cell production. Folic acid supplementation is commonly recommended." },
-  { icon: Calendar, title: "Regular checkups", body: "Routine visits catch complications early. Vaccinations, eye exams and transcranial Doppler screenings in children are non-negotiable." },
-  { icon: Snowflake, title: "Avoid triggers", body: "Extreme cold, high altitudes, exhausting activity, alcohol and stress can spark a crisis. Plan ahead and pace yourself." },
-  { icon: Heart, title: "Healthy lifestyle", body: "Gentle exercise, restful sleep, and managing stress through mindfulness or community make a measurable difference in crisis frequency." },
+const DEFAULT_CARE = [
+  { icon: "Dna", title: "Genotype testing", body: "Know your genotype before pregnancy. Two AS partners have a 25% chance of having a child with SS — a fact that quietly shapes a family's entire future." },
+  { icon: "Droplet", title: "Hydration", body: "Sickled cells are triggered by dehydration. Aim for 2–3 litres of water daily; more in hot weather, during exercise, or when unwell." },
+  { icon: "Apple", title: "Nutrition", body: "A diet rich in leafy greens, beans, fish, eggs and citrus supports red blood cell production. Folic acid supplementation is commonly recommended." },
+  { icon: "Calendar", title: "Regular checkups", body: "Routine visits catch complications early. Vaccinations, eye exams and transcranial Doppler screenings in children are non-negotiable." },
+  { icon: "Snowflake", title: "Avoid triggers", body: "Extreme cold, high altitudes, exhausting activity, alcohol and stress can spark a crisis. Plan ahead and pace yourself." },
+  { icon: "Heart", title: "Healthy lifestyle", body: "Gentle exercise, restful sleep, and managing stress through mindfulness or community make a measurable difference in crisis frequency." },
 ];
 
-// Common and rare hemoglobin genotypes
 const GENOTYPES = [
   { code: "AA", name: "Normal", desc: "Two normal hemoglobin A genes. No sickle cell trait or disease." },
   { code: "AS", name: "Sickle cell trait", desc: "Carrier. Generally healthy but can pass S gene to children." },
@@ -27,8 +38,6 @@ const GENOTYPES = [
   { code: "SO-Arab", name: "Hemoglobin SO-Arab", desc: "Rare; severity similar to SS." },
   { code: "Sβ-thal", name: "Sickle β-thalassemia", desc: "Combination of S gene and β-thalassemia. Severity varies." },
 ];
-
-// Compatibility risk: SAFE | CAUTION | HIGH RISK | DO NOT MARRY (advise against)
 
 function risk(a, b) {
   const pair = [a, b].sort().join("+");
@@ -77,128 +86,164 @@ const RISK_STYLES = {
 };
 
 function PreventionPage() {
-  useEffect(() => { document.title = "Prevention, Care & Genotype Compatibility \u2014 SickleCare"; let m = document.querySelector("meta[name=description]"); if(!m){m=document.createElement("meta");m.setAttribute("name","description");document.head.appendChild(m);} m.setAttribute("content", "Daily care, lifestyle habits, and a full genotype compatibility chart for couples \u2014 including rare variants like AC, SC, SD and S\u03b2-thalassemia."); }, []);
+  const { content } = usePageContent("prevention");
+
+  useEffect(() => {
+    document.title = "Prevention, Care & Genotype Compatibility — SickleCare";
+    let m = document.querySelector("meta[name=description]");
+    if (!m) {
+      m = document.createElement("meta");
+      m.setAttribute("name", "description");
+      document.head.appendChild(m);
+    }
+    m.setAttribute(
+      "content",
+      "Daily care, lifestyle habits, and a full genotype compatibility chart for couples — including rare variants like AC, SC, SD and Sβ-thalassemia."
+    );
+  }, []);
+
+  const headline = content?.headline || "Small daily habits, big lifelong impact.";
+  const description =
+    content?.description ||
+    "Sickle cell disease can't always be prevented, but its complications can be. These daily practices help patients spend more time well — and less time in crisis.";
+  const care = content?.carePoints || DEFAULT_CARE;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background overflow-x-hidden">
       <Header />
-      <PageHero
-        eyebrow="Prevention & Care"
-        title={<>Small daily habits, <span className="text-accent">big lifelong impact.</span></>}
-        description="Sickle cell disease can't always be prevented, but its complications can be. These daily practices help patients spend more time well — and less time in crisis."
-      />
+      <PageHero eyebrow="Prevention & Care" title={headline} description={description} />
 
       <section className="container-page py-20">
-        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {CARE.map((c) => (
-            <article key={c.title} className="rounded-2xl border border-border bg-card p-7 transition hover:-translate-y-0.5 hover:border-accent/40 hover:shadow-lg">
-              <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-accent/10 text-accent">
-                <c.icon className="h-5 w-5" />
-              </span>
-              <h3 className="mt-5 font-display text-xl font-semibold">{c.title}</h3>
-              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{c.body}</p>
-            </article>
-          ))}
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {care.map((c, idx) => {
+            const Icon = ICONS[c.icon] || Heart;
+            return (
+              <AnimatedCard key={c.title} delay={idx * 0.08} className="rounded-2xl p-7">
+                <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-accent/10 text-accent">
+                  <Icon className="h-5 w-5" />
+                </span>
+                <h3 className="mt-5 font-display text-xl font-semibold">{c.title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{c.body}</p>
+              </AnimatedCard>
+            );
+          })}
         </div>
 
         {/* Genotype glossary */}
         <div className="mt-24">
-          <p className="font-display text-sm uppercase tracking-[0.25em] text-accent">Know the genotypes</p>
-          <h2 className="mt-3 text-3xl font-semibold md:text-4xl">Every hemoglobin genotype — common and rare.</h2>
-          <p className="mt-4 max-w-2xl text-muted-foreground">
-            A simple blood test reveals which of these you carry. Knowing yours — and your partner's — protects the next generation.
-          </p>
+          <ScrollReveal variant="fade-up">
+            <p className="font-display text-sm uppercase tracking-[0.25em] text-accent">Know the genotypes</p>
+            <h2 className="mt-3 text-3xl font-semibold md:text-4xl">Every hemoglobin genotype — common and rare.</h2>
+            <p className="mt-4 max-w-2xl text-muted-foreground">
+              A simple blood test reveals which of these you carry. Knowing yours — and your partner's — protects the next generation.
+            </p>
+          </ScrollReveal>
 
-          <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {GENOTYPES.map((g) => (
-              <div key={g.code} className="rounded-2xl border border-border bg-card p-6">
-                <div className="flex items-center gap-3">
-                  <span className="inline-flex h-11 min-w-11 items-center justify-center rounded-xl bg-accent/10 px-3 font-display text-sm font-semibold text-accent">
-                    {g.code}
-                  </span>
-                  <h3 className="font-display text-base font-semibold">{g.name}</h3>
+          <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {GENOTYPES.map((g, idx) => (
+              <ScrollReveal key={g.code} variant="zoom-in" delay={idx * 0.05}>
+                <div className="rounded-2xl border border-border bg-card p-6 h-full hover:border-accent/40 transition-colors">
+                  <div className="flex items-center gap-3">
+                    <span className="inline-flex h-11 min-w-11 items-center justify-center rounded-xl bg-accent/10 px-3 font-display text-sm font-semibold text-accent">
+                      {g.code}
+                    </span>
+                    <h3 className="font-display text-base font-semibold">{g.name}</h3>
+                  </div>
+                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{g.desc}</p>
                 </div>
-                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{g.desc}</p>
-              </div>
+              </ScrollReveal>
             ))}
           </div>
         </div>
 
         {/* Compatibility chart */}
-        <div className="mt-20">
-          <p className="font-display text-sm uppercase tracking-[0.25em] text-accent">Marriage compatibility</p>
-          <h2 className="mt-3 text-3xl font-semibold md:text-4xl">Who can marry whom — safely.</h2>
-          <p className="mt-4 max-w-2xl text-muted-foreground">
-            Find your genotype in the first column and your partner's across the top. The colour tells you the risk for your future children.
-          </p>
+        <div className="mt-24">
+          <ScrollReveal variant="fade-up">
+            <p className="font-display text-sm uppercase tracking-[0.25em] text-accent">Marriage compatibility</p>
+            <h2 className="mt-3 text-3xl font-semibold md:text-4xl">Who can marry whom — safely.</h2>
+            <p className="mt-4 max-w-2xl text-muted-foreground">
+              Find your genotype in the first column and your partner's across the top. The colour tells you the risk for your future children.
+            </p>
 
-          {/* Legend */}
-          <div className="mt-8 flex flex-wrap gap-3">
-            {Object.keys(RISK_STYLES).map((r) => {
-              const s = RISK_STYLES[r];
-              return (
-                <span key={r} className={`inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-xs font-medium ${s.bg} ${s.text}`}>
-                  <s.Icon className="h-3.5 w-3.5" />
-                  {s.label}
-                </span>
-              );
-            })}
-          </div>
+            {/* Legend */}
+            <div className="mt-8 flex flex-wrap gap-3">
+              {Object.keys(RISK_STYLES).map((r) => {
+                const s = RISK_STYLES[r];
+                return (
+                  <span
+                    key={r}
+                    className={`inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-xs font-semibold ${s.bg} ${s.text}`}
+                  >
+                    <s.Icon className="h-3.5 w-3.5" />
+                    {s.label}
+                  </span>
+                );
+              })}
+            </div>
+          </ScrollReveal>
 
-          <div className="mt-8 overflow-x-auto rounded-2xl border border-border bg-card">
-            <table className="w-full min-w-[760px] border-collapse text-sm">
-              <thead>
-                <tr className="bg-muted/40">
-                  <th className="sticky left-0 z-10 bg-muted/40 px-4 py-3 text-left font-display text-xs uppercase tracking-wider text-muted-foreground">
-                    Partner →
-                  </th>
-                  {GENOTYPES.map((g) => (
-                    <th key={g.code} className="px-3 py-3 text-center font-display text-xs font-semibold">
-                      {g.code}
+          <ScrollReveal variant="zoom-in" delay={0.1}>
+            <div className="mt-8 overflow-x-auto rounded-2xl border border-border bg-card shadow-sm">
+              <table className="w-full min-w-[760px] border-collapse text-sm">
+                <thead>
+                  <tr className="bg-muted/40">
+                    <th className="sticky left-0 z-10 bg-muted/40 px-4 py-3 text-left font-display text-xs uppercase tracking-wider text-muted-foreground">
+                      Partner →
                     </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {GENOTYPES.map((row) => (
-                  <tr key={row.code} className="border-t border-border">
-                    <th className="sticky left-0 z-10 bg-card px-4 py-3 text-left font-display text-xs font-semibold">
-                      {row.code}
-                    </th>
-                    {GENOTYPES.map((col) => {
-                      const r = risk(row.code, col.code);
-                      const s = RISK_STYLES[r.level];
-                      return (
-                        <td key={col.code} className={`px-2 py-2 text-center ${s.bg}`}>
-                          <span title={r.note} className={`inline-flex items-center gap-1 rounded-md px-2 py-1 text-[11px] font-medium ${s.text}`}>
-                            <s.Icon className="h-3 w-3" />
-                            {s.label}
-                          </span>
-                        </td>
-                      );
-                    })}
+                    {GENOTYPES.map((g) => (
+                      <th key={g.code} className="px-3 py-3 text-center font-display text-xs font-semibold">
+                        {g.code}
+                      </th>
+                    ))}
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {GENOTYPES.map((row) => (
+                    <tr key={row.code} className="border-t border-border">
+                      <th className="sticky left-0 z-10 bg-card px-4 py-3 text-left font-display text-xs font-semibold">
+                        {row.code}
+                      </th>
+                      {GENOTYPES.map((col) => {
+                        const r = risk(row.code, col.code);
+                        const s = RISK_STYLES[r.level];
+                        return (
+                          <td key={col.code} className={`px-2 py-2 text-center ${s.bg}`}>
+                            <span
+                              title={r.note}
+                              className={`inline-flex items-center gap-1 rounded-md px-2 py-1 text-[11px] font-semibold ${s.text}`}
+                            >
+                              <s.Icon className="h-3 w-3" />
+                              {s.label}
+                            </span>
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </ScrollReveal>
 
           <p className="mt-4 text-xs text-muted-foreground">
             Hover or tap any cell on a desktop to see the inheritance breakdown. This chart is for awareness only — always consult a qualified genetic counsellor before making family decisions.
           </p>
         </div>
 
-        <div className="mt-20 grid gap-6 rounded-3xl border border-border bg-navy p-8 text-cream md:p-12 lg:grid-cols-[1fr_1.1fr] lg:items-center">
-          <div>
-            <p className="font-display text-sm uppercase tracking-[0.25em] text-coral">Get tested</p>
-            <h3 className="mt-3 font-display text-3xl font-semibold md:text-4xl">A simple blood test can save a generation.</h3>
+        <ScrollReveal variant="fade-up" className="mt-20">
+          <div className="grid gap-6 rounded-3xl border border-border bg-navy p-8 text-cream md:p-12 lg:grid-cols-[1fr_1.1fr] lg:items-center">
+            <div>
+              <p className="font-display text-sm uppercase tracking-[0.25em] text-coral">Get tested</p>
+              <h3 className="mt-3 font-display text-3xl font-semibold md:text-4xl">
+                A simple blood test can save a generation.
+              </h3>
+            </div>
+            <p className="leading-relaxed text-cream/80">
+              Encourage every young adult and every couple considering marriage to know their genotype. The test is quick,
+              affordable, and widely available at public health centres and most laboratories across Cameroon.
+            </p>
           </div>
-          <p className="leading-relaxed text-cream/80">
-            Encourage every young adult and every couple considering marriage to
-            know their genotype. The test is quick, affordable, and widely
-            available at public health centres and most laboratories across Cameroon.
-          </p>
-        </div>
+        </ScrollReveal>
       </section>
       <Footer />
     </div>
