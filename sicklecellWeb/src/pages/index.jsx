@@ -122,12 +122,6 @@ function HomePage() {
             </div>
           </ScrollReveal>
 
-<<<<<<< HEAD
-          </div>
-
-          <div className="reveal relative">
-            <div className="relative overflow-hidden rounded-3xl border border-border bg-navy shadow-2xl">
-=======
           <ScrollReveal variant="zoom-in" delay={0.15}>
             <motion.div
               animate={{ y: [0, -10, 0] }}
@@ -138,7 +132,6 @@ function HomePage() {
               }}
               className="relative overflow-hidden rounded-3xl border border-border bg-navy shadow-2xl"
             >
->>>>>>> 6c93f20 (feat: add feedback & FAQ management system, new pages, and improve Firebase-driven content structure)
               <img
                 src={heroImg}
                 alt="Community of caregivers and patients supporting each other"
@@ -271,12 +264,8 @@ function HomePage() {
       </section>
 
       {/* CTA */}
-<<<<<<< HEAD
-            <section className="container-page pb-24">
-=======
       <section className="container-page pb-24">
         <ScrollReveal variant="zoom-in">
->>>>>>> 6c93f20 (feat: add feedback & FAQ management system, new pages, and improve Firebase-driven content structure)
           <div className="relative overflow-hidden rounded-3xl border border-border bg-card p-10 md:p-16">
             <div
               aria-hidden
@@ -286,23 +275,6 @@ function HomePage() {
             <div className="relative flex flex-col items-center text-center gap-8">
               <div>
                 <p className="font-display text-sm uppercase tracking-[0.25em] text-accent">Get involved</p>
-<<<<<<< HEAD
-                <h2 className="mt-4 text-3xl font-semibold md:text-5xl">
-                  Know your genotype. Share what you know.
-                </h2>
-                <p className="mt-4 max-w-xl text-muted-foreground">
-                  Awareness saves lives. Take five minutes to read a guide, share it
-                  with someone you love, or get tested today.
-                </p>
-              </div>
-              <div className="flex flex-wrap justify-center gap-3">
-                <Link to="/resources" className="rounded-full bg-foreground px-6 py-3 text-sm font-medium text-background hover:opacity-90">Resources</Link>
-                <Link to="/contact" className="rounded-full border border-border bg-background px-6 py-3 text-sm font-medium hover:border-accent hover:text-accent">Contact us</Link>
-              </div>
-            </div>
-          </div>
-        </section>
-=======
                 <h2 className="mt-4 text-3xl font-semibold md:text-5xl">Know your genotype. Share what you know.</h2>
                 <p className="mt-4 max-w-xl text-muted-foreground">
                   Awareness saves lives. Take five minutes to read a guide, share it with someone you love, or get
@@ -327,7 +299,6 @@ function HomePage() {
           </div>
         </ScrollReveal>
       </section>
->>>>>>> 6c93f20 (feat: add feedback & FAQ management system, new pages, and improve Firebase-driven content structure)
 
       <Footer />
     </div>

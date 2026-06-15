@@ -2,16 +2,12 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { PageHero } from "@/components/PageHero";
-<<<<<<< HEAD
-=======
+import { PageHero } from "@/components/PageHero"
 import { SectionBody } from "@/components/SectionBody";
 import { SectionsEditor } from "@/components/SectionsEditor";
 import { Pencil } from "lucide-react";
 import { useAuth } from "@/lib/auth.jsx";
 import { usePageContent } from "@/lib/content";
->>>>>>> 6c93f20 (feat: add feedback & FAQ management system, new pages, and improve Firebase-driven content structure)
-
 function TermsPage() {
   useEffect(() => { document.title = "Terms & Conditions — SickleCare"; let m = document.querySelector("meta[name=description]"); if(!m){m=document.createElement("meta");m.setAttribute("name","description");document.head.appendChild(m);} m.setAttribute("content", "Terms governing use of the SickleCare website and mobile application."); }, []);
 
@@ -41,7 +37,6 @@ function TermsPage() {
       </PageHero>
       <section className="container-page py-16">
         <article className="mx-auto max-w-3xl space-y-8 text-[15px] leading-relaxed text-foreground/90">
-<<<<<<< HEAD
 
           {/* ── Privacy Policy link ── */}
           <p className="text-sm text-muted-foreground">
@@ -121,22 +116,7 @@ function TermsPage() {
           <Block title="12. Contact">
             Questions about these Terms? Email <a className="text-accent underline" href="mailto:legal@sicklecare.org">legal@sicklecare.org</a>.
           </Block>
-=======
-          <p className="text-sm text-muted-foreground">
-            These Terms should be read alongside our{" "}
-            <Link to="/privacy-policy" className="text-accent underline font-medium">
-              Privacy Policy
-            </Link>
-            , which explains how we collect and use your data.
-          </p>
 
-          {sections.map((s, i) => (
-            <section key={i}>
-              <h2 className="font-display text-xl font-semibold">{s.title}</h2>
-              <SectionBody text={s.body} />
-            </section>
-          ))}
->>>>>>> 6c93f20 (feat: add feedback & FAQ management system, new pages, and improve Firebase-driven content structure)
         </article>
       </section>
 
@@ -153,7 +133,6 @@ function TermsPage() {
   );
 }
 
-<<<<<<< HEAD
 function Block({ title, children }) {
   return (
     <section>
@@ -164,6 +143,5 @@ function Block({ title, children }) {
 }
 
 export default TermsPage;
-=======
-export default TermsPage;
->>>>>>> 6c93f20 (feat: add feedback & FAQ management system, new pages, and improve Firebase-driven content structure)
+
+

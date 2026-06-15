@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
-<<<<<<< HEAD
 import { Plus, Minus } from "lucide-react";
 
 const FAQS = [
@@ -14,41 +13,22 @@ const FAQS = [
   { q: "Can people with sickle cell exercise?", a: "Yes — but gently. Light to moderate activity is encouraged. Avoid pushing to exhaustion, stay hydrated, and rest when you need to. Always check with your doctor before starting new routines." },
   { q: "Is sickle cell contagious?", a: "No. Sickle cell is genetic — it cannot be passed through contact, blood transfusion (which actually helps), or any other form of transmission." },
 ];
-=======
-import { FaqEditorDialog } from "@/components/FaqEditorDialog";
-import { Plus, Minus, Pencil, Trash2, DownloadCloud, EyeOff } from "lucide-react";
-import { useAuth } from "@/lib/auth.jsx";
-import { useFaqs, deleteFaq, importSeedFaqs } from "@/lib/faqs";
-import { motion, AnimatePresence } from "framer-motion";
-import { ScrollReveal } from "@/components/AnimationHelpers";
->>>>>>> 6c93f20 (feat: add feedback & FAQ management system, new pages, and improve Firebase-driven content structure)
 
 function FaqPage() {
   useEffect(() => {
     document.title = "Frequently Asked Questions — SickleCare";
-<<<<<<< HEAD
-
-=======
->>>>>>> 6c93f20 (feat: add feedback & FAQ management system, new pages, and improve Firebase-driven content structure)
     let m = document.querySelector("meta[name=description]");
     if (!m) {
       m = document.createElement("meta");
       m.setAttribute("name", "description");
       document.head.appendChild(m);
     }
-<<<<<<< HEAD
-
-=======
->>>>>>> 6c93f20 (feat: add feedback & FAQ management system, new pages, and improve Firebase-driven content structure)
     m.setAttribute(
       "content",
       "Plain-language answers to the most common questions about sickle cell disease, inheritance, treatment and daily life."
     );
   }, []);
 
-<<<<<<< HEAD
-  const [open, setOpen] = useState(0); // ✅ FIXED
-=======
   const { isAdmin } = useAuth();
   const { faqs, live } = useFaqs(isAdmin);
   const [open, setOpen] = useState(0);
@@ -70,7 +50,6 @@ function FaqPage() {
   };
 
   const nextOrder = faqs.reduce((max, f) => Math.max(max, f.order ?? 0), 0) + 1;
->>>>>>> 6c93f20 (feat: add feedback & FAQ management system, new pages, and improve Firebase-driven content structure)
 
   return (
     <div className="min-h-screen bg-background overflow-x-hidden">
@@ -126,10 +105,6 @@ function FaqPage() {
                   onClick={() => setOpen(isOpen ? null : i)}
                   className="flex w-full items-start justify-between gap-4 p-6 text-left"
                 >
-<<<<<<< HEAD
-                  <span className="font-display text-lg font-semibold leading-snug">
-                    {f.q}
-=======
                   <span className="font-display text-lg font-bold leading-snug text-foreground">
                     {f.published === false && (
                       <span className="mr-2 inline-flex items-center gap-1 rounded-full bg-muted px-2 py-0.5 align-middle text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
@@ -138,7 +113,6 @@ function FaqPage() {
                       </span>
                     )}
                     {f.question}
->>>>>>> 6c93f20 (feat: add feedback & FAQ management system, new pages, and improve Firebase-driven content structure)
                   </span>
 
                   <span className="mt-1 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent/10 text-accent">
@@ -150,22 +124,6 @@ function FaqPage() {
                   </span>
                 </button>
 
-<<<<<<< HEAD
-                <div
-                  className="grid overflow-hidden px-6 transition-all"
-                  style={{
-                    gridTemplateRows: isOpen ? "1fr" : "0fr",
-                    paddingBottom: isOpen ? "1.5rem" : "0",
-                  }}
-                >
-                  <div className="min-h-0">
-                    <p className="leading-relaxed text-muted-foreground">
-                      {f.a}
-                    </p>
-                  </div>
-                </div>
-              </div>
-=======
                 <AnimatePresence initial={false}>
                   {isOpen && (
                     <motion.div
@@ -211,14 +169,11 @@ function FaqPage() {
                   )}
                 </AnimatePresence>
               </ScrollReveal>
->>>>>>> 6c93f20 (feat: add feedback & FAQ management system, new pages, and improve Firebase-driven content structure)
             );
           })}
         </div>
       </section>
 
-<<<<<<< HEAD
-=======
       {editing !== null && (
         <FaqEditorDialog
           faq={editing.id ? editing : null}
@@ -228,7 +183,6 @@ function FaqPage() {
         />
       )}
 
->>>>>>> 6c93f20 (feat: add feedback & FAQ management system, new pages, and improve Firebase-driven content structure)
       <Footer />
     </div>
   );
