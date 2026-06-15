@@ -63,6 +63,7 @@ import {
 } from "recharts";
 import { toast, Toaster } from "sonner";
 import { ScrollReveal } from "@/components/AnimationHelpers";
+import { SectionsEditor } from "@/components/SectionsEditor";
 import { motion, AnimatePresence } from "framer-motion";
 
 const FIELD_CLS =
@@ -1737,6 +1738,11 @@ function ContentTab() {
     description: "",
   });
 
+  const [privacyDoc, setPrivacyDoc] = useState(null);
+  const [termsDoc, setTermsDoc] = useState(null);
+  const [editorOpen, setEditorOpen] = useState(false);
+  const [editorPageKey, setEditorPageKey] = useState("privacy");
+
   // Fetch content keys from Firestore
   useEffect(() => {
     const unsubHome = onSnapshot(doc(db, "content", "home"), (snap) => {
@@ -1781,17 +1787,43 @@ function ContentTab() {
       }
     });
 
+    const unsubPrivacy = onSnapshot(doc(db, "content", "privacy"), (snap) => {
+      setPrivacyDoc(snap.exists() ? snap.data() : null);
+    });
+
+    const unsubTerms = onSnapshot(doc(db, "content", "terms"), (snap) => {
+      setTermsDoc(snap.exists() ? snap.data() : null);
+    });
+
     return () => {
       unsubHome();
       unsubRes();
       unsubPrev();
       unsubSymp();
+      unsubPrivacy();
+      unsubTerms();
     };
   }, []);
+
+  const PAGE_OPTIONS = [
+    { key: "home", label: "Home" },
+    { key: "resources", label: "Resources" },
+    { key: "prevention", label: "Prevention" },
+    { key: "symptoms", label: "Symptoms" },
+    { key: "privacy", label: "Privacy Policy" },
+    { key: "terms", label: "Terms" },
+  ];
 
   const onSave = async (e) => {
     e.preventDefault();
     setSaving(true);
+
+    if (selectedPage === "privacy" || selectedPage === "terms") {
+      toast.error("Use the legal editor button to update this page.");
+      setSaving(false);
+      return;
+    }
+
     try {
       let data = {};
       if (selectedPage === "home") data = homeForm;
@@ -1799,10 +1831,14 @@ function ContentTab() {
       if (selectedPage === "prevention") data = preventionForm;
       if (selectedPage === "symptoms") data = symptomsForm;
 
-      await setDoc(doc(db, "content", selectedPage), {
-        ...data,
-        updatedAt: serverTimestamp(),
-      }, { merge: true });
+      await setDoc(
+        doc(db, "content", selectedPage),
+        {
+          ...data,
+          updatedAt: serverTimestamp(),
+        },
+        { merge: true },
+      );
 
       toast.success("Page copy updated successfully in Firestore.");
     } catch {
@@ -1814,18 +1850,18 @@ function ContentTab() {
 
   return (
     <div className="space-y-6">
-      <div className="flex gap-2 border-b border-border pb-4">
-        {["home", "resources", "prevention", "symptoms"].map((page) => (
+      <div className="flex flex-wrap gap-2 border-b border-border pb-4">
+        {PAGE_OPTIONS.map((page) => (
           <button
-            key={page}
-            onClick={() => setSelectedPage(page)}
-            className={`rounded-full px-4 py-1.5 text-xs font-semibold capitalize transition ${
-              selectedPage === page
+            key={page.key}
+            onClick={() => setSelectedPage(page.key)}
+            className={`rounded-full px-4 py-1.5 text-xs font-semibold transition ${
+              selectedPage === page.key
                 ? "bg-foreground text-background"
                 : "border border-border bg-card text-muted-foreground hover:bg-muted"
             }`}
           >
-            {page} Page
+            {page.label}
           </button>
         ))}
       </div>
@@ -1946,6 +1982,26 @@ function ContentTab() {
           </>
         )}
 
+        {(selectedPage === "privacy" || selectedPage === "terms") && (
+          <div className="space-y-5">
+            <div>
+              <p className="text-sm text-muted-foreground">
+                Edit the live {selectedPage === "privacy" ? "Privacy Policy" : "Terms & Conditions"} stored in Firestore.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                setEditorPageKey(selectedPage);
+                setEditorOpen(true);
+              }}
+              className="inline-flex items-center gap-2 rounded-full bg-foreground px-6 py-3 text-sm font-semibold text-background transition hover:opacity-90"
+            >
+              Edit {selectedPage === "privacy" ? "Privacy Policy" : "Terms & Conditions"}
+            </button>
+          </div>
+        )}
+
         <div className="flex justify-end pt-4 border-t border-border">
           <button
             type="submit"
@@ -1956,6 +2012,16 @@ function ContentTab() {
           </button>
         </div>
       </form>
+
+      {editorOpen && (
+        <SectionsEditor
+          pageKey={editorPageKey}
+          title={editorPageKey === "privacy" ? "Privacy Policy" : "Terms & Conditions"}
+          initial={editorPageKey === "privacy" ? privacyDoc : termsDoc}
+          hasEffectiveDate={editorPageKey === "privacy"}
+          onClose={() => setEditorOpen(false)}
+        />
+      )}
     </div>
   );
 }

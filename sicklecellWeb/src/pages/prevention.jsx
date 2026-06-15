@@ -184,7 +184,7 @@ function PreventionPage() {
 
           <ScrollReveal variant="zoom-in" delay={0.1}>
             <div className="mt-8 overflow-x-auto rounded-2xl border border-border bg-card shadow-sm">
-              <table className="w-full min-w-[760px] border-collapse text-sm">
+              <table className="w-full min-w-760px border-collapse text-sm">
                 <thead>
                   <tr className="bg-muted/40">
                     <th className="sticky left-0 z-10 bg-muted/40 px-4 py-3 text-left font-display text-xs uppercase tracking-wider text-muted-foreground">
