@@ -96,8 +96,8 @@ function ContactPage() {
           </form>
 
           <aside className="space-y-5">
-            <InfoCard icon={Mail}   label="Email"  value="hello@sicklecare.org" />
-            <InfoCard icon={Phone}  label="Phone"  value="+237 6 00 00 00 00" />
+            <InfoCard icon={Mail}   label="Email"  value="hellosicklecare@gmail.com" />
+            <InfoCard icon={Phone}  label="Phone"  value="+237 6 22 11 44 07" />
             <InfoCard icon={MapPin} label="Office" value="Awareness Hub, Yaoundé, Cameroon" />
 
             <div className="overflow-hidden rounded-3xl border border-border">
