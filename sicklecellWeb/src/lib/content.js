@@ -104,6 +104,16 @@ export const SEED_HOME = {
   careDescription: "Newborn screening, simple lifestyle adjustments, and consistent follow-up dramatically reduce the frequency of pain crises and long-term complications. The earlier care begins, the brighter the outcomes.",
 };
 
+export const SEED_ABOUT = {
+  sections: [
+    { title: "What it is", body: "Sickle cell disease (SCD) is an inherited disorder of haemoglobin — the protein in red blood cells that carries oxygen. People with SCD produce abnormal haemoglobin (HbS) that distorts the cells into rigid, crescent shapes." },
+    { title: "What causes it", body: "SCD is caused by a mutation in the HBB gene. A child must inherit one affected gene from each parent to develop the disease. Inheriting one affected gene results in sickle cell trait, which usually causes no symptoms." },
+    { title: "Why awareness matters", body: "Most cases — and most preventable deaths — happen in regions with limited screening. Awareness drives testing, normalises the conversation, and removes the stigma families carry in silence." },
+    { title: "Why early diagnosis matters", body: "Children diagnosed at birth and started on simple preventive care (penicillin, vaccinations, hydration, follow-up) live significantly longer with fewer crises. Late diagnosis costs lives." },
+    { title: "What patients face", body: "Unpredictable pain crises, frequent hospital visits, fatigue, social stigma, and the emotional weight of a chronic illness. Education and community shrink that weight." },
+  ],
+};
+
 const SEEDS = {
   privacy: SEED_PRIVACY,
   terms: SEED_TERMS,
@@ -111,6 +121,7 @@ const SEEDS = {
   prevention: SEED_PREVENTION,
   symptoms: SEED_SYMPTOMS,
   home: SEED_HOME,
+  about: SEED_ABOUT,
 };
 
 /**

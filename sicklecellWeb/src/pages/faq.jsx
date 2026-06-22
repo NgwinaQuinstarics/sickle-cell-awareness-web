@@ -2,17 +2,12 @@ import { useState, useEffect } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
-import { Plus, Minus } from "lucide-react";
-
-const FAQS = [
-  { q: "What causes sickle cell disease?", a: "It is caused by inheriting two copies of an abnormal haemoglobin gene (HbS) — one from each parent. The mutation changes how red blood cells are shaped and how long they survive." },
-  { q: "Can sickle cell be cured?", a: "For most patients, no — but it can be very effectively managed. Bone marrow (stem cell) transplant is the only established cure today, and emerging gene therapies are showing strong promise." },
-  { q: "How can pain crises be prevented?", a: "Stay well hydrated, avoid temperature extremes, manage stress, take prescribed medications (such as hydroxyurea), and keep up with regular checkups. Identify and avoid your personal triggers." },
-  { q: "Is sickle cell disease hereditary?", a: "Yes. Both parents must carry the sickle cell gene for a child to inherit the disease. If both parents are carriers (AS), each pregnancy has a 25% chance of producing a child with SCD." },
-  { q: "What foods help sickle cell patients?", a: "Leafy greens, beans, lentils, fish, eggs, citrus fruits and whole grains support red blood cell production. Folic acid supplements are often recommended. Stay hydrated and limit alcohol." },
-  { q: "Can people with sickle cell exercise?", a: "Yes — but gently. Light to moderate activity is encouraged. Avoid pushing to exhaustion, stay hydrated, and rest when you need to. Always check with your doctor before starting new routines." },
-  { q: "Is sickle cell contagious?", a: "No. Sickle cell is genetic — it cannot be passed through contact, blood transfusion (which actually helps), or any other form of transmission." },
-];
+import { ScrollReveal } from "@/components/AnimationHelpers";
+import { FaqEditorDialog } from "@/components/FaqEditorDialog";
+import { Plus, Minus, DownloadCloud, EyeOff, Pencil, Trash2 } from "lucide-react";
+import { useFaqs, deleteFaq } from "@/lib/faqs";
+import { useAuth } from "@/lib/auth.jsx";
+import { AnimatePresence, motion } from "framer-motion";
 
 function FaqPage() {
   useEffect(() => {
@@ -37,12 +32,17 @@ function FaqPage() {
 
   const onDelete = async (f) => {
     if (!window.confirm(`Delete this question?\n\n"${f.question}"`)) return;
-    await deleteFaq(f.id);
+    try {
+      await deleteFaq(f.id);
+    } catch (err) {
+      console.error("Failed to delete FAQ:", err);
+    }
   };
 
   const onImportSeed = async () => {
     setImporting(true);
     try {
+      const { importSeedFaqs } = await import("@/lib/faqs");
       await importSeedFaqs();
     } finally {
       setImporting(false);
@@ -140,7 +140,7 @@ function FaqPage() {
                     >
                       <div className="px-6 pb-6">
                         <p className="whitespace-pre-line leading-relaxed text-muted-foreground">
-                          {f.a ?? f.answer}
+                          {f.answer ?? f.a}
                         </p>
 
                         {isAdmin && (

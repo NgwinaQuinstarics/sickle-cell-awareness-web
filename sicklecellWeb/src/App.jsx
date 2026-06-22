@@ -70,8 +70,10 @@ export default function App() {
       <Route path="/contact" element={<Contact />} />
       <Route path="/faq" element={<Faq />} />
       <Route path="/feedback" element={<Feedback />} />
+      <Route path="/announcements" element={<Announcements />} />
       <Route path="/prevention" element={<Prevention />} />
       <Route path="/privacy" element={<Privacy />} />
+      <Route path="/privacy-policy" element={<Privacy />} />
       <Route path="/resources" element={<Resources />} />
       <Route path="/resources/:id" element={<ResourceDetail />} />
       <Route path="/admin" element={<Admin />} />

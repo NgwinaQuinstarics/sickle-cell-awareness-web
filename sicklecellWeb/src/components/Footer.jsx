@@ -31,7 +31,7 @@ const SECTIONS = [
   {
     title: "Legal",
     links: [
-      { to: "/privacy-policy", label: "Privacy Policy" },
+      { to: "/privacy", label: "Privacy Policy" },
       { to: "/terms", label: "Terms & Conditions" },
     ],
   },

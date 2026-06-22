@@ -60,7 +60,7 @@ export function SectionsEditor({ pageKey, title, initial, hasEffectiveDate = fal
   };
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-start justify-center overflow-y-auto bg-foreground/40 p-4 backdrop-blur-sm">
+    <div className="fixed inset-0 z-60 flex items-start justify-center overflow-y-auto bg-foreground/40 p-4 backdrop-blur-sm">
       <div className="relative my-8 w-full max-w-2xl rounded-3xl border border-border bg-card p-8 shadow-2xl">
         <button
           onClick={onClose}

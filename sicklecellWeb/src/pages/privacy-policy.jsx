@@ -1,12 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
 import { SectionBody } from "@/components/SectionBody";
-import { SectionsEditor } from "@/components/SectionsEditor";
-import { Pencil } from "lucide-react";
-import { useAuth } from "@/lib/auth.jsx";
 import { usePageContent } from "@/lib/content";
 
 function PrivacyPage() {
@@ -24,10 +21,7 @@ function PrivacyPage() {
     );
   }, []);
 
-  const { isAdmin } = useAuth();
   const { content } = usePageContent("privacy");
-  const [editing, setEditing] = useState(false);
-
   const updated = content?.effectiveDate || "10 June 2026";
   const sections = content?.sections ?? [];
 
@@ -38,17 +32,7 @@ function PrivacyPage() {
         eyebrow="Legal"
         title={<>Privacy <span className="text-accent">Policy</span></>}
         description={`Effective date: ${updated}. This policy applies to the SickleCare website and the SickleCare mobile application.`}
-      >
-        {isAdmin && (
-          <button
-            onClick={() => setEditing(true)}
-            className="inline-flex items-center gap-2 rounded-full bg-foreground px-4 py-1.5 text-xs font-medium text-background transition hover:opacity-90"
-          >
-            <Pencil className="h-3.5 w-3.5" />
-            Edit page
-          </button>
-        )}
-      </PageHero>
+      />
       <section className="container-page py-16">
         <article className="prose-content mx-auto max-w-3xl space-y-8 text-[15px] leading-relaxed text-foreground/90">
           {sections.map((s, i) => (
@@ -65,16 +49,6 @@ function PrivacyPage() {
           </p>
         </article>
       </section>
-
-      {editing && (
-        <SectionsEditor
-          pageKey="privacy"
-          title="Privacy Policy"
-          initial={content}
-          hasEffectiveDate
-          onClose={() => setEditing(false)}
-        />
-      )}
       <Footer />
     </div>
   );

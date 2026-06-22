@@ -58,7 +58,7 @@ export function FaqEditorDialog({ faq, live, nextOrder = 1, onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-start justify-center overflow-y-auto bg-foreground/40 p-4 backdrop-blur-sm md:items-center">
+    <div className="fixed inset-0 z-60 flex items-start justify-center overflow-y-auto bg-foreground/40 p-4 backdrop-blur-sm md:items-center">
       <div className="relative my-8 w-full max-w-xl rounded-3xl border border-border bg-card p-8 shadow-2xl">
         <button
           onClick={onClose}
@@ -92,7 +92,7 @@ export function FaqEditorDialog({ faq, live, nextOrder = 1, onClose }) {
               <input type="number" min={0} value={form.order} onChange={set("order")} className={FIELD_CLS} />
             </div>
             <label className="flex cursor-pointer items-end gap-3 pb-3 text-sm">
-              <input type="checkbox" checked={form.published} onChange={set("published")} className="h-4 w-4 accent-[var(--accent,currentColor)]" />
+              <input type="checkbox" checked={form.published} onChange={set("published")} className="h-4 w-4 accent-var(--accent,currentColor)" />
               <span className="font-medium">Published</span>
             </label>
           </div>

@@ -1,22 +1,44 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PageHero } from "@/components/PageHero";
-import { Dna, HeartHandshake, Microscope, ShieldAlert, Sparkles } from "lucide-react";
+import { Pencil } from "lucide-react";
+import { useAuth } from "@/lib/auth.jsx";
+import { usePageContent } from "@/lib/content";
+import { SectionsEditor } from "@/components/SectionsEditor";
 import careImg from "@/assets/care.jpg";
 
 
 
-const POINTS = [
-  { icon: Dna, title: "What it is", body: "Sickle cell disease (SCD) is an inherited disorder of haemoglobin — the protein in red blood cells that carries oxygen. People with SCD produce abnormal haemoglobin (HbS) that distorts the cells into rigid, crescent shapes." },
-  { icon: Microscope, title: "What causes it", body: "SCD is caused by a mutation in the HBB gene. A child must inherit one affected gene from each parent to develop the disease. Inheriting one affected gene results in sickle cell trait, which usually causes no symptoms." },
-  { icon: Sparkles, title: "Why awareness matters", body: "Most cases — and most preventable deaths — happen in regions with limited screening. Awareness drives testing, normalises the conversation, and removes the stigma families carry in silence." },
-  { icon: HeartHandshake, title: "Why early diagnosis matters", body: "Children diagnosed at birth and started on simple preventive care (penicillin, vaccinations, hydration, follow-up) live significantly longer with fewer crises. Late diagnosis costs lives." },
-  { icon: ShieldAlert, title: "What patients face", body: "Unpredictable pain crises, frequent hospital visits, fatigue, social stigma, and the emotional weight of a chronic illness. Education and community shrink that weight." },
+const DEFAULT_POINTS = [
+  { title: "What it is", body: "Sickle cell disease (SCD) is an inherited disorder of haemoglobin — the protein in red blood cells that carries oxygen. People with SCD produce abnormal haemoglobin (HbS) that distorts the cells into rigid, crescent shapes." },
+  { title: "What causes it", body: "SCD is caused by a mutation in the HBB gene. A child must inherit one affected gene from each parent to develop the disease. Inheriting one affected gene results in sickle cell trait, which usually causes no symptoms." },
+  { title: "Why awareness matters", body: "Most cases — and most preventable deaths — happen in regions with limited screening. Awareness drives testing, normalises the conversation, and removes the stigma families carry in silence." },
+  { title: "Why early diagnosis matters", body: "Children diagnosed at birth and started on simple preventive care (penicillin, vaccinations, hydration, follow-up) live significantly longer with fewer crises. Late diagnosis costs lives." },
+  { title: "What patients face", body: "Unpredictable pain crises, frequent hospital visits, fatigue, social stigma, and the emotional weight of a chronic illness. Education and community shrink that weight." },
 ];
 
 function AboutPage() {
-  useEffect(() => { document.title = "About Sickle Cell Disease \u2014 SickleCare"; let m = document.querySelector("meta[name=description]"); if(!m){m=document.createElement("meta");m.setAttribute("name","description");document.head.appendChild(m);} m.setAttribute("content", "Understand what sickle cell disease is, its causes, why awareness matters, and the challenges patients face every day."); }, []);
+  useEffect(() => {
+    document.title = "About Sickle Cell Disease — SickleCare";
+    let m = document.querySelector("meta[name=description]");
+    if (!m) {
+      m = document.createElement("meta");
+      m.setAttribute("name", "description");
+      document.head.appendChild(m);
+    }
+    m.setAttribute(
+      "content",
+      "Understand what sickle cell disease is, its causes, why awareness matters, and the challenges patients face every day."
+    );
+  }, []);
+
+  const { isAdmin } = useAuth();
+  const { content } = usePageContent("about");
+  const [editing, setEditing] = useState(false);
+
+  const sections = content?.sections ?? [];
+  const points = sections.length > 0 ? sections : DEFAULT_POINTS;
 
   return (
     <div className="min-h-screen bg-background">
@@ -25,17 +47,24 @@ function AboutPage() {
         eyebrow="About"
         title={<>Understanding sickle cell <span className="text-accent">starts here.</span></>}
         description="A clear, compassionate explainer of what the disease is, who it affects, and why early awareness changes everything."
-      />
+      >
+        {isAdmin && (
+          <button
+            onClick={() => setEditing(true)}
+            className="inline-flex items-center gap-2 rounded-full bg-foreground px-4 py-1.5 text-xs font-medium text-background transition hover:opacity-90"
+          >
+            <Pencil className="h-3.5 w-3.5" />
+            Edit page
+          </button>
+        )}
+      </PageHero>
 
       <section className="container-page py-20">
         <div className="grid gap-12 lg:grid-cols-[1.1fr_1fr] lg:items-start">
           <div className="space-y-10">
-            {POINTS.map((p) => (
-              <article key={p.title} className="rounded-2xl border border-border bg-card p-7">
-                <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-accent/10 text-accent">
-                  <p.icon className="h-5 w-5" />
-                </span>
-                <h2 className="mt-5 font-display text-2xl font-semibold">{p.title}</h2>
+            {points.map((p, i) => (
+              <article key={i} className="rounded-2xl border border-border bg-card p-7">
+                <h2 className="font-display text-2xl font-semibold">{p.title}</h2>
                 <p className="mt-3 leading-relaxed text-muted-foreground">{p.body}</p>
               </article>
             ))}
@@ -58,6 +87,14 @@ function AboutPage() {
         </div>
       </section>
 
+      {editing && (
+        <SectionsEditor
+          pageKey="about"
+          title="About Sickle Cell Disease"
+          initial={content}
+          onClose={() => setEditing(false)}
+        />
+      )}
       <Footer />
     </div>
   );

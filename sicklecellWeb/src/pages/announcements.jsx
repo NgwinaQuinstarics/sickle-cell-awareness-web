@@ -9,38 +9,9 @@ import { Bell, CalendarDays, Users, ChevronDown, ChevronUp } from "lucide-react"
 
 // Seed announcements shown when Firestore has nothing yet
 const SEED_ANNOUNCEMENTS = [
-  {
-    id: "seed-1",
-    title: "World Sickle Cell Day — Free Screening Campaign",
-    body: "Join us this 19 June for a free sickle cell genotype screening campaign at the Yaoundé General Hospital. Bring a family member — early knowledge saves lives.",
-    sentTo: "all",
-    type: "announcement",
-    createdAt: { toMillis: () => 1718600000000 },
-  },
-  {
-    id: "seed-2",
-    title: "New Resource: Hydroxyurea Patient Guide",
-    body: "We have published a comprehensive patient-friendly guide to hydroxyurea therapy — covering dosing, side effects, what to monitor and when to call your doctor. Find it in the Resources section.",
-    sentTo: "all",
-    type: "announcement",
-    createdAt: { toMillis: () => 1718400000000 },
-  },
-  {
-    id: "seed-3",
-    title: "SickleCare Mobile App — Version 2.1 Released",
-    body: "The latest update brings an improved pain-crisis log, smarter hydration reminders, and a new AI assistant chat. Update your app from the Play Store or App Store.",
-    sentTo: "all",
-    type: "announcement",
-    createdAt: { toMillis: () => 1718200000000 },
-  },
-  {
-    id: "seed-4",
-    title: "Research Update: Gene Therapy Advances",
-    body: "A landmark clinical trial published in the New England Journal of Medicine reports durable sickle cell remission in 89 % of patients treated with the new one-time gene therapy. While not yet available in Cameroon, this is a hopeful milestone for the global community.",
-    sentTo: "all",
-    type: "announcement",
-    createdAt: { toMillis: () => 1718000000000 },
-  },
+  
+ 
+  
 ];
 
 function formatDate(createdAt) {

@@ -32,7 +32,7 @@ import {
   RefreshCw,
 } from "lucide-react";
 import { useAuth, login, logout } from "@/lib/auth.jsx";
-import logo from "@/assets/sicklecare-logo.png";
+import { Logo } from "@/components/Logo";
 import { db, storage } from "@/firebase";
 import {
   collection,
@@ -184,7 +184,7 @@ function SignInForm({ email, setEmail, password, setPassword, error, busy, onSub
   return (
     <form onSubmit={onSubmit} className="rounded-3xl border border-border bg-card p-8 shadow-2xl">
       <div className="flex flex-col items-center gap-3 mb-6">
-        <img src={logo} alt="SickleCare" className="h-16 w-auto object-contain" />
+        <Logo className="h-16 w-auto" />
       </div>
       <h2 className="text-center font-display text-2xl font-bold">SickleCare Admin</h2>
       <p className="mt-1 text-center text-sm text-muted-foreground">Sign in with your administrative account.</p>
@@ -361,10 +361,10 @@ function Dashboard({ email }) {
   return (
     <div className="flex min-h-screen bg-muted/30">
       {/* Sidebar */}
-      <aside className="w-64 border-r border-border bg-card p-6 flex flex-col justify-between hidden md:flex shrink-0">
+      <aside className="w-64 border-r border-border bg-card p-6  flex-col justify-between hidden md:flex shrink-0">
         <div>
           <div className="flex items-center gap-3 mb-8">
-            <img src={logo} alt="SickleCare" className="h-9 w-auto object-contain" />
+            <Logo className="h-9 w-auto" />
             <span className="font-display text-lg font-bold">SickleCare Admin</span>
           </div>
 
@@ -619,7 +619,7 @@ function UsersTab({ users }) {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap gap-4 items-center justify-between">
-        <div className="relative flex-1 min-w-[280px]">
+        <div className="relative flex-1 min-w-280px">
           <Search className="absolute left-3.5 top-3.5 h-4 w-4 text-muted-foreground" />
           <input
             value={search}
@@ -848,7 +848,7 @@ function ResourcesTab({ resources, isDbEmpty }) {
       )}
 
       <div className="flex flex-wrap gap-4 items-center justify-between">
-        <div className="relative flex-1 min-w-[220px]">
+        <div className="relative flex-1 min-w-220px">
           <Search className="absolute left-3.5 top-3.5 h-4 w-4 text-muted-foreground" />
           <input
             value={search}
@@ -886,13 +886,13 @@ function ResourcesTab({ resources, isDbEmpty }) {
               .map((r) => (
               <tr key={r.id} className="hover:bg-muted/10 transition-colors">
                 <td className="px-6 py-4">
-                  <div className="font-medium text-foreground font-semibold">{r.title}</div>
+                  <div className="font-semibold text-foreground">{r.title}</div>
                   <p className="text-xs text-muted-foreground max-w-md truncate mt-0.5">{r.body}</p>
                 </td>
                 <td className="px-6 py-4">
                   <span className="rounded bg-accent/15 px-2.5 py-0.5 text-xs font-semibold text-accent uppercase">
                     {r.tag}
-                  </span>
+                  </span>=
                 </td>
                 <td className="px-6 py-4">{r.time || "—"}</td>
                 <td className="px-6 py-4">
@@ -1148,7 +1148,7 @@ function FaqsTab({ faqs, isDbEmpty }) {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap gap-4 items-center justify-between">
-        <div className="relative flex-1 min-w-[220px]">
+        <div className="relative flex-1 min-w-220px">
           <Search className="absolute left-3.5 top-3.5 h-4 w-4 text-muted-foreground" />
           <input
             value={search}
@@ -1186,7 +1186,7 @@ function FaqsTab({ faqs, isDbEmpty }) {
               <tr key={f.id} className="hover:bg-muted/10 transition-colors">
                 <td className="px-6 py-4 font-semibold text-foreground">{f.order || 0}</td>
                 <td className="px-6 py-4">
-                  <div className="font-medium text-foreground font-semibold">{f.question}</div>
+                  <div className="font-semibold text-foreground">{f.question}</div>
                   <p className="text-xs mt-1 max-w-xl line-clamp-2">{f.answer}</p>
                 </td>
                 <td className="px-6 py-4">
@@ -1429,7 +1429,7 @@ function FeedbackTab({ feedbacks }) {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap gap-4 items-center justify-between">
-        <div className="relative flex-1 min-w-[280px]">
+        <div className="relative flex-1 min-w-280px">
           <Search className="absolute left-3.5 top-3.5 h-4 w-4 text-muted-foreground" />
           <input
             value={search}
@@ -1625,7 +1625,7 @@ function SupportTab({ support }) {
       </div>
 
       {/* Details / Chat side */}
-      <div className="rounded-3xl border border-border bg-card p-6 shadow-sm min-h-[400px] flex flex-col justify-between">
+      <div className="rounded-3xl border border-border bg-card p-6 shadow-sm min-h-400px flex flex-col justify-between">
         {selectedConvo ? (
           <div className="space-y-4 flex flex-col justify-between h-full flex-1">
             <div>
@@ -1649,7 +1649,7 @@ function SupportTab({ support }) {
               </div>
 
               {/* Chat Thread */}
-              <div className="space-y-3 max-h-[300px] overflow-y-auto mb-4 p-1">
+              <div className="space-y-3 max-h-300px overflow-y-auto mb-4 p-1">
                 {/* Initial message */}
                 <div className="rounded-2xl bg-muted/40 p-4 max-w-[85%] text-sm space-y-1">
                   <p className="font-bold text-xs text-foreground">{selectedConvo.name}</p>
@@ -1740,6 +1740,7 @@ function ContentTab() {
 
   const [privacyDoc, setPrivacyDoc] = useState(null);
   const [termsDoc, setTermsDoc] = useState(null);
+  const [aboutDoc, setAboutDoc] = useState(null);
   const [editorOpen, setEditorOpen] = useState(false);
   const [editorPageKey, setEditorPageKey] = useState("privacy");
 
@@ -1795,6 +1796,10 @@ function ContentTab() {
       setTermsDoc(snap.exists() ? snap.data() : null);
     });
 
+    const unsubAbout = onSnapshot(doc(db, "content", "about"), (snap) => {
+      setAboutDoc(snap.exists() ? snap.data() : null);
+    });
+
     return () => {
       unsubHome();
       unsubRes();
@@ -1802,6 +1807,7 @@ function ContentTab() {
       unsubSymp();
       unsubPrivacy();
       unsubTerms();
+      unsubAbout();
     };
   }, []);
 
@@ -1810,6 +1816,7 @@ function ContentTab() {
     { key: "resources", label: "Resources" },
     { key: "prevention", label: "Prevention" },
     { key: "symptoms", label: "Symptoms" },
+    { key: "about", label: "About" },
     { key: "privacy", label: "Privacy Policy" },
     { key: "terms", label: "Terms" },
   ];
@@ -1818,7 +1825,7 @@ function ContentTab() {
     e.preventDefault();
     setSaving(true);
 
-    if (selectedPage === "privacy" || selectedPage === "terms") {
+    if (selectedPage === "privacy" || selectedPage === "terms" || selectedPage === "about") {
       toast.error("Use the legal editor button to update this page.");
       setSaving(false);
       return;
@@ -1982,11 +1989,11 @@ function ContentTab() {
           </>
         )}
 
-        {(selectedPage === "privacy" || selectedPage === "terms") && (
+        {(selectedPage === "privacy" || selectedPage === "terms" || selectedPage === "about") && (
           <div className="space-y-5">
             <div>
               <p className="text-sm text-muted-foreground">
-                Edit the live {selectedPage === "privacy" ? "Privacy Policy" : "Terms & Conditions"} stored in Firestore.
+                Edit the live {selectedPage === "privacy" ? "Privacy Policy" : selectedPage === "terms" ? "Terms & Conditions" : "About page"} stored in Firestore.
               </p>
             </div>
             <button
@@ -1997,7 +2004,7 @@ function ContentTab() {
               }}
               className="inline-flex items-center gap-2 rounded-full bg-foreground px-6 py-3 text-sm font-semibold text-background transition hover:opacity-90"
             >
-              Edit {selectedPage === "privacy" ? "Privacy Policy" : "Terms & Conditions"}
+              Edit {selectedPage === "privacy" ? "Privacy Policy" : selectedPage === "terms" ? "Terms & Conditions" : "About Page"}
             </button>
           </div>
         )}
@@ -2016,8 +2023,8 @@ function ContentTab() {
       {editorOpen && (
         <SectionsEditor
           pageKey={editorPageKey}
-          title={editorPageKey === "privacy" ? "Privacy Policy" : "Terms & Conditions"}
-          initial={editorPageKey === "privacy" ? privacyDoc : termsDoc}
+          title={editorPageKey === "privacy" ? "Privacy Policy" : editorPageKey === "terms" ? "Terms & Conditions" : "About Sickle Cell Disease"}
+          initial={editorPageKey === "privacy" ? privacyDoc : editorPageKey === "terms" ? termsDoc : aboutDoc}
           hasEffectiveDate={editorPageKey === "privacy"}
           onClose={() => setEditorOpen(false)}
         />
