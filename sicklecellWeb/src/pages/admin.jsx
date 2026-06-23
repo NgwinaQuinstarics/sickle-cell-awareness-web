@@ -69,58 +69,6 @@ import { motion, AnimatePresence } from "framer-motion";
 const FIELD_CLS =
   "w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/20";
 
-// Fallback Seeds (to display when Firestore collection holds 0 records)
-const MOCK_USERS = [
-  { id: "u1", email: "jean.dupont@gmail.com", displayName: "Jean Dupont", role: "user", createdAt: { toMillis: () => 1718000000000 }, genotype: "AA", phone: "+237 677 88 99 00" },
-  { id: "u2", email: "marie.foeh@outlook.com", displayName: "Marie Foeh", role: "user", createdAt: { toMillis: () => 1718100000000 }, genotype: "AS", phone: "+237 699 11 22 33" },
-  { id: "u3", email: "christian.t@gmail.com", displayName: "Christian T.", role: "admin", createdAt: { toMillis: () => 1718200000000 }, genotype: "AA", phone: "+237 688 44 55 66" },
-  { id: "u4", email: "alice.ngu@yahoo.fr", displayName: "Alice Ngu", role: "user", createdAt: { toMillis: () => 1718300000000 }, genotype: "SS", phone: "+237 655 33 44 55" },
-  { id: "u5", email: "emmanuel.b@gmail.com", displayName: "Emmanuel Bella", role: "user", createdAt: { toMillis: () => 1718400000000 }, genotype: "SC", phone: "+237 671 22 88 99" }
-];
-
-const MOCK_RESOURCES = [
-  { id: "r1", title: "Living with sickle cell at every age", tag: "Article", body: "What changes from childhood to adulthood.", time: "8 min read", published: true, views: 520 },
-  { id: "r2", title: "Building a daily hydration routine", tag: "Health Tip", body: "Practical strategies to drink enough water.", time: "4 min read", published: true, views: 485 },
-  { id: "r3", title: "How a pain crisis happens (explained)", tag: "Video", body: "A short animated explainer of vaso-occlusion.", time: "3:42", published: true, views: 350 },
-  { id: "r4", title: "Genotype, trait, and disease differences", tag: "FAQ", body: "The short answer your family needs.", time: "5 min read", published: false, views: 0 }
-];
-
-const MOCK_FAQS = [
-  { id: "f1", question: "What causes sickle cell disease?", answer: "It is caused by inheriting two copies of an abnormal haemoglobin gene (HbS).", order: 1, published: true },
-  { id: "f2", question: "Can sickle cell be cured?", answer: "Bone marrow transplant is the only established cure today.", order: 2, published: true }
-];
-
-const MOCK_CONTACTS = [
-  { id: "c1", name: "Amadou Bello", email: "amadou@gmail.com", subject: "Sponsorship Inquiry", message: "Hello, we are interested in sponsoring the upcoming campaign in Douala.", resolved: false, createdAt: { toMillis: () => 1718400000000 } },
-  { id: "c2", name: "Therese Ngo", email: "therese.ngo@yahoo.com", subject: "Genotype Testing Location", message: "Hi, where is the closest testing center in Yaoundé?", resolved: true, createdAt: { toMillis: () => 1718300000000 } },
-  { id: "c3", name: "Dr. Paul Ebanda", email: "p.ebanda@clinic.cm", subject: "Collaboration Opportunity", message: "I would like to distribute your checklists to my patients.", resolved: false, createdAt: { toMillis: () => 1718200000000 } }
-];
-
-const MOCK_FEEDBACKS = [
-  { id: "fb1", name: "Cynthia Kamdem", email: "cKamdem@gmail.com", category: "praise", message: "The hydration tracker in the mobile app is a life-saver!", rating: 5, createdAt: { toMillis: () => 1718450000000 } },
-  { id: "fb2", name: "Anonymous", email: "", category: "bug", message: "The app crashed when trying to edit my daily reminder.", rating: 2, createdAt: { toMillis: () => 1718380000000 } }
-];
-
-const MOCK_SUPPORTS = [
-  {
-    id: "s1",
-    name: "Alice Ngu",
-    email: "alice.ngu@yahoo.fr",
-    subject: "Struggling with side effects",
-    message: "Hello team, my doctor recently prescribed hydroxyurea, but I am experiencing nausea.",
-    resolved: false,
-    createdAt: { toMillis: () => 1718410000000 },
-    updatedAt: { toMillis: () => 1718450000000 },
-    replies: [
-      { sender: "user", text: "Hello team, my doctor recently prescribed hydroxyurea, but I am experiencing nausea.", createdAt: { toMillis: () => 1718410000000 } },
-      { sender: "admin", text: "Hi Alice, mild nausea can occur initially. Inform your hematologist.", createdAt: { toMillis: () => 1718450000000 } }
-    ]
-  }
-];
-
-const MOCK_NOTIFICATIONS = [
-  { id: "n1", title: "World Sickle Cell Day", body: "Join us this Friday for a free screening campaign.", sentTo: "all", type: "announcement", createdAt: { toMillis: () => 1718300000000 } }
-];
 
 function AdminPage() {
   useEffect(() => {
@@ -302,14 +250,6 @@ function Dashboard({ email }) {
     };
   }, []);
 
-  // Use database data or fall back to mock data
-  const finalUsers = users.length > 0 ? users : MOCK_USERS;
-  const finalResources = resources.length > 0 ? resources : MOCK_RESOURCES;
-  const finalFaqs = faqs.length > 0 ? faqs : MOCK_FAQS;
-  const finalContacts = contacts.length > 0 ? contacts : MOCK_CONTACTS;
-  const finalFeedbacks = feedbacks.length > 0 ? feedbacks : MOCK_FEEDBACKS;
-  const finalSupport = supportList.length > 0 ? supportList : MOCK_SUPPORTS;
-  const finalNotifications = notifications.length > 0 ? notifications : MOCK_NOTIFICATIONS;
 
   // Render current tab body
   const renderTabContent = () => {
@@ -317,30 +257,30 @@ function Dashboard({ email }) {
       case "overview":
         return (
           <OverviewTab
-            users={finalUsers}
-            resources={finalResources}
-            faqs={finalFaqs}
-            contacts={finalContacts}
-            feedbacks={finalFeedbacks}
-            support={finalSupport}
+            users={users}
+            resources={resources}
+            faqs={faqs}
+            contacts={contacts}
+            feedbacks={feedbacks}
+            support={supportList}
           />
         );
       case "users":
-        return <UsersTab users={finalUsers} />;
+        return <UsersTab users={users} />;
       case "resources":
-        return <ResourcesTab resources={finalResources} isDbEmpty={resources.length === 0} />;
+        return <ResourcesTab resources={resources} isDbEmpty={resources.length === 0} />;
       case "faqs":
-        return <FaqsTab faqs={finalFaqs} isDbEmpty={faqs.length === 0} />;
+        return <FaqsTab faqs={faqs} isDbEmpty={faqs.length === 0} />;
       case "contacts":
-        return <ContactsTab contacts={finalContacts} />;
+        return <ContactsTab contacts={contacts} />;
       case "feedback":
-        return <FeedbackTab feedbacks={finalFeedbacks} />;
+        return <FeedbackTab feedbacks={feedbacks} />;
       case "support":
-        return <SupportTab support={finalSupport} />;
+        return <SupportTab support={supportList} />;
       case "content":
         return <ContentTab />;
       case "notifications":
-        return <NotificationsTab notifications={finalNotifications} />;
+        return <NotificationsTab notifications={notifications} />;
       default:
         return null;
     }
@@ -455,36 +395,72 @@ function Dashboard({ email }) {
 
 // 1. OVERVIEW & ANALYTICS TAB
 function OverviewTab({ users, resources, faqs, contacts, feedbacks, support }) {
-  // Chart datasets
-  const growthData = [
-    { month: "Jan", users: 12 },
-    { month: "Feb", users: 24 },
-    { month: "Mar", users: 48 },
-    { month: "Apr", users: 95 },
-    { month: "May", users: 160 },
-    { month: "Jun", users: users.length > 5 ? users.length : 220 },
-  ];
+  // Helper: extract month-year label from a Firestore timestamp or Date
+  const toMonthLabel = (ts) => {
+    const d = ts?.toMillis ? new Date(ts.toMillis()) : ts?.seconds ? new Date(ts.seconds * 1000) : ts instanceof Date ? ts : null;
+    if (!d || isNaN(d)) return null;
+    return d.toLocaleDateString("en-US", { month: "short", year: "numeric" });
+  };
 
-  const categoryData = [
-    { name: "Praise", count: feedbacks.filter((f) => f.category === "praise").length || 8 },
-    { name: "Suggestion", count: feedbacks.filter((f) => f.category === "suggestion").length || 5 },
-    { name: "Bug Report", count: feedbacks.filter((f) => f.category === "bug").length || 3 },
-    { name: "Content", count: feedbacks.filter((f) => f.category === "content").length || 4 },
-  ];
+  // Helper: extract short date label (dd Mon) from a timestamp
+  const toDayLabel = (ts) => {
+    const d = ts?.toMillis ? new Date(ts.toMillis()) : ts?.seconds ? new Date(ts.seconds * 1000) : ts instanceof Date ? ts : null;
+    if (!d || isNaN(d)) return null;
+    return d.toLocaleDateString("en-US", { day: "2-digit", month: "short" });
+  };
 
-  const viewData = resources.slice(0, 5).map((r) => ({
-    name: r.title.length > 18 ? r.title.slice(0, 15) + "..." : r.title,
-    views: r.views || Math.floor(Math.random() * 300) + 100,
-  }));
+  // 1. User Registration Growth — group users by registration month
+  const growthData = (() => {
+    const counts = {};
+    users.forEach((u) => {
+      const label = toMonthLabel(u.createdAt);
+      if (label) counts[label] = (counts[label] || 0) + 1;
+    });
+    // Build cumulative series sorted chronologically
+    const sorted = Object.entries(counts).sort(([a], [b]) => new Date(a) - new Date(b));
+    let cumulative = 0;
+    return sorted.map(([month, count]) => {
+      cumulative += count;
+      return { month, users: cumulative };
+    });
+  })();
 
-  const timelineData = [
-    { day: "09 Jun", contacts: 2, support: 1 },
-    { day: "10 Jun", contacts: 4, support: 3 },
-    { day: "11 Jun", contacts: 1, support: 2 },
-    { day: "12 Jun", contacts: 3, support: 4 },
-    { day: "13 Jun", contacts: 6, support: 1 },
-    { day: "14 Jun", contacts: contacts.length || 5, support: support.length || 2 },
-  ];
+  // 2. Feedback Categories — real counts, 0 when none exist
+  const categoryData = (() => {
+    const cats = {};
+    feedbacks.forEach((f) => {
+      const cat = (f.category || "other").charAt(0).toUpperCase() + (f.category || "other").slice(1);
+      cats[cat] = (cats[cat] || 0) + 1;
+    });
+    // Always show these base categories (+ any extras from DB)
+    ["Praise", "Suggestion", "Bug", "Content"].forEach((c) => { if (!(c in cats)) cats[c] = 0; });
+    return Object.entries(cats).map(([name, count]) => ({ name, count }));
+  })();
+
+  // 3. Popular Resources — sorted by real views, top 5
+  const viewData = [...resources]
+    .sort((a, b) => (b.views || 0) - (a.views || 0))
+    .slice(0, 5)
+    .map((r) => ({
+      name: r.title?.length > 18 ? r.title.slice(0, 15) + "..." : r.title || "Untitled",
+      views: r.views || 0,
+    }));
+
+  // 4. Inquiries Activity Timeline — group contacts & support by day
+  const timelineData = (() => {
+    const buckets = {};
+    contacts.forEach((c) => {
+      const label = toDayLabel(c.createdAt);
+      if (label) { buckets[label] = buckets[label] || { contacts: 0, support: 0 }; buckets[label].contacts++; }
+    });
+    support.forEach((s) => {
+      const label = toDayLabel(s.createdAt);
+      if (label) { buckets[label] = buckets[label] || { contacts: 0, support: 0 }; buckets[label].support++; }
+    });
+    return Object.entries(buckets)
+      .sort(([a], [b]) => new Date(a) - new Date(b))
+      .map(([day, v]) => ({ day, contacts: v.contacts, support: v.support }));
+  })();
 
   const statCards = [
     { title: "Total Users", count: users.length, icon: Users, color: "text-blue-500 bg-blue-500/10" },

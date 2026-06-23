@@ -1,13 +1,16 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "ignoreDeprecations": "6.0",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": [
+        "src/*"
+      ]
     },
     "jsx": "react-jsx",
     "checkJs": false,
     "allowJs": true
   },
-  "include": ["src/**/*"]
+  "include": [
+    "src/**/*"
+  ]
 }
